@@ -26,11 +26,18 @@ public interface GameProtoHandler<P> {
   interface Service {
 
     Config config(Class<?> configType);
+
+    Data data();
   }
 
   interface Config {
 
     <C> C find(Comparable<?> id);
+  }
+
+  interface Data {
+
+    void executeCommand(Class<?> commandType, Object param);
   }
 
   void onHandle(Context ctx);
