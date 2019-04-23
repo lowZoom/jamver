@@ -15,10 +15,14 @@ class ProtocMojo extends AbstractMojo {
 
   @Override
   void execute() {
-    ProtoAllGenerator generator = ProtoAllGenerator.Factory.create(_project, NetProto, getLog())
-    generator.generate()
+    ProtoAllGenerator.Factory
+        .create(NetProto, _project, _protoc, getLog())
+        .generate()
   }
 
   @Parameter(defaultValue = '${project}', readonly = true)
   private MavenProject _project
+
+  @Parameter(property = 'jamver.bin.protoc')
+  private File _protoc
 }
