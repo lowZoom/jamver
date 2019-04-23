@@ -16,7 +16,7 @@ class ProtocMojo extends AbstractMojo {
   @Override
   void execute() {
     ProtoAllGenerator.Factory
-        .create(NetProto, _project, _protoc, getLog())
+        .create(NetProto, _project, _protoc, _protoOut, getLog())
         .generate()
   }
 
@@ -25,4 +25,7 @@ class ProtocMojo extends AbstractMojo {
 
   @Parameter(property = 'jamver.bin.protoc')
   private File _protoc
+
+  @Parameter(property = 'jamver.out.proto')
+  private File _protoOut
 }
