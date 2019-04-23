@@ -15,11 +15,21 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.5.2</version>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
-    <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
+    <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-core -->
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
+      <artifactId>maven-core</artifactId>
       <version>3.5.4</version>
     </dependency>
 
@@ -29,6 +39,18 @@
       <artifactId>maven-plugin-annotations</artifactId>
       <version>3.5.2</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>luj.game.server</groupId>
+      <artifactId>jamver</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>luj.proto</groupId>
+      <artifactId>lujproto-maven-plugin</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
