@@ -5,6 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Collection;
 import org.springframework.stereotype.Component;
 
 public interface GameProtoHandler<P> {
@@ -36,14 +37,16 @@ public interface GameProtoHandler<P> {
 
   interface Service {
 
-    Config config(Class<?> configType);
+    <C> Config<C> config(Class<C> configType);
 
     Data data();
   }
 
-  interface Config {
+  interface Config<C> {
 
-    <C> C find(Comparable<?> id);
+    C find(Comparable<?> id);
+
+    Collection<C> list();
   }
 
   interface Data {
