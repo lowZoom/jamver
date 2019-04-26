@@ -32,7 +32,7 @@ public interface GameProtoHandler<P> {
 
     Long getPlayerId();
 
-    void sendProto();
+    void sendProto(Object proto);
   }
 
   interface Service {
