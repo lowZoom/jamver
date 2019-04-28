@@ -4,8 +4,9 @@ import luj.game.server.api.event.GameEventListener;
 
 final class ListenerContextImpl implements GameEventListener.Context {
 
-  ListenerContextImpl(Object event) {
+  ListenerContextImpl(Object event, GameEventListener.Service service) {
     _event = event;
+    _service = service;
   }
 
   @SuppressWarnings("unchecked")
@@ -14,5 +15,12 @@ final class ListenerContextImpl implements GameEventListener.Context {
     return (E) _event;
   }
 
+  @Override
+  public GameEventListener.Service service() {
+    return _service;
+  }
+
   private final Object _event;
+
+  private final GameEventListener.Service _service;
 }

@@ -13,6 +13,7 @@ final class OnLujclusterStart implements NodeStartListener {
     JambeanInLujcluster param = ctx.getStartParam();
 
     ctx.createApplicationActor(new GameplayEventActor(
-        new EventListenerMapCollector(param.getEventListenerList()).collect()));
+        new EventListenerMapCollector(param.getEventListenerList()).collect(),
+        param.getEventListenService()));
   }
 }

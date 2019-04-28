@@ -20,6 +20,18 @@ public interface GameEventListener<E> {
   interface Context {
 
     <E> E event(GameEventListener<E> listener);
+
+    Service service();
+  }
+
+  interface Service {
+
+    Data data();
+  }
+
+  interface Data {
+
+    void executeCommand(Class<?> commandType, Object param);
   }
 
   void onEvent(Context ctx);
