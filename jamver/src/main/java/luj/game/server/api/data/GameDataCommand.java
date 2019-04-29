@@ -34,6 +34,8 @@ public interface GameDataCommand<P, D> {
     <C> Config<C> config(Class<C> configType);
 
     Random random();
+
+    Network network();
   }
 
   interface Data {
@@ -51,6 +53,16 @@ public interface GameDataCommand<P, D> {
   interface Random {
 
     boolean randBool(double likelihood);
+  }
+
+  interface Network {
+
+    Session session(String sessionId);
+  }
+
+  interface Session {
+
+    void send(Object proto);
   }
 
   void onExecute(Context ctx);
