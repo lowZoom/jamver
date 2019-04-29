@@ -32,6 +32,13 @@ public interface GameDataCommand<P, D> {
     Data data();
 
     <C> Config<C> config(Class<C> configType);
+
+    Random random();
+  }
+
+  interface Data {
+
+    <T> T create(Class<T> dataType);
   }
 
   interface Config<C> {
@@ -41,9 +48,9 @@ public interface GameDataCommand<P, D> {
     Collection<C> list();
   }
 
-  interface Data {
+  interface Random {
 
-    <T> T create(Class<T> dataType);
+    boolean randBool(double likelihood);
   }
 
   void onExecute(Context ctx);
