@@ -57,7 +57,7 @@ public interface GameDataCommand<P, D> {
 
   interface Network {
 
-    Session session(String sessionId);
+    Session session(Comparable<?> sessionId);
   }
 
   interface Session {
