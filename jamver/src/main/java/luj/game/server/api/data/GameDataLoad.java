@@ -11,7 +11,7 @@ public interface GameDataLoad<P, R> {
     @Deprecated
     <R, F> AndLoad<R, F> load(Function<R, F> field, Comparable<?> id);
 
-    <R, F> AndLoad<R, F> load(Function<R, F> field, Class<F> dataType, Comparable<?> dataId);
+    <R, F> AndLoad<R, F> load(Class<F> dataType, Comparable<?> dataId, Function<R, F> field);
   }
 
   interface AndLoad<R, F> {
