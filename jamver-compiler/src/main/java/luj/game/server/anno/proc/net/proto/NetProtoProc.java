@@ -1,4 +1,4 @@
-package luj.game.server.anno.proc.proto;
+package luj.game.server.anno.proc.net.proto;
 
 import com.google.auto.service.AutoService;
 import java.io.IOException;
