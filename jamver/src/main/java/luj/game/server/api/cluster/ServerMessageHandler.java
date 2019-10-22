@@ -19,6 +19,7 @@ public interface ServerMessageHandler<M> {
 
   interface Context {
 
+    <M> M getMessage(ServerMessageHandler<M> handler);
   }
 
   void onHandle(Context ctx);
