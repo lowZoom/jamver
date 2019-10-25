@@ -7,6 +7,7 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 import javax.annotation.processing.Processor;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -29,32 +30,39 @@ public final class DataCommandProc extends SingleAnnoProc {
   @Override
   protected void processElement(Context ctx) throws IOException {
     ProcType procType = ctx.getProcessingType();
-    if (!isCommand(procType)) {
+    Optional<DeclaredType> cmdDeclar = findCommandDeclaration(procType);
+
+    if (!cmdDeclar.isPresent()) {
       procType.getLogger().warn("忽略：" + procType);
       return;
     }
 
+    String cmdName = getCommandName(procType);
     procType.getPackage().writeToFile(TypeSpec
-        .classBuilder(getCommandName(procType) + "LoadMeta")
+        .classBuilder(cmdName + "LoadMeta")
         .addModifiers(Modifier.FINAL)
         .addAnnotation(Component.class)
         .superclass(getHolderClass(procType))
         .build());
 
-    new LoadResultImplGenerator().generate();
+    new LoadResultImplGenerator(procType, cmdName, cmdDeclar.get()).generate(procType.getLogger());
   }
 
-  private boolean isCommand(ProcType procType) {
+  private Optional<DeclaredType> findCommandDeclaration(ProcType procType) {
     return procType.toElement().getInterfaces().stream()
         .map(m -> (DeclaredType) m)
-        .map(t -> (TypeElement) t.asElement())
-        .map(TypeElement::getQualifiedName)
-        .map(CharSequence::toString)
-        .anyMatch(n -> n.equals(GameDataCommand.class.getName()));
+        .filter(this::isCommandType)
+        .findAny();
   }
 
   private String getCommandName(ProcType type) {
     return type.toElement().getSimpleName().toString();
+  }
+
+  private boolean isCommandType(DeclaredType type) {
+    return ((TypeElement) type.asElement())
+        .getQualifiedName()
+        .contentEquals(GameDataCommand.class.getName());
   }
 
   private TypeName getHolderClass(ProcType procType) {

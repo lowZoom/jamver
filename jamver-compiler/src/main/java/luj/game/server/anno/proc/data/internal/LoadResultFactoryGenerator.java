@@ -2,10 +2,11 @@ package luj.game.server.anno.proc.data.internal;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import java.io.IOException;
-import luj.game.server.internal.data.load.DataLoadMetaHolder;
+import luj.game.server.internal.data.load.generate.DataLoadResultFactory;
 import luj.generate.annotation.process.type.ProcType;
+import org.springframework.stereotype.Component;
 
 public class LoadResultFactoryGenerator {
 
@@ -15,16 +16,18 @@ public class LoadResultFactoryGenerator {
   }
 
   public void generate() throws IOException {
-    new BeanInSamePackageGenerator(_commandType, _commandName + "LoadResultFac").generate(b -> b
-        .addSuperinterface(getFactoryClass())
-    );
+    new BeanInSamePackageGenerator(_commandType, _commandName + "LoadResultFac")
+        .generate(this::initFactoryClass);
   }
 
-  private TypeName getFactoryClass() {
-    return ParameterizedTypeName.get(ClassName
-        .get(DataLoadMetaHolder.class), _commandType.toTypeName());
+  private void initFactoryClass(TypeSpec.Builder clazz) {
+    clazz.addAnnotation(Component.class);
+
+    clazz.addSuperinterface(ParameterizedTypeName.get(ClassName
+        .get(DataLoadResultFactory.class), _commandType.toTypeName()));
   }
 
   private final ProcType _commandType;
+
   private final String _commandName;
 }

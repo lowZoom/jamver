@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.function.Consumer;
 import javax.lang.model.element.Modifier;
 import luj.generate.annotation.process.type.ProcType;
-import org.springframework.stereotype.Component;
 
 public class BeanInSamePackageGenerator {
 
@@ -16,8 +15,7 @@ public class BeanInSamePackageGenerator {
 
   public void generate(Consumer<TypeSpec.Builder> beanBuilder) throws IOException {
     TypeSpec.Builder bean = TypeSpec.classBuilder(_beanName)
-        .addModifiers(Modifier.FINAL)
-        .addAnnotation(Component.class);
+        .addModifiers(Modifier.FINAL);
 
     beanBuilder.accept(bean);
     _procType.getPackage().writeToFile(bean.build());
