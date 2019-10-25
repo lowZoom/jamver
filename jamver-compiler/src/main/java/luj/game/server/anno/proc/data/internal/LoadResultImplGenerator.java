@@ -4,14 +4,13 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
-import luj.generate.annotation.process.AnnoProc;
 import luj.generate.annotation.process.type.ProcType;
 
 public class LoadResultImplGenerator {
@@ -23,14 +22,16 @@ public class LoadResultImplGenerator {
     _commandDeclaration = commandDeclaration;
   }
 
-  public void generate(AnnoProc.Log log) throws IOException {
+  public Optional<String> generate() {
     DeclaredType resultType = getResultType();
     if (isVoid(resultType)) {
-      return;
+      return Optional.empty();
     }
 
-    new BeanInSamePackageGenerator(_commandType, _commandName + "LoadResultImpl")
-        .generate(b -> initResultImpl(b, resultType, log));
+    TypeSpec implClass = new ClassInSamePackageGenerator(_commandType,
+        _commandName + "LoadResultImpl").generate(b -> initResultImpl(b, resultType));
+
+    return Optional.of(implClass.name);
   }
 
   private boolean isVoid(DeclaredType resultType) {
@@ -42,7 +43,7 @@ public class LoadResultImplGenerator {
     return (DeclaredType) _commandDeclaration.getTypeArguments().get(1);
   }
 
-  private void initResultImpl(TypeSpec.Builder clazz, DeclaredType resultType, AnnoProc.Log log) {
+  private void initResultImpl(TypeSpec.Builder clazz, DeclaredType resultType) {
     clazz.addSuperinterface(TypeName.get(resultType));
 
     List<ResultField> fieldList = resultType.asElement()

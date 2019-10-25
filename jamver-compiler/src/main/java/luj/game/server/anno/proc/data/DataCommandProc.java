@@ -12,6 +12,7 @@ import javax.annotation.processing.Processor;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
+import luj.game.server.anno.proc.data.internal.LoadResultFactoryGenerator;
 import luj.game.server.anno.proc.data.internal.LoadResultImplGenerator;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.load.DataLoadMetaHolder;
@@ -45,7 +46,9 @@ public final class DataCommandProc extends SingleAnnoProc {
         .superclass(getHolderClass(procType))
         .build());
 
-    new LoadResultImplGenerator(procType, cmdName, cmdDeclar.get()).generate(procType.getLogger());
+    new LoadResultImplGenerator(procType, cmdName, cmdDeclar.get()).generate()
+        .map(n -> new LoadResultFactoryGenerator(procType, cmdName, n))
+        .ifPresent(LoadResultFactoryGenerator::generate);
   }
 
   private Optional<DeclaredType> findCommandDeclaration(ProcType procType) {
