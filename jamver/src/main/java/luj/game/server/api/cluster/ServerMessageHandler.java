@@ -20,7 +20,14 @@ public interface ServerMessageHandler<M> {
   interface Context {
 
     <M> M getMessage(ServerMessageHandler<M> handler);
+
+    Server getRemoteServer();
   }
 
-  void onHandle(Context ctx);
+  interface Server {
+
+    void sendMessage(Object msg);
+  }
+
+  void onHandle(Context ctx) throws Exception;
 }

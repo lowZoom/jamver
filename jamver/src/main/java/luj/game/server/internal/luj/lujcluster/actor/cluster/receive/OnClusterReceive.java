@@ -13,7 +13,7 @@ final class OnClusterReceive implements ClusterCommMsgHandler<ClusterReceiveMsg>
 
   @Override
   public void onHandle(Context ctx) {
-    ClusterCommActor actor = ctx.getActor(this);
+    ClusterCommActor actor = ctx.getActorState(this);
     ClusterReceiveMsg msg = ctx.getMessage(this);
 
     Map<String, ServerMessageHandler<?>> handlerMap = actor.getHandlerMap();
@@ -25,8 +25,13 @@ final class OnClusterReceive implements ClusterCommMsgHandler<ClusterReceiveMsg>
       return;
     }
 
-    HandleContextImpl handleCtx = new HandleContextImpl(msg.getMessage());
-    handler.onHandle(handleCtx);
+    ServerImpl sender = new ServerImpl(ctx.getRemoteNode());
+    HandleContextImpl handleCtx = new HandleContextImpl(msg.getMessage(), sender);
+    try {
+      handler.onHandle(handleCtx);
+    } catch (Exception e) {
+      throw new UnsupportedOperationException(e);
+    }
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnClusterReceive.class);

@@ -4,8 +4,9 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 
 final class HandleContextImpl implements ServerMessageHandler.Context {
 
-  HandleContextImpl(Object message) {
+  HandleContextImpl(Object message, ServerMessageHandler.Server remoteServer) {
     _message = message;
+    _remoteServer = remoteServer;
   }
 
   @SuppressWarnings("unchecked")
@@ -14,5 +15,12 @@ final class HandleContextImpl implements ServerMessageHandler.Context {
     return (M) _message;
   }
 
+  @Override
+  public ServerMessageHandler.Server getRemoteServer() {
+    return _remoteServer;
+  }
+
   private final Object _message;
+
+  private final ServerMessageHandler.Server _remoteServer;
 }
