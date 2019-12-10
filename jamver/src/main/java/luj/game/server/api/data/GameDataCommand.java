@@ -65,5 +65,5 @@ public interface GameDataCommand<P, D> {
     void send(Object proto);
   }
 
-  void onExecute(Context ctx);
+  void onExecute(Context ctx) throws Exception;
 }
