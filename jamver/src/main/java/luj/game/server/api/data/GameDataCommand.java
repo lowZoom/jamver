@@ -24,6 +24,8 @@ public interface GameDataCommand<P, D> {
 
     <D> D data(GameDataCommand<?, D> cmd);
 
+    DataCommandException error(String messageTemplate, Object... messageArgs);
+
     Service service();
   }
 
