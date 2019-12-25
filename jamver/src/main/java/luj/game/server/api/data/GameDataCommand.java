@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 public interface GameDataCommand<P, D> {
@@ -25,6 +26,8 @@ public interface GameDataCommand<P, D> {
     <D> D data(GameDataCommand<?, D> cmd);
 
     DataCommandException error(String messageTemplate, Object... messageArgs);
+
+    Logger logger();
 
     Service service();
   }
