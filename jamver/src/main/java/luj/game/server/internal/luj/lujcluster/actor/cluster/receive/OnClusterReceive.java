@@ -29,6 +29,8 @@ final class OnClusterReceive implements ClusterCommMsgHandler<ClusterReceiveMsg>
     HandleContextImpl handleCtx = new HandleContextImpl(msg.getMessage(), sender);
     try {
       handler.onHandle(handleCtx);
+    } catch (RuntimeException e) {
+      throw e;
     } catch (Exception e) {
       throw new UnsupportedOperationException(e);
     }
