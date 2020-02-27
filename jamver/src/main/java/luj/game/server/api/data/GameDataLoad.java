@@ -13,6 +13,8 @@ public interface GameDataLoad<P, R> {
 
     <R, F> AndLoad<R, F> load(Function<R, F> field, Comparable<?> id);
 
+    <R, F> void loadGlobal(Function<R, F> field);
+
     <D, R> void find(Class<D> dataType, Consumer<FindCondition<D>> condition, Function<R, Collection<?>> resultField);
   }
 
