@@ -14,5 +14,10 @@ final class ServerImpl implements ServerMessageHandler.Server {
     _remoteNode.sendMessage(msg);
   }
 
+  @Override
+  public String toString() {
+    return _remoteNode.toString();
+  }
+
   private final ActorMessageHandler.Node _remoteNode;
 }
