@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -60,15 +61,26 @@ public interface GameDataCommand<P, D> {
     boolean randBool(double likelihood);
   }
 
+  ///////////////////////////////////////////////////////
+
   interface Network {
 
     Session session(Comparable<?> sessionId);
+
+    Http http();
   }
 
   interface Session {
 
     void send(Object proto);
   }
+
+  interface Http {
+
+    void request(String url, Map<String, Object> params);
+  }
+
+  ///////////////////////////////////////////////////////
 
   void onExecute(Context ctx) throws Exception;
 }
