@@ -5,6 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import luj.game.server.api.data.GameDataCommand;
 import org.springframework.stereotype.Component;
 
 public interface GameEventListener<E> {
@@ -31,7 +32,7 @@ public interface GameEventListener<E> {
 
   interface Data {
 
-    void executeCommand(Class<?> commandType, Object param);
+    <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
   }
 
   void onEvent(Context ctx);

@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
+import luj.game.server.api.data.GameDataCommand;
 import org.springframework.stereotype.Component;
 
 public interface GameProtoHandler<P> {
@@ -51,7 +52,7 @@ public interface GameProtoHandler<P> {
 
   interface Data {
 
-    void executeCommand(Class<?> commandType, Object param);
+    <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
   }
 
   void onHandle(Context ctx);
