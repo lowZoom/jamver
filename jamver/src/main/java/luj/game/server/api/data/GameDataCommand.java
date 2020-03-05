@@ -7,6 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
 import java.util.Map;
+import luj.game.server.api.net.GameHttpHandler;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -77,7 +78,8 @@ public interface GameDataCommand<P, D> {
 
   interface Http {
 
-    void request(String url, Map<String, Object> params);
+    void request(String url, Map<String, Object> params,
+        Class<? extends GameHttpHandler<?>> handler);
   }
 
   ///////////////////////////////////////////////////////

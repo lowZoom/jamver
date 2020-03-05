@@ -11,6 +11,7 @@ final class ServerImpl implements ServerMessageHandler.Server {
 
   @Override
   public void sendMessage(Object msg) {
+    //FIXME: 这里应该发ClusterReceiveMsg
     _remoteNode.sendMessage(msg);
   }
 
