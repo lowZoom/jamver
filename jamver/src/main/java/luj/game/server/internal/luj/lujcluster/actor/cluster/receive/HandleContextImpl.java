@@ -9,9 +9,14 @@ final class HandleContextImpl implements ServerMessageHandler.Context {
     _remoteServer = remoteServer;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public <M> M getMessage(ServerMessageHandler<M> handler) {
+    return message(handler);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <M> M message(ServerMessageHandler<M> handler) {
     return (M) _message;
   }
 

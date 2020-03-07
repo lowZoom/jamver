@@ -19,7 +19,10 @@ public interface ServerMessageHandler<M> {
 
   interface Context {
 
+    @Deprecated
     <M> M getMessage(ServerMessageHandler<M> handler);
+
+    <M> M message(ServerMessageHandler<M> handler);
 
     Server getRemoteServer();
   }
