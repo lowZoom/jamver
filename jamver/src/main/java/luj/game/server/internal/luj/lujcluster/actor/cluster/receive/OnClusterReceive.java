@@ -21,7 +21,7 @@ final class OnClusterReceive implements ClusterCommMsgHandler<ClusterReceiveMsg>
 
     ServerMessageHandler<?> handler = handlerMap.get(msgKey);
     if (handler == null) {
-      LOG.warn("分布式消息没有处理器：{}", msgKey);
+      LOG.info("分布式消息没有处理器：{}", msgKey);
       return;
     }
 

@@ -1,14 +1,13 @@
-package luj.game.server.api.boot;
+package luj.game.server.api.cluster;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import luj.game.server.api.data.GameDataCommand;
 import org.springframework.stereotype.Component;
 
-public interface GameStartListener {
+public interface ServerJoinListener {
 
   @Target(ElementType.TYPE)
   @Retention(RetentionPolicy.RUNTIME)
@@ -20,18 +19,13 @@ public interface GameStartListener {
 
   interface Context {
 
-    Service service();
+    Server remoteServer();
   }
 
-  interface Service {
+  interface Server {
 
-    Data data();
+    void sendMessage(Object msg);
   }
 
-  interface Data {
-
-    void executeCommand(Class<? extends GameDataCommand<?, ?>> commandType);
-  }
-
-  void onStart(Context ctx) throws Exception;
+  void onHandle(Context ctx) throws Exception;
 }

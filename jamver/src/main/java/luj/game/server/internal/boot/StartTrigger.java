@@ -13,8 +13,10 @@ public class StartTrigger {
   }
 
   public void trigger() throws Exception {
+    StartContextImpl ctx = new StartContextImpl();
+
     for (GameStartListener listener : nonNull(_startListenerList)) {
-      listener.onStart(new StartContextImpl());
+      listener.onStart(ctx);
     }
   }
 

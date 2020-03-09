@@ -1,17 +1,28 @@
 package luj.game.server.internal.luj.lujcluster;
 
 import java.util.List;
+import luj.game.server.api.boot.GameStartListener;
+import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.event.GameEventListener;
 
 public class JambeanInLujcluster {
 
-  public JambeanInLujcluster(List<GameEventListener<?>> eventListenerList,
+  public JambeanInLujcluster(
+      List<GameStartListener> startListenerList,
+      List<GameEventListener<?>> eventListenerList,
       GameEventListener.Service eventListenService,
-      List<ServerMessageHandler<?>> clusterHandlerList) {
+      List<ServerMessageHandler<?>> clusterMessageList,
+      List<ServerJoinListener> clusterJoinList) {
+    _startListenerList = startListenerList;
     _eventListenerList = eventListenerList;
     _eventListenService = eventListenService;
-    _clusterHandlerList = clusterHandlerList;
+    _clusterMessageList = clusterMessageList;
+    _clusterJoinList = clusterJoinList;
+  }
+
+  public List<GameStartListener> getStartListenerList() {
+    return _startListenerList;
   }
 
   public List<GameEventListener<?>> getEventListenerList() {
@@ -22,12 +33,19 @@ public class JambeanInLujcluster {
     return _eventListenService;
   }
 
-  public List<ServerMessageHandler<?>> getClusterHandlerList() {
-    return _clusterHandlerList;
+  public List<ServerMessageHandler<?>> getClusterMessageList() {
+    return _clusterMessageList;
   }
+
+  public List<ServerJoinListener> getClusterJoinList() {
+    return _clusterJoinList;
+  }
+
+  private final List<GameStartListener> _startListenerList;
 
   private final List<GameEventListener<?>> _eventListenerList;
   private final GameEventListener.Service _eventListenService;
 
-  private final List<ServerMessageHandler<?>> _clusterHandlerList;
+  private final List<ServerMessageHandler<?>> _clusterMessageList;
+  private final List<ServerJoinListener> _clusterJoinList;
 }
