@@ -2,6 +2,7 @@ package luj.game.server.internal.luj.lujcluster;
 
 import java.util.List;
 import luj.ava.spring.Internal;
+import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.node.NodeStartListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
@@ -32,9 +33,10 @@ final class OnLujclusterStart implements NodeStartListener {
   }
 
   private GameplayDataActor dataActor(JambeanInLujcluster param) {
-    CacheContainer dataCache = param.getLujcache().createCache(null);
+    CacheSession lujcache = param.getLujcache();
+    CacheContainer dataCache = lujcache.createCache(null);
 
-    return new GameplayDataActor(dataCache, new CommandMapCollector(
+    return new GameplayDataActor(dataCache, lujcache, new CommandMapCollector(
         param.getDataCommandList(), param.getDataLoadList()).collect());
   }
 
