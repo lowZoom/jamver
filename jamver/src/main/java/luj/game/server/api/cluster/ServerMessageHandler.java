@@ -25,7 +25,10 @@ public interface ServerMessageHandler<M> {
 
     <M> M message(ServerMessageHandler<M> handler);
 
+    @Deprecated
     Server getRemoteServer();
+
+    Server remoteServer();
 
     Service service();
   }
