@@ -18,6 +18,10 @@ final class InstanceTempProxy implements InvocationHandler {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) {
+    if ("toString".equals(method.getName())) {
+      return _dataMap.toString();
+    }
+
     String fieldName = method.getName();
     return _dataMap.get(fieldName);
   }

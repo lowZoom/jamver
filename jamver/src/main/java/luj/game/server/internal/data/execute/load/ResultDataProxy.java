@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 final class ResultDataProxy implements InvocationHandler {
@@ -40,7 +40,7 @@ final class ResultDataProxy implements InvocationHandler {
   }
 
   private Object defaultValue(Class<?> fieldType, String fieldName) {
-    if (fieldType == List.class) {
+    if (fieldType == Collection.class) {
       return ImmutableList.of();
     }
     throw new UnsupportedOperationException(fieldName);

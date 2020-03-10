@@ -18,19 +18,22 @@ public class DataLoadRequestMaker {
   /**
    * @see luj.game.server.internal.luj.lujcache.OnWalkReq
    */
-  public void make() {
+  public Object make() {
     ResultFieldProxy fieldHolder = new ResultFieldProxy(_loadResultType).init();
-    ResultDataProxy loadResult = new ResultDataProxy(_loadResultType, new HashMap<>());
+    ResultDataProxy loadResult = new ResultDataProxy(_loadResultType, new HashMap<>()).init();
 
-    CacheRequest req = _lujcache.createRequest(null);
-    _loader.onLoad(new LoadContextImpl(_param, req, fieldHolder, loadResult));
+    CacheRequest req = _lujcache.createRequest(loadResult);
+    _loader.onLoad(new LoadContextImpl(_param, req, fieldHolder));
 
     req.walk();
+    return loadResult.getInstance();
   }
 
   private final GameDataLoad<?, ?> _loader;
   private final Class<?> _loadResultType;
 
   private final Object _param;
+//  private final CacheContainer _dataCache;
+
   private final CacheSession _lujcache;
 }
