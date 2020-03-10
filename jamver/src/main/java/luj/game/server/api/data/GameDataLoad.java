@@ -15,13 +15,15 @@ public interface GameDataLoad<P, R> {
 
     <R, F> AndLoad<R, F> loadGlobal(Function<R, F> field);
 
+    <R, F> AndLoad<R, F> loadGlobal(GameDataLoad<?, R> load, Class<F> dataType);
+
     <D, R> void find(Class<D> dataType, Consumer<FindCondition<D>> condition,
         Function<R, Collection<?>> resultField);
   }
 
   interface AndLoad<R, F> {
 
-    AndLoad load(Function<F, ?> a, Function<R, ?> b);
+    AndLoad load(Function<F, ?> from, Function<R, ?> to);
   }
 
   void onLoad(Context ctx);

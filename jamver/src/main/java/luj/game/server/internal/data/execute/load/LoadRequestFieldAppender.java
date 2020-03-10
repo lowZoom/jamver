@@ -4,9 +4,9 @@ import java.lang.reflect.Method;
 import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
 
-public class LoadRequestAppender {
+public class LoadRequestFieldAppender {
 
-  public LoadRequestAppender(CacheRequest cacheReq, Function<Object, ?> fieldSpecifier,
+  public LoadRequestFieldAppender(CacheRequest cacheReq, Function<Object, ?> fieldSpecifier,
       ResultFieldProxy fieldHolder, Comparable<?> dataId) {
     _cacheReq = cacheReq;
     _fieldSpecifier = fieldSpecifier;
@@ -15,10 +15,10 @@ public class LoadRequestAppender {
   }
 
   public void append() {
-    Method field = _fieldHolder.getField(_fieldSpecifier);
+    Method loadField = _fieldHolder.getField(_fieldSpecifier);
 
-    String fieldName = field.getName();
-    Class<?> fieldType = field.getReturnType();
+    String fieldName = loadField.getName();
+    Class<?> fieldType = loadField.getReturnType();
 
     _cacheReq.addNode(fieldType, _dataId,
         (r, v) -> setResultField((ResultDataProxy) r, fieldName, v));

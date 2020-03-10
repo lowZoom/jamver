@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.data.GameDataLoad;
+import luj.game.server.api.data.GameDataLoad.AndLoad;
 import luj.game.server.api.data.find.FindCondition;
 
 final class LoadContextImpl implements GameDataLoad.Context {
@@ -28,7 +29,15 @@ final class LoadContextImpl implements GameDataLoad.Context {
 
   @Override
   public <R, F> GameDataLoad.AndLoad<R, F> loadGlobal(Function<R, F> field) {
-    new LoadRequestAppender(_cacheReq, (Function<Object, ?>) field, _fieldHolder, -1L).append();
+    new LoadRequestFieldAppender(_cacheReq,
+        (Function<Object, ?>) field, _fieldHolder, -1L).append();
+
+    return new AndLoadImpl<>();
+  }
+
+  @Override
+  public <R, F> AndLoad<R, F> loadGlobal(GameDataLoad<?, R> load, Class<F> dataType) {
+    new LoadRequestTransientAppender(_cacheReq, dataType, -1L).append();
 
     return new AndLoadImpl<>();
   }

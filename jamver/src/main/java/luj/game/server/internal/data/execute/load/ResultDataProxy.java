@@ -31,8 +31,11 @@ final class ResultDataProxy implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) {
     String fieldName = method.getName();
-    Object value = _resultMap.get(fieldName);
+    if ("toString".equals(fieldName)) {
+      return _resultMap.toString();
+    }
 
+    Object value = _resultMap.get(fieldName);
     if (value == null) {
       return defaultValue(method.getReturnType(), fieldName);
     }

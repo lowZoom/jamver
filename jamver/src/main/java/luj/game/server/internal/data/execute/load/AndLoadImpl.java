@@ -7,7 +7,7 @@ import luj.game.server.api.data.GameDataLoad.AndLoad;
 final class AndLoadImpl<R, F> implements GameDataLoad.AndLoad<R, F> {
 
   @Override
-  public AndLoad load(Function<F, ?> a, Function<R, ?> b) {
+  public AndLoad load(Function<F, ?> from, Function<R, ?> to) {
     return null;
   }
 }
