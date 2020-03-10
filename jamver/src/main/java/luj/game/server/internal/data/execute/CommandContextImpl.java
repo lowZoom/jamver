@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 
 final class CommandContextImpl implements GameDataCommand.Context {
 
-  CommandContextImpl(Object param) {
+  CommandContextImpl(Object param, Object loadResult, GameDataCommand.Service service) {
     _param = param;
+    _loadResult = loadResult;
+    _service = service;
   }
 
   @SuppressWarnings("unchecked")
@@ -16,9 +18,10 @@ final class CommandContextImpl implements GameDataCommand.Context {
     return (P) _param;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public <D> D data(GameDataCommand<?, D> cmd) {
-    return null;
+    return (D) _loadResult;
   }
 
   @Override
@@ -33,8 +36,11 @@ final class CommandContextImpl implements GameDataCommand.Context {
 
   @Override
   public GameDataCommand.Service service() {
-    return null;
+    return _service;
   }
 
   private final Object _param;
+  private final Object _loadResult;
+
+  private final GameDataCommand.Service _service;
 }

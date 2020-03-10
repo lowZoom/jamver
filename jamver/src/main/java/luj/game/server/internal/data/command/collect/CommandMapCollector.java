@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import luj.ava.reflect.type.TypeX;
 import luj.ava.stream.StreamX;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
@@ -27,7 +28,12 @@ public class CommandMapCollector {
     GameDataCommand<?, ?> cmd = findCommandBean(load.getClass());
 //    Logger logger = LoggerFactory.getLogger(cmd.getClass());
 
-    return new KitImpl(cmd, cmd.getClass(), load);
+    Class<?> loadResultType = TypeX.ofInstance(load)
+        .getSupertype(GameDataLoad.class)
+        .getTypeParam(1)
+        .asClass();
+
+    return new KitImpl(cmd, cmd.getClass(), load, loadResultType);
   }
 
   private GameDataCommand<?, ?> findCommandBean(Class<?> loadType) {

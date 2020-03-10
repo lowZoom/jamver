@@ -1,6 +1,7 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data;
 
 import java.util.Map;
+import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
@@ -16,18 +17,27 @@ public class GameplayDataActor {
 
     GameDataCommand<?, ?> getCommand();
 
-    GameDataLoad<?, ?> getLoad();
+    GameDataLoad<?, ?> getLoader();
+
+    Class<?> getLoadResultType();
 
     Logger getLogger();
   }
 
-  public GameplayDataActor(Map<Class<?>, CommandKit> commandMap) {
+  public GameplayDataActor(CacheContainer dataCache, Map<Class<?>, CommandKit> commandMap) {
+    _dataCache = dataCache;
     _commandMap = commandMap;
+  }
+
+  public CacheContainer getDataCache() {
+    return _dataCache;
   }
 
   public Map<Class<?>, CommandKit> getCommandMap() {
     return _commandMap;
   }
+
+  private final CacheContainer _dataCache;
 
   private final Map<Class<?>, CommandKit> _commandMap;
 }

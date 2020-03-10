@@ -1,6 +1,7 @@
 package luj.game.server.internal.luj.lujcluster;
 
 import java.util.List;
+import luj.cache.api.CacheSession;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
@@ -17,7 +18,7 @@ public class JambeanInLujcluster {
       List<GameEventListener<?>> eventListenerList,
       GameEventListener.Service eventListenService,
       List<ServerMessageHandler<?>> clusterMessageList,
-      List<ServerJoinListener> clusterJoinList) {
+      List<ServerJoinListener> clusterJoinList, CacheSession lujcache) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
     _dataLoadList = dataLoadList;
@@ -25,6 +26,7 @@ public class JambeanInLujcluster {
     _eventListenService = eventListenService;
     _clusterMessageList = clusterMessageList;
     _clusterJoinList = clusterJoinList;
+    _lujcache = lujcache;
   }
 
   public List<GameStartListener> getStartListenerList() {
@@ -55,6 +57,10 @@ public class JambeanInLujcluster {
     return _clusterJoinList;
   }
 
+  public CacheSession getLujcache() {
+    return _lujcache;
+  }
+
   private final List<GameStartListener> _startListenerList;
 
   private final List<GameDataCommand<?, ?>> _dataCommandList;
@@ -65,4 +71,6 @@ public class JambeanInLujcluster {
 
   private final List<ServerMessageHandler<?>> _clusterMessageList;
   private final List<ServerJoinListener> _clusterJoinList;
+
+  private final CacheSession _lujcache;
 }

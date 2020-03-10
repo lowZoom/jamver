@@ -1,5 +1,6 @@
 package luj.game.server.internal.framework;
 
+import luj.cache.api.LujCache;
 import luj.cluster.api.LujCluster;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
@@ -27,7 +28,8 @@ public class ServerInstanceStarter {
           null,
           null,
           beanRoot.getClusterMessageList(),
-          beanRoot.getClusterJoinList()));
+          beanRoot.getClusterJoinList(),
+          LujCache.start(ctx)));
     }
   }
 
