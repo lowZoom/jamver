@@ -1,12 +1,14 @@
-package luj.game.server.internal.luj.lujcluster.actor.cluster.receive;
+package luj.game.server.internal.cluster.handle;
 
 import luj.game.server.api.cluster.ServerMessageHandler;
 
 final class HandleContextImpl implements ServerMessageHandler.Context {
 
-  HandleContextImpl(Object message, ServerMessageHandler.Server remoteServer) {
+  HandleContextImpl(Object message, ServerMessageHandler.Server remoteServer,
+      ServerMessageHandler.Service service) {
     _message = message;
     _remoteServer = remoteServer;
+    _service = service;
   }
 
   @Override
@@ -25,7 +27,13 @@ final class HandleContextImpl implements ServerMessageHandler.Context {
     return _remoteServer;
   }
 
-  private final Object _message;
+  @Override
+  public ServerMessageHandler.Service service() {
+    return _service;
+  }
 
+  private final Object _message;
   private final ServerMessageHandler.Server _remoteServer;
+
+  private final ServerMessageHandler.Service _service;
 }

@@ -26,6 +26,8 @@ public interface ServerMessageHandler<M> {
     <M> M message(ServerMessageHandler<M> handler);
 
     Server getRemoteServer();
+
+    Service service();
   }
 
   interface Server {

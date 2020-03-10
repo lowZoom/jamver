@@ -12,7 +12,7 @@ final class OnFireEvent implements EventActorMsgHandler<FireEventMsg> {
 
   @Override
   public void onHandle(Context ctx) {
-    GameplayEventActor actor = ctx.getActor(this);
+    GameplayEventActor actor = ctx.getActorState(this);
     FireEventMsg msg = ctx.getMessage(this);
 
     Class<?> eventType = msg.getEventType();

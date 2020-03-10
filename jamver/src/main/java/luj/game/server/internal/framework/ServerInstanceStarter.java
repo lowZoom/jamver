@@ -17,13 +17,13 @@ public class ServerInstanceStarter {
     ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
 
     try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext()) {
-//      ctx.setParent(_appContext);
-
       ctx.register(InternalInjectConf.class);
       ctx.refresh();
 
       LujCluster.start(ctx).startNode("127.0.0.1", 2555, "127.0.0.1:2555", new JambeanInLujcluster(
           beanRoot.getStartListenerList(),
+          beanRoot.getDataCommandList(),
+          beanRoot.getDataLoadList(),
           null,
           null,
           beanRoot.getClusterMessageList(),
