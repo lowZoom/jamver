@@ -7,6 +7,7 @@ import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.data.GameDataLoad.AndLoad;
 import luj.game.server.api.data.find.FindCondition;
+import luj.game.server.internal.data.instance.DataTempProxy;
 
 final class LoadContextImpl implements GameDataLoad.Context {
 
@@ -38,7 +39,9 @@ final class LoadContextImpl implements GameDataLoad.Context {
 
   @Override
   public <R, F> AndLoad<R, F> loadGlobal(GameDataLoad<?, R> load, Class<F> dataType) {
-    CacheRequest.Node node = new ReqRootTransientAppender(_cacheReq, dataType, -1L).append();
+    CacheRequest.Node node = new ReqRootTransientAppender(
+        _cacheReq, dataType, DataTempProxy.GLOBAL).append();
+
     return new AndLoadImpl<>(node, _fieldHolder);
   }
 

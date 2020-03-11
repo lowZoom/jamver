@@ -17,17 +17,16 @@ public class DataInstanceCreator {
     _dataType = dataType;
   }
 
-  @SuppressWarnings("unchecked")
-  public <T> T create() {
+  public DataTempProxy create() {
     checkState(_dataType.isInterface(), _dataType);
 
     Map<String, Object> listMap = Arrays.stream(_dataType.getMethods())
         .filter(m -> m.getReturnType() == List.class)
         .collect(Collectors.toMap(Method::getName, m -> new ArrayList<>()));
 
-    return (T) new InstanceTempProxy(_dataType, new HashMap<>(ImmutableMap.<String, Object>builder()
+    return new DataTempProxy(_dataType, new HashMap<>(ImmutableMap.<String, Object>builder()
         .putAll(listMap)
-        .build())).newInstance();
+        .build())).init();
   }
 
   private final Class<?> _dataType;

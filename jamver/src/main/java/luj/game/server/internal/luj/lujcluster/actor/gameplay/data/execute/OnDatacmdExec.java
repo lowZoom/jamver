@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Map;
 import luj.ava.spring.Internal;
+import luj.cache.api.container.CacheContainer;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.GameplayDataActor;
@@ -25,9 +26,9 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     //TODO: 调用外部load创建数据使用req
     Class<?> loadResultType = cmdKit.getLoadResultType();
-
+    CacheContainer dataCache = actor.getDataCache();
     Object loadResult = new DataLoadRequestMaker(cmdKit.getLoader(),
-        loadResultType, param, actor.getLujcache()).make();
+        loadResultType, param, dataCache, actor.getLujcache()).make();
 
     //TODO: 遍历得出借不出的数据
 
@@ -35,6 +36,6 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     //TODO: 如果没有，进行数据借出锁定，创建结果对象，以供CMD使用
 
-    new DataCmdExecutor(cmdKit, param, loadResult, ctx.getActorRef()).execute();
+    new DataCmdExecutor(cmdKit, param, loadResult, ctx.getActorRef(), dataCache).execute();
   }
 }

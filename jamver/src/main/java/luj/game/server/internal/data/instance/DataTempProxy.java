@@ -5,15 +5,27 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
-final class InstanceTempProxy implements InvocationHandler {
+@Deprecated
+public class DataTempProxy implements InvocationHandler {
 
-  InstanceTempProxy(Class<?> dataType, Map<String, Object> dataMap) {
+  public static final Long GLOBAL = -1L;
+
+  DataTempProxy(Class<?> dataType, Map<String, Object> dataMap) {
     _dataType = dataType;
     _dataMap = dataMap;
   }
 
-  public Object newInstance() {
-    return Proxy.newProxyInstance(_dataType.getClassLoader(), new Class[]{_dataType}, this);
+  public DataTempProxy init() {
+    _instance = Proxy.newProxyInstance(_dataType.getClassLoader(), new Class[]{_dataType}, this);
+    return this;
+  }
+
+  public Object getInstance() {
+    return _instance;
+  }
+
+  public Map<String, Object> getDataMap() {
+    return _dataMap;
   }
 
   @Override
@@ -26,7 +38,8 @@ final class InstanceTempProxy implements InvocationHandler {
     return _dataMap.get(fieldName);
   }
 
-  private final Class<?> _dataType;
+  private Object _instance;
 
+  private final Class<?> _dataType;
   private final Map<String, Object> _dataMap;
 }

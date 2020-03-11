@@ -46,7 +46,8 @@ final class ResultDataProxy implements InvocationHandler {
     if (fieldType == Collection.class) {
       return ImmutableList.of();
     }
-    throw new UnsupportedOperationException(fieldName);
+//    throw new UnsupportedOperationException(fieldName);
+    return null;
   }
 
   private Object _instance;
