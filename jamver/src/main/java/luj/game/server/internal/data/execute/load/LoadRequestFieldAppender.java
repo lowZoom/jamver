@@ -6,21 +6,21 @@ import luj.cache.api.request.CacheRequest;
 
 public class LoadRequestFieldAppender {
 
-  public LoadRequestFieldAppender(CacheRequest cacheReq, Function<Object, ?> fieldSpecifier,
+  public LoadRequestFieldAppender(CacheRequest.Node reqNode, Function<Object, ?> fieldSpecifier,
       ResultFieldProxy fieldHolder, Comparable<?> dataId) {
-    _cacheReq = cacheReq;
+    _reqNode = reqNode;
     _fieldSpecifier = fieldSpecifier;
     _fieldHolder = fieldHolder;
     _dataId = dataId;
   }
 
-  public void append() {
+  public CacheRequest.Node append() {
     Method loadField = _fieldHolder.getField(_fieldSpecifier);
 
     String fieldName = loadField.getName();
     Class<?> fieldType = loadField.getReturnType();
 
-    _cacheReq.addNode(fieldType, _dataId,
+    return _reqNode.addChild(fieldType, _dataId,
         (r, v) -> setResultField((ResultDataProxy) r, fieldName, v));
   }
 
@@ -28,7 +28,7 @@ public class LoadRequestFieldAppender {
     loadResult.getResultMap().put(fieldName, value);
   }
 
-  private final CacheRequest _cacheReq;
+  private final CacheRequest.Node _reqNode;
 
   private final Function<Object, ?> _fieldSpecifier;
   private final ResultFieldProxy _fieldHolder;

@@ -6,9 +6,11 @@ import org.slf4j.Logger;
 
 final class CommandContextImpl implements GameDataCommand.Context {
 
-  CommandContextImpl(Object param, Object loadResult, GameDataCommand.Service service) {
+  CommandContextImpl(Object param, Object loadResult, Logger logger,
+      GameDataCommand.Service service) {
     _param = param;
     _loadResult = loadResult;
+    _logger = logger;
     _service = service;
   }
 
@@ -31,7 +33,8 @@ final class CommandContextImpl implements GameDataCommand.Context {
 
   @Override
   public Logger logger() {
-    return null;
+    //TODO: 是不是要直接用slf4j的接口还要再想想
+    return _logger;
   }
 
   @Override
@@ -42,5 +45,6 @@ final class CommandContextImpl implements GameDataCommand.Context {
   private final Object _param;
   private final Object _loadResult;
 
+  private final Logger _logger;
   private final GameDataCommand.Service _service;
 }

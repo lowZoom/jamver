@@ -18,7 +18,9 @@ public class DataCmdExecutor {
     CommandServiceImpl commandSvc = new CommandServiceImpl(dataSvc);
 
     try {
-      _cmdKit.getCommand().onExecute(new CommandContextImpl(_param, _loadResult, commandSvc));
+      _cmdKit.getCommand().onExecute(new CommandContextImpl(
+          _param, _loadResult, _cmdKit.getLogger(), commandSvc));
+
     } catch (RuntimeException e) {
       throw e;
     } catch (Exception e) {

@@ -9,6 +9,8 @@ import luj.ava.stream.StreamX;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.GameplayDataActor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommandMapCollector {
 
@@ -26,14 +28,14 @@ public class CommandMapCollector {
 
   private KitImpl makeKit(GameDataLoad<?, ?> load) {
     GameDataCommand<?, ?> cmd = findCommandBean(load.getClass());
-//    Logger logger = LoggerFactory.getLogger(cmd.getClass());
+    Logger logger = LoggerFactory.getLogger(cmd.getClass());
 
     Class<?> loadResultType = TypeX.ofInstance(load)
         .getSupertype(GameDataLoad.class)
         .getTypeParam(1)
         .asClass();
 
-    return new KitImpl(cmd, cmd.getClass(), load, loadResultType);
+    return new KitImpl(cmd, cmd.getClass(), load, loadResultType, logger);
   }
 
   private GameDataCommand<?, ?> findCommandBean(Class<?> loadType) {

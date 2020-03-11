@@ -8,11 +8,12 @@ import org.slf4j.Logger;
 final class KitImpl implements GameplayDataActor.CommandKit {
 
   KitImpl(GameDataCommand<?, ?> command, Class<?> commandType, GameDataLoad<?, ?> loader,
-      Class<?> loadResultType) {
+      Class<?> loadResultType, Logger logger) {
     _command = command;
     _commandType = commandType;
     _loader = loader;
     _loadResultType = loadResultType;
+    _logger = logger;
   }
 
   public Class<?> getCommandType() {
@@ -36,7 +37,7 @@ final class KitImpl implements GameplayDataActor.CommandKit {
 
   @Override
   public Logger getLogger() {
-    return null;
+    return _logger;
   }
 
   private final GameDataCommand<?, ?> _command;
@@ -44,4 +45,6 @@ final class KitImpl implements GameplayDataActor.CommandKit {
 
   private final GameDataLoad<?, ?> _loader;
   private final Class<?> _loadResultType;
+
+  private final Logger _logger;
 }
