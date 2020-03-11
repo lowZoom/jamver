@@ -4,22 +4,23 @@ import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.data.GameDataLoad.AndLoad;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 final class AndLoadImpl<R, F> implements GameDataLoad.AndLoad<R, F> {
 
-  AndLoadImpl(CacheRequest.Node node) {
+  AndLoadImpl(CacheRequest.Node node, ResultFieldProxy fieldHolder) {
     _node = node;
+    _fieldHolder = fieldHolder;
   }
 
   @Override
   public AndLoad load(Function<F, ?> from, Function<R, ?> to) {
-    new LoadRequestFieldAppender(_node, (Function<Object, ?>) to, null, null).append();
+    new ReqChildFieldAppender(_node, (Function<Object, ?>) to, _fieldHolder, from).append();
     return null;
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(AndLoadImpl.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(AndLoadImpl.class);
 
   private final CacheRequest.Node _node;
+
+  private final ResultFieldProxy _fieldHolder;
 }

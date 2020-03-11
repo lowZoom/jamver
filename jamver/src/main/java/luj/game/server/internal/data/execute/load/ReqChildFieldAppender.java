@@ -4,24 +4,22 @@ import java.lang.reflect.Method;
 import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
 
-public class LoadRequestFieldAppender {
+public class ReqChildFieldAppender {
 
-  public LoadRequestFieldAppender(CacheRequest.Node reqNode, Function<Object, ?> fieldSpecifier,
-      ResultFieldProxy fieldHolder, Comparable<?> dataId) {
+  public ReqChildFieldAppender(CacheRequest.Node reqNode, Function<Object, ?> fieldSpecifier,
+      ResultFieldProxy fieldHolder, Function<?, ?> idGetter) {
     _reqNode = reqNode;
     _fieldSpecifier = fieldSpecifier;
     _fieldHolder = fieldHolder;
-    _dataId = dataId;
+    _idGetter = idGetter;
   }
 
   public CacheRequest.Node append() {
     Method loadField = _fieldHolder.getField(_fieldSpecifier);
-
     String fieldName = loadField.getName();
-    Class<?> fieldType = loadField.getReturnType();
 
-    return _reqNode.addChild(fieldType, _dataId,
-        (r, v) -> setResultField((ResultDataProxy) r, fieldName, v));
+    _reqNode.addChild(_idGetter, (r, v) -> setResultField((ResultDataProxy) r, fieldName, v));
+    return null;
   }
 
   private void setResultField(ResultDataProxy loadResult, String fieldName, Object value) {
@@ -33,5 +31,5 @@ public class LoadRequestFieldAppender {
   private final Function<Object, ?> _fieldSpecifier;
   private final ResultFieldProxy _fieldHolder;
 
-  private final Comparable<?> _dataId;
+  private final Function<?, ?> _idGetter;
 }

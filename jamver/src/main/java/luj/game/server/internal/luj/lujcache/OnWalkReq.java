@@ -15,10 +15,11 @@ final class OnWalkReq implements RequestWalkListener {
   @Override
   public void onWalk(Context ctx) {
     Class<?> dataType = ctx.getDataType();
-    Long dataId = ctx.getDataId();
+    Comparable<?> dataId = ctx.getDataId();
 
     LOG.debug("读取读取读取读取：{}, {}", dataType.getName(), dataId);
 
+    //FIXME: 改为到数据中心读取
     Object data = new DataInstanceCreator(dataType).create();
     ctx.getFieldSetter().accept(ctx.getRequestParam(), data);
   }
