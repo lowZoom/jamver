@@ -1,6 +1,5 @@
 package luj.game.server.internal.data.execute.load;
 
-import java.lang.reflect.Method;
 import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
 
@@ -15,12 +14,12 @@ public class ReqRootFieldAppender {
   }
 
   public CacheRequest.Node append() {
-    Method loadField = _fieldHolder.getField(_fieldSpecifier);
+    ResultFieldProxy.Field loadField = _fieldHolder.getField(_fieldSpecifier);
 
     String fieldName = loadField.getName();
-    Class<?> fieldType = loadField.getReturnType();
+    Class<?> dataType = loadField.getDataType();
 
-    return _cacheReq.getRoot().addChild(fieldType, _dataId,
+    return _cacheReq.getRoot().addChild(dataType, _dataId,
         (r, v) -> setResultField((ResultDataProxy) r, fieldName, v));
   }
 

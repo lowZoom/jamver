@@ -7,6 +7,13 @@ import java.util.function.Function;
 
 final class ResultFieldProxy implements InvocationHandler {
 
+  interface Field {
+
+    String getName();
+
+    Class<?> getDataType();
+  }
+
   ResultFieldProxy(Class<?> resultType) {
     _resultType = resultType;
   }
@@ -17,9 +24,9 @@ final class ResultFieldProxy implements InvocationHandler {
     return this;
   }
 
-  public Method getField(Function<Object, ?> field) {
+  public Field getField(Function<Object, ?> field) {
     field.apply(_instance);
-    return _field;
+    return new ResultFieldImpl(_field);
   }
 
   @Override
