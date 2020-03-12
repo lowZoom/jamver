@@ -9,6 +9,7 @@ import java.util.Map;
 public class DataTempProxy implements InvocationHandler {
 
   public static final Long GLOBAL = -1L;
+  public static final String ID = "id";
 
   DataTempProxy(Class<?> dataType, Map<String, Object> dataMap) {
     _dataType = dataType;
@@ -24,18 +25,29 @@ public class DataTempProxy implements InvocationHandler {
     return _instance;
   }
 
+  public Class<?> getDataType() {
+    return _dataType;
+  }
+
   public Map<String, Object> getDataMap() {
     return _dataMap;
   }
 
+  public Object invoke(String methodName) {
+    if ("toString".equals(methodName)) {
+      return toString();
+    }
+    return _dataMap.get(methodName);
+  }
+
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) {
-    if ("toString".equals(method.getName())) {
-      return _dataMap.toString();
-    }
+    return invoke(method.getName());
+  }
 
-    String fieldName = method.getName();
-    return _dataMap.get(fieldName);
+  @Override
+  public String toString() {
+    return _dataMap.toString();
   }
 
   private Object _instance;

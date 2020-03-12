@@ -32,7 +32,7 @@ final class LoadContextImpl implements GameDataLoad.Context {
   @Override
   public <R, F> GameDataLoad.AndLoad<R, F> loadGlobal(Function<R, F> field) {
     CacheRequest.Node node = new ReqRootFieldAppender(_cacheReq,
-        (Function<Object, ?>) field, _fieldHolder, -1L).append();
+        (Function<Object, ?>) field, _fieldHolder, DataTempProxy.GLOBAL).append();
 
     return new AndLoadImpl<>(node, _fieldHolder);
   }

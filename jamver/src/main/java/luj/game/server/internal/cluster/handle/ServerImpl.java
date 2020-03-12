@@ -2,6 +2,7 @@ package luj.game.server.internal.cluster.handle;
 
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.game.server.api.cluster.ServerMessageHandler;
+import luj.game.server.internal.luj.lujcluster.actor.cluster.receive.ClusterReceiveMsg;
 
 final class ServerImpl implements ServerMessageHandler.Server {
 
@@ -11,8 +12,8 @@ final class ServerImpl implements ServerMessageHandler.Server {
 
   @Override
   public void sendMessage(Object msg) {
-    //FIXME: 这里应该发ClusterReceiveMsg
-    _remoteNode.sendMessage(msg);
+    ClusterReceiveMsg gameMsg = new ClusterReceiveMsg(msg.getClass().getName(), msg);
+    _remoteNode.sendMessage(ClusterReceiveMsg.class.getName(), gameMsg);
   }
 
   @Override

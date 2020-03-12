@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.load;
+package luj.game.server.internal.data.load.meta;
 
 import static java.util.stream.Collectors.toMap;
 

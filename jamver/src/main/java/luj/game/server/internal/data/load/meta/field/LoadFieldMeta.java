@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.load.field;
+package luj.game.server.internal.data.load.meta.field;
 
 import java.util.function.BiConsumer;
 

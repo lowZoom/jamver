@@ -14,7 +14,7 @@ public class DataTempAdder {
   }
 
   public void add() {
-    Object dataId = _dataObj.getDataMap().get("id");
+    Object dataId = _dataObj.getDataMap().get(DataTempProxy.ID);
     checkNotNull(dataId, _dataType);
     _dataCache.put(dataKey(_dataType, dataId), _dataObj);
   }

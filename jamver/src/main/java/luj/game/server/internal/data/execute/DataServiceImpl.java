@@ -1,35 +1,41 @@
 package luj.game.server.internal.data.execute;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.function.Supplier;
-import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
-import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.execute.DatacmdExecMsg;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-final class DataServiceImpl implements GameDataCommand.Data {
+public class DataServiceImpl implements GameDataCommand.Data {
 
-  DataServiceImpl(ActorMessageHandler.Ref dataRef, CacheContainer dataCache) {
+  public DataServiceImpl(ActorMessageHandler.Ref dataRef, List<DataTempProxy> createLog) {
     _dataRef = dataRef;
-    _dataCache = dataCache;
+    _createLog = createLog;
+  }
+
+  public void specifySetField(DataTempProxy data, String fieldName) {
+    _curData = data;
+    _curField = fieldName;
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public <T> T create(Class<T> dataType) {
     DataTempProxy dataObj = new DataInstanceCreator(dataType).create();
-    new DataTempAdder(_dataCache, dataType, dataObj).add();
-    return (T) dataObj.getInstance();
+    _createLog.add(dataObj);
+
+    DataResultProxy result = new DataResultProxy(dataObj, this::specifySetField).init();
+    return (T) result.getInstance();
   }
 
   @Override
   public <T> void set(Supplier<T> field, T value) {
-    LOG.warn("尚未实现：set");
+    field.get();
+    _curData.getDataMap().put(_curField, value);
   }
 
   @Override
@@ -43,10 +49,11 @@ final class DataServiceImpl implements GameDataCommand.Data {
     _dataRef.tell(msg, Duration.ZERO);
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(DataServiceImpl.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(DataServiceImpl.class);
+
+  private DataTempProxy _curData;
+  private String _curField;
 
   private final ActorMessageHandler.Ref _dataRef;
-
-  @Deprecated
-  private final CacheContainer _dataCache;
+  private final List<DataTempProxy> _createLog;
 }

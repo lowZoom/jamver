@@ -1,15 +1,18 @@
 package luj.game.server.internal.data.instance;
 
 import static com.google.common.base.Preconditions.checkState;
+import static java.util.stream.Collectors.toMap;
 
 import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.function.Function;
 
 public class DataInstanceCreator {
 
@@ -19,15 +22,23 @@ public class DataInstanceCreator {
 
   public DataTempProxy create() {
     checkState(_dataType.isInterface(), _dataType);
-
-    Map<String, Object> listMap = Arrays.stream(_dataType.getMethods())
-        .filter(m -> m.getReturnType() == List.class)
-        .collect(Collectors.toMap(Method::getName, m -> new ArrayList<>()));
+    Method[] methodList = _dataType.getMethods();
 
     return new DataTempProxy(_dataType, new HashMap<>(ImmutableMap.<String, Object>builder()
-        .putAll(listMap)
+        .putAll(makeInitMap(methodList, List.class, m -> new ArrayList<>()))
+        .putAll(makeInitMap(methodList, Set.class, m -> new HashSet<>()))
+        .putAll(makeInitMap(methodList, int.class, m -> INT_ZERO))
         .build())).init();
   }
+
+  private Map<String, Object> makeInitMap(Method[] methodList, Class<?> type,
+      Function<Method, Object> valueInit) {
+    return Arrays.stream(methodList)
+        .filter(m -> m.getReturnType() == type)
+        .collect(toMap(Method::getName, valueInit));
+  }
+
+  private static final Integer INT_ZERO = 0;
 
   private final Class<?> _dataType;
 }

@@ -1,7 +1,7 @@
-package luj.game.server.internal.data.load;
+package luj.game.server.internal.data.load.meta;
 
-import luj.game.server.internal.data.load.generate.DataLoadRequestFactory;
-import luj.game.server.internal.data.load.generate.DataLoadResultFactory;
+import luj.game.server.internal.data.load.meta.generate.DataLoadRequestFactory;
+import luj.game.server.internal.data.load.meta.generate.DataLoadResultFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class DataLoadMetaHolder<T> {

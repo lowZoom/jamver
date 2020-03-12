@@ -1,10 +1,12 @@
 package luj.game.server.internal.data.execute.load;
 
 import java.util.HashMap;
+import java.util.function.BiConsumer;
 import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.data.GameDataLoad;
+import luj.game.server.internal.data.instance.DataTempProxy;
 
 public class DataLoadRequestMaker {
 
@@ -13,15 +15,19 @@ public class DataLoadRequestMaker {
     Object getLoadResult();
 
     CacheContainer getDataCache();
+
+    BiConsumer<DataTempProxy, String> getFieldHook();
   }
 
   public DataLoadRequestMaker(GameDataLoad<?, ?> loader, Class<?> loadResultType, Object param,
-      CacheContainer dataCache, CacheSession lujcache) {
+      CacheContainer dataCache, CacheSession lujcache,
+      BiConsumer<DataTempProxy, String> fieldHook) {
     _loader = loader;
     _loadResultType = loadResultType;
     _param = param;
     _dataCache = dataCache;
     _lujcache = lujcache;
+    _fieldHook = fieldHook;
   }
 
   /**
@@ -41,6 +47,11 @@ public class DataLoadRequestMaker {
       public CacheContainer getDataCache() {
         return _dataCache;
       }
+
+      @Override
+      public BiConsumer<DataTempProxy, String> getFieldHook() {
+        return _fieldHook;
+      }
     });
 
     _loader.onLoad(new LoadContextImpl(_param, req, fieldHolder));
@@ -56,4 +67,7 @@ public class DataLoadRequestMaker {
   private final CacheContainer _dataCache;
 
   private final CacheSession _lujcache;
+
+  @Deprecated
+  private final BiConsumer<DataTempProxy, String> _fieldHook;
 }

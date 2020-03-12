@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.load.generate;
+package luj.game.server.internal.data.load.meta.generate;
 
 public interface DataLoadRequestFactory<T> {
 
