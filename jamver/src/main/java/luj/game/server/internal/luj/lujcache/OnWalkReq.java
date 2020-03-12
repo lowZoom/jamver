@@ -14,8 +14,6 @@ import luj.game.server.internal.data.instance.DataInstanceCreator;
 import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Internal
 final class OnWalkReq implements RequestWalkListener {
@@ -47,7 +45,7 @@ final class OnWalkReq implements RequestWalkListener {
       return initGlobal(dataCache, dataType, fieldHook);
     }
 
-    LOG.debug("读取读取读取读取：{}, {}", dataType.getName(), dataId);
+//    LOG.debug("读取读取读取读取：{}, {}", dataType.getName(), dataId);
     return makeData(dataProxy, fieldHook);
   }
 
@@ -55,7 +53,7 @@ final class OnWalkReq implements RequestWalkListener {
       Function<Object, Collection<Comparable<?>>> idGetter, Class<?> dataType,
       CacheContainer dataCache, BiConsumer<DataTempProxy, String> fieldHook) {
     List<Object> dataList = idGetter.apply(parentData.getInstance()).stream()
-        .peek(id -> LOG.debug("数组读取读取读取读取：{}, {}", dataType.getName(), id))
+//        .peek(id -> LOG.debug("数组读取读取读取读取：{}, {}", dataType.getName(), id))
         .map(id -> (DataTempProxy) dataCache.get(dataKey(dataType, id)))
         .filter(Objects::nonNull)
         .map(d -> new DataResultProxy(d, fieldHook).init())
@@ -111,5 +109,5 @@ final class OnWalkReq implements RequestWalkListener {
     Object getReturn();
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(OnWalkReq.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(OnWalkReq.class);
 }
