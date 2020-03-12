@@ -15,7 +15,7 @@ import javax.lang.model.type.DeclaredType;
 import luj.game.server.anno.proc.data.internal.LoadResultFactoryGenerator;
 import luj.game.server.anno.proc.data.internal.LoadResultImplGenerator;
 import luj.game.server.api.data.GameDataCommand;
-import luj.game.server.internal.data.load.DataLoadMetaHolder;
+import luj.game.server.internal.data.load.meta.DataLoadMetaHolder;
 import luj.generate.annotation.process.SingleAnnoProc;
 import luj.generate.annotation.process.type.ProcType;
 import org.springframework.stereotype.Component;

@@ -6,7 +6,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 import java.lang.reflect.Method;
 import javax.lang.model.element.Modifier;
-import luj.game.server.internal.data.load.generate.DataLoadResultFactory;
+import luj.game.server.internal.data.load.meta.generate.DataLoadResultFactory;
 import luj.generate.annotation.process.type.ProcType;
 import org.springframework.stereotype.Component;
 
