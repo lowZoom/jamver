@@ -1,11 +1,11 @@
 package luj.game.server.internal.luj.lujcache;
 
+import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import luj.ava.spring.Internal;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
@@ -25,7 +25,7 @@ final class OnWalkReq implements RequestWalkListener {
   public Object onWalk(Context ctx) {
     DataLoadRequestMaker.Context param = ctx.getRequestParam();
 
-    //FIXME: 改为到数据中心读取
+    //TODO: 改为向数据中心发起读取请求
     Data data = loadData(ctx, param.getDataCache(), param.getFieldHook());
     ctx.getFieldSetter().accept(param.getLoadResult(), data.getResult());
 
@@ -52,13 +52,13 @@ final class OnWalkReq implements RequestWalkListener {
   private Data idToList(DataTempProxy parentData,
       Function<Object, Collection<Comparable<?>>> idGetter, Class<?> dataType,
       CacheContainer dataCache, BiConsumer<DataTempProxy, String> fieldHook) {
-    List<Object> dataList = idGetter.apply(parentData.getInstance()).stream()
+    List<Object> dataList = ImmutableList.copyOf(idGetter.apply(parentData.getInstance()).stream()
 //        .peek(id -> LOG.debug("数组读取读取读取读取：{}, {}", dataType.getName(), id))
         .map(id -> (DataTempProxy) dataCache.get(dataKey(dataType, id)))
         .filter(Objects::nonNull)
         .map(d -> new DataResultProxy(d, fieldHook).init())
         .map(DataResultProxy::getInstance)
-        .collect(Collectors.toList());
+        .iterator());
 
     return new Data() {
       @Override
