@@ -1,7 +1,6 @@
 package luj.game.server.internal.cluster.handle;
 
 import luj.game.server.api.cluster.ServerMessageHandler;
-import luj.game.server.api.cluster.ServerMessageHandler.Server;
 
 final class HandleContextImpl implements ServerMessageHandler.Context {
 
@@ -29,7 +28,7 @@ final class HandleContextImpl implements ServerMessageHandler.Context {
   }
 
   @Override
-  public Server remoteServer() {
+  public ServerMessageHandler.Server remoteServer() {
     return _remoteServer;
   }
 
