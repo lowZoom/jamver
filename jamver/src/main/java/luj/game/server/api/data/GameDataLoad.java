@@ -23,7 +23,13 @@ public interface GameDataLoad<P, R> {
 
   interface AndLoad<R, F> {
 
+    /**
+     * @see #join
+     */
+    @Deprecated
     AndLoad load(Function<F, ?> from, Function<R, ?> to);
+
+    AndLoad join(Function<F, ?> from, Function<R, ?> to);
   }
 
   void onLoad(Context ctx);
