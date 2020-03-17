@@ -8,6 +8,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.dataload.DataLoadPlugin;
 
 public class JambeanInLujcluster {
 
@@ -18,7 +19,9 @@ public class JambeanInLujcluster {
       List<GameEventListener<?>> eventListenerList,
       GameEventListener.Service eventListenService,
       List<ServerMessageHandler<?>> clusterMessageList,
-      List<ServerJoinListener> clusterJoinList, CacheSession lujcache) {
+      List<ServerJoinListener> clusterJoinList,
+      DataLoadPlugin dataLoadPlugin,
+      CacheSession lujcache) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
     _dataLoadList = dataLoadList;
@@ -26,6 +29,7 @@ public class JambeanInLujcluster {
     _eventListenService = eventListenService;
     _clusterMessageList = clusterMessageList;
     _clusterJoinList = clusterJoinList;
+    _dataLoadPlugin = dataLoadPlugin;
     _lujcache = lujcache;
   }
 
@@ -57,6 +61,10 @@ public class JambeanInLujcluster {
     return _clusterJoinList;
   }
 
+  public DataLoadPlugin getDataLoadPlugin() {
+    return _dataLoadPlugin;
+  }
+
   public CacheSession getLujcache() {
     return _lujcache;
   }
@@ -72,5 +80,6 @@ public class JambeanInLujcluster {
   private final List<ServerMessageHandler<?>> _clusterMessageList;
   private final List<ServerJoinListener> _clusterJoinList;
 
+  private final DataLoadPlugin _dataLoadPlugin;
   private final CacheSession _lujcache;
 }

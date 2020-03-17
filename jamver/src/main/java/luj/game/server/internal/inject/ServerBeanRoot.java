@@ -1,15 +1,17 @@
 package luj.game.server.internal.inject;
 
 import java.util.List;
-import luj.ava.spring.Internal;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.dataload.DataLoadPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Internal
+/**
+ * @see ServerBeanCollector#collect
+ */
 public class ServerBeanRoot {
 
   public List<GameStartListener> getStartListenerList() {
@@ -32,6 +34,10 @@ public class ServerBeanRoot {
     return _clusterJoinList;
   }
 
+  public DataLoadPlugin getDataLoadPlugin() {
+    return _dataLoadPlugin;
+  }
+
   @Autowired(required = false)
   private List<GameStartListener> _startListenerList;
 
@@ -46,4 +52,7 @@ public class ServerBeanRoot {
 
   @Autowired(required = false)
   private List<ServerJoinListener> _clusterJoinList;
+
+  @Autowired
+  private DataLoadPlugin _dataLoadPlugin;
 }

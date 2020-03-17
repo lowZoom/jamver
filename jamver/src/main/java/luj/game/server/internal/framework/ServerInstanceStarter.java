@@ -1,12 +1,14 @@
 package luj.game.server.internal.framework;
 
 import luj.cache.api.LujCache;
+import luj.cluster.api.ClusterSession;
 import luj.cluster.api.LujCluster;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigUtils;
 
 public class ServerInstanceStarter {
 
@@ -17,11 +19,15 @@ public class ServerInstanceStarter {
   public void start() {
     ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
 
-    try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext()) {
-      ctx.register(InternalInjectConf.class);
-      ctx.refresh();
+    try (AnnotationConfigApplicationContext internalCtx = new AnnotationConfigApplicationContext()) {
+      internalCtx.getBeanFactory().registerSingleton(
+          AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR, new BeanNameGen());
 
-      LujCluster.start(ctx).startNode("127.0.0.1", 2555, "127.0.0.1:2555", new JambeanInLujcluster(
+      internalCtx.register(InternalInjectConf.class);
+      internalCtx.refresh();
+
+      ClusterSession lujcluster = LujCluster.start(internalCtx);
+      lujcluster.startNode("127.0.0.1", 2555, "127.0.0.1:2555", new JambeanInLujcluster(
           beanRoot.getStartListenerList(),
           beanRoot.getDataCommandList(),
           beanRoot.getDataLoadList(),
@@ -29,7 +35,8 @@ public class ServerInstanceStarter {
           null,
           beanRoot.getClusterMessageList(),
           beanRoot.getClusterJoinList(),
-          LujCache.start(ctx)));
+          beanRoot.getDataLoadPlugin(),
+          LujCache.start(internalCtx)));
     }
   }
 

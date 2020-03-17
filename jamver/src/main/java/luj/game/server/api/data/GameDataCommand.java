@@ -52,6 +52,8 @@ public interface GameDataCommand<P, D> {
 
     <T> void set(Supplier<T> field, T value);
 
+    boolean exists(Object data);
+
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType);
 
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);

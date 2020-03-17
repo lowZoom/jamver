@@ -37,7 +37,7 @@ final class OnLujclusterStart implements NodeStartListener {
     CacheContainer dataCache = lujcache.createCache(null);
 
     return new GameplayDataActor(dataCache, lujcache, new CommandMapCollector(
-        param.getDataCommandList(), param.getDataLoadList()).collect());
+        param.getDataCommandList(), param.getDataLoadList()).collect(), param.getDataLoadPlugin());
   }
 
   private GameplayEventActor eventActor(JambeanInLujcluster param) {

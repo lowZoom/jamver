@@ -32,10 +32,19 @@ public class DataServiceImpl implements GameDataCommand.Data {
     return (T) result.getInstance();
   }
 
+  /**
+   * @see DataResultProxy#invoke
+   */
   @Override
   public <T> void set(Supplier<T> field, T value) {
     field.get();
     _curData.getDataMap().put(_curField, value);
+  }
+
+  @Override
+  public boolean exists(Object data) {
+    //FIXME: TEMP
+    return data != null;
   }
 
   @Override

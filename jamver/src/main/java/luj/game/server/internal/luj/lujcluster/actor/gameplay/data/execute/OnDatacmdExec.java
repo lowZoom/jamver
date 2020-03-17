@@ -13,6 +13,8 @@ import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
 import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.GameplayDataActor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Internal
 final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
@@ -45,11 +47,14 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     //TODO: 如果没有，进行数据借出锁定，创建结果对象，以供CMD使用
 
-    ctx.getLogger().debug("执行数据CMD：{}", cmdType.getName());
+//    ctx.getLogger().debug("执行数据CMD：{}", cmdType.getName());
+    LOG.debug("执行数据CMD：{}", cmdType.getName());
     new DataCmdExecutor(cmdKit, param, loadResult, dataSvc).execute();
 
     for (DataTempProxy data : createLog) {
       new DataTempAdder(dataCache, data.getDataType(), data).add();
     }
   }
+
+  private static final Logger LOG = LoggerFactory.getLogger(OnDatacmdExec.class);
 }
