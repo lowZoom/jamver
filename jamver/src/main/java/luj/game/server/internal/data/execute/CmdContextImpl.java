@@ -4,9 +4,9 @@ import luj.game.server.api.data.DataCommandException;
 import luj.game.server.api.data.GameDataCommand;
 import org.slf4j.Logger;
 
-final class CommandContextImpl implements GameDataCommand.Context {
+final class CmdContextImpl implements GameDataCommand.Context {
 
-  CommandContextImpl(Object param, Object loadResult, Logger logger,
+  CmdContextImpl(Object param, Object loadResult, Logger logger,
       GameDataCommand.Service service) {
     _param = param;
     _loadResult = loadResult;

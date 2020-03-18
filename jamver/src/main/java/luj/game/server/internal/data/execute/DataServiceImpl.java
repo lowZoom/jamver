@@ -8,7 +8,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.execute.DatacmdExecMsg;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
 
 public class DataServiceImpl implements GameDataCommand.Data {
 

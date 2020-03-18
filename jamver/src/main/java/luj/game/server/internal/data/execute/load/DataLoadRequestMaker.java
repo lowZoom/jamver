@@ -34,6 +34,10 @@ public class DataLoadRequestMaker {
    * @see luj.game.server.internal.luj.lujcache.OnWalkReq
    */
   public Object make() {
+    if (_loadResultType == Void.class) {
+      return null;
+    }
+
     ResultFieldProxy fieldHolder = new ResultFieldProxy(_loadResultType).init();
     ResultDataProxy loadResult = new ResultDataProxy(_loadResultType, new HashMap<>()).init();
 

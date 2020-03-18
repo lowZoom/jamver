@@ -11,7 +11,7 @@ import luj.game.server.internal.cluster.handle.collect.ClusterHandleMapCollector
 import luj.game.server.internal.data.command.collect.CommandMapCollector;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.GameplayDataActor;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.GameplayEventActor;
 
 @Internal
@@ -37,7 +37,8 @@ final class OnLujclusterStart implements NodeStartListener {
     CacheContainer dataCache = lujcache.createCache(null);
 
     return new GameplayDataActor(dataCache, lujcache, new CommandMapCollector(
-        param.getDataCommandList(), param.getDataLoadList()).collect(), param.getDataLoadPlugin());
+        param.getDataCommandList(), param.getDataLoadList()).collect(),
+        param.getDataInitPlugin(), param.getDataLoadPlugin(), param.getDataSavePlugin());
   }
 
   private GameplayEventActor eventActor(JambeanInLujcluster param) {

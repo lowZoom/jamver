@@ -1,4 +1,4 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.dataload.load;
+package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.load;
 
 public class DataLoadMsg {
 

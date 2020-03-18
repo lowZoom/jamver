@@ -2,9 +2,9 @@ package luj.game.server.internal.data.execute;
 
 import luj.game.server.api.data.GameDataCommand;
 
-final class CommandServiceImpl implements GameDataCommand.Service {
+final class CmdServiceImpl implements GameDataCommand.Service {
 
-  CommandServiceImpl(GameDataCommand.Data dataSvc) {
+  CmdServiceImpl(GameDataCommand.Data dataSvc) {
     _dataSvc = dataSvc;
   }
 

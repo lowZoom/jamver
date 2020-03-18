@@ -3,7 +3,7 @@ package luj.game.server.internal.cluster.handle;
 import luj.cluster.api.node.NodeStartListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.execute.DatacmdExecMsg;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
 
 final class DataServiceImpl implements ServerMessageHandler.Data {
 

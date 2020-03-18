@@ -1,4 +1,4 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.dataload;
+package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load;
 
 import luj.game.server.api.plugin.JamverDataLoadInit;
 import luj.game.server.api.plugin.JamverDataLoadLoad;

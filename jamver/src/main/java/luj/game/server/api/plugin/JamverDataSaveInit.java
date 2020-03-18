@@ -1,6 +1,6 @@
 package luj.game.server.api.plugin;
 
-public interface JamverDataLoadInit {
+public interface JamverDataSaveInit {
 
   interface Context {
 

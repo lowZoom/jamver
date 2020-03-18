@@ -1,8 +1,8 @@
-package luj.game.server.internal.data.load.io.init;
+package luj.game.server.internal.data.save.init;
 
-import luj.game.server.api.plugin.JamverDataLoadInit;
+import luj.game.server.api.plugin.JamverDataSaveInit;
 
-final class InitContextImpl implements JamverDataLoadInit.Context {
+final class InitContextImpl implements JamverDataSaveInit.Context {
 
   InitContextImpl(Object dataState) {
     _dataState = dataState;

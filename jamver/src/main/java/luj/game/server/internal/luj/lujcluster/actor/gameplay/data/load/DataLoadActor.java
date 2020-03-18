@@ -1,7 +1,6 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.dataload;
+package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load;
 
 import luj.cluster.api.actor.ActorMessageHandler;
-import luj.cluster.api.actor.ActorPreStartHandler;
 
 public class DataLoadActor {
 
@@ -9,11 +8,8 @@ public class DataLoadActor {
     // NOOP
   }
 
-  public interface PreStart extends ActorPreStartHandler<DataLoadActor> {
-    // NOOP
-  }
-
-  public DataLoadActor(DataLoadPlugin loadPlugin) {
+  public DataLoadActor(Object loadState, DataLoadPlugin loadPlugin) {
+    _loadState = loadState;
     _loadPlugin = loadPlugin;
   }
 
@@ -21,15 +17,11 @@ public class DataLoadActor {
     return _loadState;
   }
 
-  public void setLoadState(Object loadState) {
-    _loadState = loadState;
-  }
-
   public DataLoadPlugin getLoadPlugin() {
     return _loadPlugin;
   }
 
-  private Object _loadState;
+  private final Object _loadState;
 
   private final DataLoadPlugin _loadPlugin;
 }

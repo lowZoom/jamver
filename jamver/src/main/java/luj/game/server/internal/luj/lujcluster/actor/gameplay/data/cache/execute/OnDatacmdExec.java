@@ -1,4 +1,4 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.execute;
+package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -10,9 +10,10 @@ import luj.cache.api.container.CacheContainer;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.DataServiceImpl;
 import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
+import luj.game.server.internal.data.execute.save.DataSaveRequestor;
 import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.GameplayDataActor;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,8 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     checkNotNull(cmdKit, cmdType);
 
     //TODO: 调用外部load创建数据使用req
-    Class<?> loadResultType = cmdKit.getLoadResultType();
     CacheContainer dataCache = actor.getDataCache();
+    Class<?> loadResultType = cmdKit.getLoadResultType();
 
     List<DataTempProxy> createLog = new ArrayList<>();
     DataServiceImpl dataSvc = new DataServiceImpl(ctx.getActorRef(), createLog);
@@ -54,6 +55,7 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     for (DataTempProxy data : createLog) {
       new DataTempAdder(dataCache, data.getDataType(), data).add();
     }
+    new DataSaveRequestor(actor.getSaveRef(), createLog).request();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnDatacmdExec.class);

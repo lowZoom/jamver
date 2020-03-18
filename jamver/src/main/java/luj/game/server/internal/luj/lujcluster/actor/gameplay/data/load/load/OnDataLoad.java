@@ -1,9 +1,9 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.dataload.load;
+package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.load;
 
 import luj.ava.spring.Internal;
 import luj.game.server.internal.data.load.io.DataIoLoader;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.dataload.DataLoadActor;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.dataload.DataLoadPlugin;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadActor;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
 
 @Internal
 final class OnDataLoad implements DataLoadActor.Handler<DataLoadMsg> {

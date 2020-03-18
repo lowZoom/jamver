@@ -31,11 +31,12 @@ public class ServerInstanceStarter {
           beanRoot.getStartListenerList(),
           beanRoot.getDataCommandList(),
           beanRoot.getDataLoadList(),
-          null,
-          null,
+          null, null,
           beanRoot.getClusterMessageList(),
           beanRoot.getClusterJoinList(),
+          beanRoot.getDataInitPlugin(),
           beanRoot.getDataLoadPlugin(),
+          beanRoot.getDataSavePlugin(),
           LujCache.start(internalCtx)));
     }
   }

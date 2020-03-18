@@ -1,4 +1,4 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.execute;
+package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute;
 
 public class DatacmdExecMsg {
 

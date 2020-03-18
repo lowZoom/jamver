@@ -2,7 +2,7 @@ package luj.game.server.internal.data.command.collect;
 
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.GameplayDataActor;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
 
 final class KitImpl implements GameplayDataActor.CommandKit {

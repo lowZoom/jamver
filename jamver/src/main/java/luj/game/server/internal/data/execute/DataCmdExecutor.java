@@ -1,6 +1,6 @@
 package luj.game.server.internal.data.execute;
 
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.GameplayDataActor;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 public class DataCmdExecutor {
 
@@ -13,10 +13,10 @@ public class DataCmdExecutor {
   }
 
   public void execute() {
-    CommandServiceImpl commandSvc = new CommandServiceImpl(_dataSvc);
+    CmdServiceImpl commandSvc = new CmdServiceImpl(_dataSvc);
 
     try {
-      _cmdKit.getCommand().onExecute(new CommandContextImpl(
+      _cmdKit.getCommand().onExecute(new CmdContextImpl(
           _param, _loadResult, _cmdKit.getLogger(), commandSvc));
 
     } catch (RuntimeException e) {
