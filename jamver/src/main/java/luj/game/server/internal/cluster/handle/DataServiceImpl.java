@@ -11,6 +11,9 @@ final class DataServiceImpl implements ServerMessageHandler.Data {
     _dataRef = dataRef;
   }
 
+  /**
+   * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.OnDatacmdExec
+   */
   @Override
   public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param) {
     DatacmdExecMsg msg = new DatacmdExecMsg(commandType, param);

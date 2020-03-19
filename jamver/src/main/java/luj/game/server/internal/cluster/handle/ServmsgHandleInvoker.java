@@ -21,7 +21,7 @@ public class ServmsgHandleInvoker {
   public void invoke() {
     ServerMessageHandler<?> handler = _handlerMap.get(_messageKey);
     if (handler == null) {
-      LOG.info("分布式消息没有处理器：{}", _messageKey);
+      LOG.info("[game]消息没有处理器：{}", _messageKey);
       return;
     }
 

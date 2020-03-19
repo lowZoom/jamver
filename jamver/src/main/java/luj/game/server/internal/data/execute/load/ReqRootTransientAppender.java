@@ -17,7 +17,7 @@ public class ReqRootTransientAppender {
   }
 
   private void setResultField(ResultDataProxy loadResult, Object value) {
-    LOG.debug("临时变量：{}", _dataType.getName());
+//    LOG.debug("临时变量：{}", _dataType.getName());
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(ReqRootTransientAppender.class);

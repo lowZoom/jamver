@@ -16,6 +16,9 @@ public class ServerInstanceStarter {
     _appContext = appContext;
   }
 
+  /**
+   * @see luj.game.server.internal.luj.lujcluster.OnLujclusterStart#onStart
+   */
   public void start() {
     ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
 

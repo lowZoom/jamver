@@ -11,6 +11,7 @@ import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
+import luj.game.server.internal.data.instance.DataKeyMaker;
 import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
@@ -34,8 +35,8 @@ final class OnWalkReq implements RequestWalkListener {
 
   private Data loadData(Context ctx, CacheContainer dataCache,
       BiConsumer<DataTempProxy, String> fieldHook) {
-    Comparable<?> dataId = ctx.getDataId();
     Class<?> dataType = ctx.getDataType();
+    Comparable<?> dataId = ctx.getDataId();
     if (dataId == null) {
       return idToList(ctx.getParentReturn(), ctx.getDataIdGetter(), dataType, dataCache, fieldHook);
     }
@@ -84,7 +85,7 @@ final class OnWalkReq implements RequestWalkListener {
   }
 
   private String dataKey(Class<?> dataType, Comparable<?> dataId) {
-    return dataType.getName() + "#" + dataId;
+    return new DataKeyMaker(dataType, dataId).make();
   }
 
   private Data makeData(DataTempProxy dataProxy, BiConsumer<DataTempProxy, String> fieldHook) {
