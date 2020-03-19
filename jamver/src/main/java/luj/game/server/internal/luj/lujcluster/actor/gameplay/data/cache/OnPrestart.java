@@ -14,23 +14,24 @@ final class OnPrestart implements GameplayDataActor.PreStart {
 
   @Override
   public void onHandle(Context ctx) {
-    GameplayDataActor actor = ctx.getActorState(this);
+    GameplayDataActor self = ctx.getActorState(this);
+    Actor selfRef = ctx.getActor();
 
-    Object rootState = new DataRootInitializer(actor.getInitPlugin()).init();
-    actor.setPluginState(rootState);
+    Object rootState = new DataRootInitializer(self.getInitPlugin()).init();
+    self.setPluginState(rootState);
 
-    Actor loadRef = ctx.createActor(loadActor(actor, rootState));
-    actor.setLoadRef(loadRef);
+    Actor loadRef = ctx.createActor(loadActor(self, rootState, selfRef));
+    self.setLoadRef(loadRef);
 
-    Actor saveRef = ctx.createActor(saveActor(actor, rootState));
-    actor.setSaveRef(saveRef);
+    Actor saveRef = ctx.createActor(saveActor(self, rootState));
+    self.setSaveRef(saveRef);
   }
 
-  private DataLoadActor loadActor(GameplayDataActor dataActor, Object pluginState) {
+  private DataLoadActor loadActor(GameplayDataActor dataActor, Object pluginState, Actor dataRef) {
     JamverDataLoadInit initPlugin = dataActor.getLoadPlugin().getLoadInit();
     Object loadState = new DataLoadInitializer(initPlugin, pluginState).init();
 
-    return new DataLoadActor(loadState, dataActor.getLoadPlugin());
+    return new DataLoadActor(loadState, dataActor.getLoadPlugin(), dataRef);
   }
 
   private DataSaveActor saveActor(GameplayDataActor dataActor, Object pluginState) {

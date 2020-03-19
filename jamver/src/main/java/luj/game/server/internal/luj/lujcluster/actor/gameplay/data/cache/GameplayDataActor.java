@@ -1,6 +1,7 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache;
 
 import java.util.Map;
+import java.util.Queue;
 import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.ActorMessageHandler;
@@ -8,6 +9,7 @@ import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.plugin.JamverDataRootInit;
+import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSavePlugin;
 import org.slf4j.Logger;
@@ -26,6 +28,8 @@ public class GameplayDataActor {
 
     GameDataCommand<?, ?> getCommand();
 
+    Class<?> getCommandType();
+
     GameDataLoad<?, ?> getLoader();
 
     Class<?> getLoadResultType();
@@ -33,10 +37,11 @@ public class GameplayDataActor {
     Logger getLogger();
   }
 
-  public GameplayDataActor(CacheContainer dataCache, CacheSession lujcache,
-      Map<Class<?>, CommandKit> commandMap, JamverDataRootInit initPlugin,
+  public GameplayDataActor(CacheContainer dataCache, Queue<DataCommandRequest> commandQueue,
+      CacheSession lujcache, Map<Class<?>, CommandKit> commandMap, JamverDataRootInit initPlugin,
       DataLoadPlugin loadPlugin, DataSavePlugin savePlugin) {
     _dataCache = dataCache;
+    _commandQueue = commandQueue;
     _lujcache = lujcache;
     _commandMap = commandMap;
     _initPlugin = initPlugin;
@@ -72,6 +77,10 @@ public class GameplayDataActor {
     return _dataCache;
   }
 
+  public Queue<DataCommandRequest> getCommandQueue() {
+    return _commandQueue;
+  }
+
   public Map<Class<?>, CommandKit> getCommandMap() {
     return _commandMap;
   }
@@ -98,6 +107,9 @@ public class GameplayDataActor {
   private ActorPreStartHandler.Actor _saveRef;
 
   private final CacheContainer _dataCache;
+  private final Queue<DataCommandRequest> _commandQueue;
+
+  /////////////////////////
 
   private final Map<Class<?>, CommandKit> _commandMap;
   private final CacheSession _lujcache;

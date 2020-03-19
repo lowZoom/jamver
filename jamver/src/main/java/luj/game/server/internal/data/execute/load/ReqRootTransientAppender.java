@@ -1,6 +1,7 @@
 package luj.game.server.internal.data.execute.load;
 
 import luj.cache.api.request.CacheRequest;
+import luj.game.server.internal.data.execute.finish.ResultDataProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

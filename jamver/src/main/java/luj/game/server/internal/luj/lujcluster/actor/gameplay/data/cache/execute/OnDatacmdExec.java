@@ -2,20 +2,19 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execut
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import luj.ava.spring.Internal;
+import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
-import luj.game.server.internal.data.execute.DataCmdExecutor;
-import luj.game.server.internal.data.execute.DataServiceImpl;
+import luj.cache.api.request.CacheRequest;
+import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.game.server.internal.data.command.queue.add.WaitQueueAdder;
+import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
 import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
-import luj.game.server.internal.data.execute.save.DataSaveRequestor;
-import luj.game.server.internal.data.instance.DataTempAdder;
-import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.execute.load.missing.LoadMissingCollector;
+import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Internal
 final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
@@ -33,14 +32,6 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     checkNotNull(cmdKit, cmdType);
 
     //TODO: 调用外部load创建数据使用req
-    CacheContainer dataCache = actor.getDataCache();
-    Class<?> loadResultType = cmdKit.getLoadResultType();
-
-    List<DataTempProxy> createLog = new ArrayList<>();
-    DataServiceImpl dataSvc = new DataServiceImpl(ctx.getActorRef(), createLog);
-
-    Object loadResult = new DataLoadRequestMaker(cmdKit.getLoader(), loadResultType,
-        param, dataCache, actor.getLujcache(), dataSvc::specifySetField).make();
 
     //TODO: 遍历得出借不出的数据
 
@@ -48,15 +39,30 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     //TODO: 如果没有，进行数据借出锁定，创建结果对象，以供CMD使用
 
-//    ctx.getLogger().debug("执行数据CMD：{}", cmdType.getName());
-    LOG.debug("执行数据CMD：{}", cmdType.getName());
-    new DataCmdExecutor(cmdKit, param, loadResult, dataSvc).execute();
+    Class<?> loadResultType = cmdKit.getLoadResultType();
+    CacheSession lujcache = actor.getLujcache();
 
-    for (DataTempProxy data : createLog) {
-      new DataTempAdder(dataCache, data.getDataType(), data).add();
+    CacheRequest cacheReq = new DataLoadRequestMaker(cmdKit.getLoader(), loadResultType,
+        param, lujcache).make();
+
+    CacheContainer dataCache = actor.getDataCache();
+    List<LoadMissingCollector.Missing> missList =
+        new LoadMissingCollector(cacheReq, dataCache).collect();
+
+    ActorPreStartHandler.Actor loadRef = actor.getLoadRef();
+    if (!missList.isEmpty()) {
+      // 发起数据读取
+      new MissingLoadRequestor(missList, loadRef).request();
+
+      // 加入等待队列
+      new WaitQueueAdder(actor.getCommandQueue(), cmdKit, param, cacheReq).add();
+
+      return;
     }
-    new DataSaveRequestor(actor.getSaveRef(), createLog).request();
+
+    new CommandExecFinisher(loadResultType, cacheReq, dataCache, cmdType, cmdKit,
+        param, ctx.getActorRef(), actor.getSaveRef()).finish();
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(OnDatacmdExec.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(OnDatacmdExec.class);
 }

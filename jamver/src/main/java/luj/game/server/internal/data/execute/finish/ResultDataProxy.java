@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.execute.load;
+package luj.game.server.internal.data.execute.finish;
 
 import com.google.common.collect.ImmutableList;
 import java.lang.reflect.InvocationHandler;
@@ -7,7 +7,8 @@ import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.Map;
 
-final class ResultDataProxy implements InvocationHandler {
+@Deprecated
+public class ResultDataProxy implements InvocationHandler {
 
   ResultDataProxy(Class<?> resultType, Map<String, Object> resultMap) {
     _resultType = resultType;

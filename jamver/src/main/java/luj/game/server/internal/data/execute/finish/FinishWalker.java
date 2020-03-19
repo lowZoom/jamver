@@ -1,4 +1,4 @@
-package luj.game.server.internal.luj.lujcache;
+package luj.game.server.internal.data.execute.finish;
 
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
@@ -9,26 +9,38 @@ import java.util.function.Function;
 import luj.ava.spring.Internal;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
-import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
+import luj.game.server.internal.data.cache.CacheItem;
+import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
-import luj.game.server.internal.data.instance.DataKeyMaker;
 import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Internal
-final class OnWalkReq implements RequestWalkListener {
+final class FinishWalker implements RequestWalkListener {
+
+  @Deprecated
+  FinishWalker() {
+    this(null, null, null);
+    LOG.warn("该形式准备移除");
+  }
+
+  FinishWalker(CacheContainer dataCache, ResultDataProxy loadResult,
+      BiConsumer<DataTempProxy, String> fieldHook) {
+    _dataCache = dataCache;
+    _loadResult = loadResult;
+    _fieldHook = fieldHook;
+  }
 
   /**
-   * @see DataLoadRequestMaker#make
+   * @see CommandExecFinisher#finish
    */
   @Override
   public Object onWalk(Context ctx) {
-    DataLoadRequestMaker.Context param = ctx.getRequestParam();
-
-    //TODO: 改为向数据中心发起读取请求
-    Data data = loadData(ctx, param.getDataCache(), param.getFieldHook());
-    ctx.getFieldSetter().accept(param.getLoadResult(), data.getResult());
+    Data data = loadData(ctx, _dataCache, _fieldHook);
+    ctx.getFieldSetter().accept(_loadResult, data.getResult());
 
     return data.getReturn();
   }
@@ -38,10 +50,10 @@ final class OnWalkReq implements RequestWalkListener {
     Class<?> dataType = ctx.getDataType();
     Comparable<?> dataId = ctx.getDataId();
     if (dataId == null) {
-      return idToList(ctx.getParentReturn(), ctx.getDataIdGetter(), dataType, dataCache, fieldHook);
+      return idToList(ctx.getParentReturn(), ctx.getDataIdGetter(), dataType, fieldHook);
     }
 
-    DataTempProxy dataProxy = dataCache.get(dataKey(dataType, dataId));
+    DataTempProxy dataProxy = getDataObj(dataType, dataId);
     if (dataProxy == null && DataTempProxy.GLOBAL.equals(dataId)) {
       return initGlobal(dataCache, dataType, fieldHook);
     }
@@ -52,10 +64,10 @@ final class OnWalkReq implements RequestWalkListener {
 
   private Data idToList(DataTempProxy parentData,
       Function<Object, Collection<Comparable<?>>> idGetter, Class<?> dataType,
-      CacheContainer dataCache, BiConsumer<DataTempProxy, String> fieldHook) {
+      BiConsumer<DataTempProxy, String> fieldHook) {
     List<Object> dataList = ImmutableList.copyOf(idGetter.apply(parentData.getInstance()).stream()
 //        .peek(id -> LOG.debug("数组读取读取读取读取：{}, {}", dataType.getName(), id))
-        .map(id -> (DataTempProxy) dataCache.get(dataKey(dataType, id)))
+        .map(id -> getDataObj(dataType, id))
         .filter(Objects::nonNull)
         .map(d -> new DataResultProxy(d, fieldHook).init())
         .map(DataResultProxy::getInstance)
@@ -74,6 +86,16 @@ final class OnWalkReq implements RequestWalkListener {
     };
   }
 
+  private DataTempProxy getDataObj(Class<?> dataType, Comparable<?> dataId) {
+    String dataKey = new CacheKeyMaker(dataType, dataId).make();
+    CacheItem cacheItem = _dataCache.get(dataKey);
+
+    if (cacheItem == null || !cacheItem.isPresent()) {
+      return null;
+    }
+    return cacheItem.getDataObj();
+  }
+
   private Data initGlobal(CacheContainer dataCache, Class<?> dataType,
       BiConsumer<DataTempProxy, String> fieldHook) {
     DataTempProxy dataProxy = new DataInstanceCreator(dataType).create();
@@ -82,10 +104,6 @@ final class OnWalkReq implements RequestWalkListener {
     new DataTempAdder(dataCache, dataType, dataProxy).add();
 
     return makeData(dataProxy, fieldHook);
-  }
-
-  private String dataKey(Class<?> dataType, Comparable<?> dataId) {
-    return new DataKeyMaker(dataType, dataId).make();
   }
 
   private Data makeData(DataTempProxy dataProxy, BiConsumer<DataTempProxy, String> fieldHook) {
@@ -110,5 +128,11 @@ final class OnWalkReq implements RequestWalkListener {
     Object getReturn();
   }
 
-//  private static final Logger LOG = LoggerFactory.getLogger(OnWalkReq.class);
+  private static final Logger LOG = LoggerFactory.getLogger(FinishWalker.class);
+
+  private final CacheContainer _dataCache;
+  private final ResultDataProxy _loadResult;
+
+  @Deprecated
+  private final BiConsumer<DataTempProxy, String> _fieldHook;
 }

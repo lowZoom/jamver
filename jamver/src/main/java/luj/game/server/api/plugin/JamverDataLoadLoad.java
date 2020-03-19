@@ -1,5 +1,7 @@
 package luj.game.server.api.plugin;
 
+import java.util.Map;
+
 public interface JamverDataLoadLoad {
 
   interface Context {
@@ -18,5 +20,5 @@ public interface JamverDataLoadLoad {
     String getIdField();
   }
 
-  void onLoad(Context ctx);
+  Map<String, Object> onLoad(Context ctx);
 }

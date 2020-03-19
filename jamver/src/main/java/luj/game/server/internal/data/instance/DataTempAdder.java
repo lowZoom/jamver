@@ -3,6 +3,7 @@ package luj.game.server.internal.data.instance;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import luj.cache.api.container.CacheContainer;
+import luj.game.server.internal.data.cache.CacheKeyMaker;
 
 @Deprecated
 public class DataTempAdder {
@@ -17,7 +18,7 @@ public class DataTempAdder {
     Object dataId = _dataObj.getDataMap().get(DataTempProxy.ID);
     checkNotNull(dataId, _dataType);
 
-    String dataKey = new DataKeyMaker(_dataType, dataId).make();
+    String dataKey = new CacheKeyMaker(_dataType, dataId).make();
     _dataCache.put(dataKey, _dataObj);
   }
 

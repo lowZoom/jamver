@@ -17,18 +17,26 @@ import java.util.function.Function;
 public class DataInstanceCreator {
 
   public DataInstanceCreator(Class<?> dataType) {
+    this(dataType, ImmutableMap.of());
+  }
+
+  public DataInstanceCreator(Class<?> dataType, Map<String, Object> initValue) {
     _dataType = dataType;
+    _initValue = initValue;
   }
 
   public DataTempProxy create() {
     checkState(_dataType.isInterface(), _dataType);
     Method[] methodList = _dataType.getMethods();
 
-    return new DataTempProxy(_dataType, new HashMap<>(ImmutableMap.<String, Object>builder()
+    Map<String, Object> dataMap = new HashMap<>(ImmutableMap.<String, Object>builder()
         .putAll(makeInitMap(methodList, List.class, m -> new ArrayList<>()))
         .putAll(makeInitMap(methodList, Set.class, m -> new HashSet<>()))
         .putAll(makeInitMap(methodList, int.class, m -> INT_ZERO))
-        .build())).init();
+        .build());
+
+    dataMap.putAll(_initValue);
+    return new DataTempProxy(_dataType, dataMap).init();
   }
 
   private Map<String, Object> makeInitMap(Method[] methodList, Class<?> type,
@@ -41,4 +49,5 @@ public class DataInstanceCreator {
   private static final Integer INT_ZERO = 0;
 
   private final Class<?> _dataType;
+  private final Map<String, Object> _initValue;
 }

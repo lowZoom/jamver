@@ -1,8 +1,8 @@
-package luj.game.server.internal.data.instance;
+package luj.game.server.internal.data.cache;
 
-public class DataKeyMaker {
+public class CacheKeyMaker {
 
-  public DataKeyMaker(Class<?> dataType, Object dataId) {
+  public CacheKeyMaker(Class<?> dataType, Object dataId) {
     _dataType = dataType;
     _dataId = dataId;
   }
