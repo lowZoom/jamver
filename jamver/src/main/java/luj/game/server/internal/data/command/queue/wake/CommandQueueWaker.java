@@ -9,16 +9,19 @@ import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
 import luj.game.server.internal.data.execute.load.missing.LoadMissingCollector;
+import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 public class CommandQueueWaker {
 
   public CommandQueueWaker(Queue<DataCommandRequest> commandQueue, CacheContainer dataCache,
-      ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef) {
+      ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef,
+      ActorPreStartHandler.Actor loadRef) {
     _commandQueue = commandQueue;
     _dataCache = dataCache;
     _dataRef = dataRef;
     _saveRef = saveRef;
+    _loadRef = loadRef;
   }
 
   public void wake() {
@@ -31,6 +34,7 @@ public class CommandQueueWaker {
         new LoadMissingCollector(cacheReq, _dataCache).collect();
 
     if (!missList.isEmpty()) {
+      new MissingLoadRequestor(missList, _loadRef).request();
       return false;
     }
 
@@ -50,4 +54,5 @@ public class CommandQueueWaker {
 
   private final ActorMessageHandler.Ref _dataRef;
   private final ActorPreStartHandler.Actor _saveRef;
+  private final ActorPreStartHandler.Actor _loadRef;
 }

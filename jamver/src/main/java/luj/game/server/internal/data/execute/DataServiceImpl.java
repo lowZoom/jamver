@@ -17,7 +17,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
     _createLog = createLog;
   }
 
-  public void specifySetField(DataTempProxy data, String fieldName) {
+  public void specifySetField(DataResultProxy data, String fieldName) {
     _curData = data;
     _curField = fieldName;
   }
@@ -34,11 +34,14 @@ public class DataServiceImpl implements GameDataCommand.Data {
 
   /**
    * @see DataResultProxy#invoke
+   * @see #specifySetField
    */
   @Override
   public <T> void set(Supplier<T> field, T value) {
     field.get();
-    _curData.getDataMap().put(_curField, value);
+
+    _curData.setDirty(true);
+    _curData.getData().getDataMap().put(_curField, value);
   }
 
   @Override
@@ -60,7 +63,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
 
 //  private static final Logger LOG = LoggerFactory.getLogger(DataServiceImpl.class);
 
-  private DataTempProxy _curData;
+  private DataResultProxy _curData;
   private String _curField;
 
   private final ActorMessageHandler.Ref _dataRef;

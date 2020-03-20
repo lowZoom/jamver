@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.save.create;
+package luj.game.server.internal.data.save.create.io;
 
 import java.util.Map;
 import luj.game.server.api.plugin.JamverDataSaveCreate;

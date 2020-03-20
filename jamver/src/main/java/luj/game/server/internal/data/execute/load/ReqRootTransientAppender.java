@@ -1,7 +1,7 @@
 package luj.game.server.internal.data.execute.load;
 
 import luj.cache.api.request.CacheRequest;
-import luj.game.server.internal.data.execute.finish.ResultDataProxy;
+import luj.game.server.internal.data.execute.finish.LoadResultProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +17,7 @@ public class ReqRootTransientAppender {
     return _cacheReq.getRoot().addChild(_dataType, _dataId, this::setResultField);
   }
 
-  private void setResultField(ResultDataProxy loadResult, Object value) {
+  private void setResultField(LoadResultProxy loadResult, Object value) {
 //    LOG.debug("临时变量：{}", _dataType.getName());
   }
 

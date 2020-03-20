@@ -19,7 +19,7 @@ public class DataTempAdder {
     Object dataId = _dataObj.getDataMap().get(DataTempProxy.ID);
     checkNotNull(dataId, _dataType);
 
-    CacheItem cacheItem = new CacheItem();
+    CacheItem cacheItem = new CacheItem(_dataType);
     cacheItem.setPresent(true);
     cacheItem.setDataObj(_dataObj);
 

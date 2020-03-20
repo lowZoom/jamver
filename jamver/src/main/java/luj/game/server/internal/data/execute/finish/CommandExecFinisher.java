@@ -9,9 +9,10 @@ import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.DataServiceImpl;
-import luj.game.server.internal.data.execute.save.DataSaveRequestor;
+import luj.game.server.internal.data.execute.save.CommandSaveRequestor;
 import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +40,9 @@ public class CommandExecFinisher {
     List<DataTempProxy> createLog = new ArrayList<>();
     DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, createLog);
 
-    ResultDataProxy resultProxy = new ResultDataProxy(_loadResultType, new HashMap<>()).init();
-    _cacheReq.walk(new FinishWalker(_dataCache, resultProxy, dataSvc::specifySetField));
+    LoadResultProxy resultProxy = new LoadResultProxy(_loadResultType, new HashMap<>()).init();
+    List<DataResultProxy> loadLog = new ArrayList<>();
+    _cacheReq.walk(new FinishWalker(_dataCache, resultProxy, loadLog, dataSvc::specifySetField));
 
     Object loadResult = resultProxy.getInstance();
     new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc).execute();
@@ -48,7 +50,7 @@ public class CommandExecFinisher {
     for (DataTempProxy data : createLog) {
       new DataTempAdder(_dataCache, data.getDataType(), data).add();
     }
-    new DataSaveRequestor(_saveRef, createLog).request();
+    new CommandSaveRequestor(_saveRef, createLog, loadLog).request();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(CommandExecFinisher.class);

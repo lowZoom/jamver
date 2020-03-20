@@ -8,14 +8,14 @@ import java.util.Collection;
 import java.util.Map;
 
 @Deprecated
-public class ResultDataProxy implements InvocationHandler {
+public class LoadResultProxy implements InvocationHandler {
 
-  ResultDataProxy(Class<?> resultType, Map<String, Object> resultMap) {
+  LoadResultProxy(Class<?> resultType, Map<String, Object> resultMap) {
     _resultType = resultType;
     _resultMap = resultMap;
   }
 
-  public ResultDataProxy init() {
+  public LoadResultProxy init() {
     _instance = Proxy.newProxyInstance(
         _resultType.getClassLoader(), new Class[]{_resultType}, this);
     return this;

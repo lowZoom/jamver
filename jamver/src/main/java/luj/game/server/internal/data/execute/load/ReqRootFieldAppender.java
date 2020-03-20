@@ -2,7 +2,7 @@ package luj.game.server.internal.data.execute.load;
 
 import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
-import luj.game.server.internal.data.execute.finish.ResultDataProxy;
+import luj.game.server.internal.data.execute.finish.LoadResultProxy;
 
 public class ReqRootFieldAppender {
 
@@ -21,10 +21,10 @@ public class ReqRootFieldAppender {
     Class<?> dataType = loadField.getDataType();
 
     return _cacheReq.getRoot().addChild(dataType, _dataId,
-        (r, v) -> setResultField((ResultDataProxy) r, fieldName, v));
+        (r, v) -> setResultField((LoadResultProxy) r, fieldName, v));
   }
 
-  private void setResultField(ResultDataProxy loadResult, String fieldName, Object value) {
+  private void setResultField(LoadResultProxy loadResult, String fieldName, Object value) {
     loadResult.getResultMap().put(fieldName, value);
   }
 
