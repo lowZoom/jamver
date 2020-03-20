@@ -1,6 +1,5 @@
 package luj.game.server.api.boot;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,7 +11,6 @@ public interface GameStartListener {
 
   @Target(ElementType.TYPE)
   @Retention(RetentionPolicy.RUNTIME)
-  @Documented
   @Component
   @interface Register {
     // NOOP

@@ -21,7 +21,7 @@ final class OnLoadFinish implements GameplayDataActor.Handler<LoadFinishMsg> {
     Comparable<?> dataId = msg.getDataId();
 
     boolean present = msg.isPresent();
-    LOG.debug("[game]数据读取完成：{}#{}, {}", dataType, dataId, present);
+    LOG.debug("[game]数据读取完成：{}#{}, {}", dataType.getName(), dataId, present);
 
     Map<String, Object> valueMap = msg.getDataValue();
     checkState(present == !valueMap.isEmpty());

@@ -39,7 +39,7 @@ public class CacheLoadFinisher {
 
   private void updateCache() {
     String dataKey = new CacheKeyMaker(_dataType, _dataId).make();
-    checkState(_dataCache.get(dataKey) == null);
+    checkState(_dataCache.get(dataKey) == null, dataKey);
 
     CacheItem item = new CacheItem();
     item.setPresent(_present);

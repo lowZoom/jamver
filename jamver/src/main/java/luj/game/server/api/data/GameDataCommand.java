@@ -1,6 +1,5 @@
 package luj.game.server.api.data;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,7 +15,6 @@ public interface GameDataCommand<P, D> {
 
   @Target(ElementType.TYPE)
   @Retention(RetentionPolicy.RUNTIME)
-  @Documented
   @Component
   @interface Register {
     // NOOP

@@ -88,11 +88,13 @@ final class FinishWalker implements RequestWalkListener {
 
   private DataTempProxy getDataObj(Class<?> dataType, Comparable<?> dataId) {
     String dataKey = new CacheKeyMaker(dataType, dataId).make();
-    CacheItem cacheItem = _dataCache.get(dataKey);
+//    LOG.debug("读取读取读取读取：{}", dataKey);
 
+    CacheItem cacheItem = _dataCache.get(dataKey);
     if (cacheItem == null || !cacheItem.isPresent()) {
       return null;
     }
+
     return cacheItem.getDataObj();
   }
 

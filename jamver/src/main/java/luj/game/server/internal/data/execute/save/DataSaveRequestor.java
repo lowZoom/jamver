@@ -1,10 +1,12 @@
 package luj.game.server.internal.data.execute.save;
 
+import static java.util.stream.Collectors.toMap;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.game.server.api.data.annotation.Transient;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.create.DataCreateMsg;
 
@@ -16,17 +18,22 @@ public class DataSaveRequestor {
   }
 
   public void request() {
-    requestCreate();
+    _createLog.stream()
+        .filter(d -> !isTransient(d))
+        .forEach(this::sendCreateMsg);
   }
 
-  private void requestCreate() {
-    for (DataTempProxy dataObj : _createLog) {
-      Map<String, Serializable> dataValue = dataObj.getDataMap().entrySet().stream()
-          .collect(Collectors.toMap(Map.Entry::getKey, e -> (Serializable) e.getValue()));
+  private boolean isTransient(DataTempProxy dataObj) {
+    Class<?> dataType = dataObj.getDataType();
+    return dataType.isAnnotationPresent(Transient.class);
+  }
 
-      DataCreateMsg msg = new DataCreateMsg(dataObj.getDataType(), dataValue);
-      _saveRef.tell(msg);
-    }
+  private void sendCreateMsg(DataTempProxy dataObj) {
+    Map<String, Serializable> dataValue = dataObj.getDataMap().entrySet().stream()
+        .collect(toMap(Map.Entry::getKey, e -> (Serializable) e.getValue()));
+
+    DataCreateMsg msg = new DataCreateMsg(dataObj.getDataType(), dataValue);
+    _saveRef.tell(msg);
   }
 
   private final ActorPreStartHandler.Actor _saveRef;
