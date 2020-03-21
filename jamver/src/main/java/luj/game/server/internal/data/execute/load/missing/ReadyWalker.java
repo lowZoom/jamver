@@ -8,12 +8,15 @@ import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
+import luj.game.server.internal.data.cache.DataPresence;
 
-final class MissingWalker implements RequestWalkListener {
+final class ReadyWalker implements RequestWalkListener {
 
-  MissingWalker(CacheContainer cache, List<LoadMissingCollector.Missing> out) {
+  ReadyWalker(CacheContainer cache, List<CacheItem> lockedOrLoadingOut,
+      List<DataReadyChecker.Missing> missingOut) {
     _cache = cache;
-    _out = out;
+    _lockedOrLoadingOut = lockedOrLoadingOut;
+    _missingOut = missingOut;
   }
 
   /**
@@ -30,16 +33,19 @@ final class MissingWalker implements RequestWalkListener {
 
     CacheItem dataItem = cacheGet(dataType, dataId);
     if (dataItem == null) {
-      _out.add(new MissingImpl(dataType, dataId));
+      _missingOut.add(new MissingImpl(dataType, dataId));
       return null;
     }
 
+    if (dataItem.getPresence() == DataPresence.LOADING) {
+      _lockedOrLoadingOut.add(dataItem);
+    }
     return dataItem;
   }
 
   private List<CacheItem> walkList(CacheItem parentItem,
       Function<Object, Collection<Comparable<?>>> idGetter, Class<?> dataType) {
-    if (parentItem == null || !parentItem.isPresent()) {
+    if (parentItem == null || parentItem.getPresence() != DataPresence.PRESENT) {
       return ImmutableList.of();
     }
 
@@ -50,7 +56,7 @@ final class MissingWalker implements RequestWalkListener {
       if (cacheGet(dataType, id) != null) {
         continue;
       }
-      _out.add(new MissingImpl(dataType, id));
+      _missingOut.add(new MissingImpl(dataType, id));
     }
 
     return ImmutableList.of();
@@ -63,5 +69,6 @@ final class MissingWalker implements RequestWalkListener {
 
   private final CacheContainer _cache;
 
-  private final List<LoadMissingCollector.Missing> _out;
+  private final List<CacheItem> _lockedOrLoadingOut;
+  private final List<DataReadyChecker.Missing> _missingOut;
 }

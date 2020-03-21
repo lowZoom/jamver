@@ -8,12 +8,12 @@ public class CacheItem {
     _dataType = dataType;
   }
 
-  public boolean isPresent() {
-    return _present;
+  public DataPresence getPresence() {
+    return _presence;
   }
 
-  public void setPresent(boolean present) {
-    _present = present;
+  public void setPresence(DataPresence presence) {
+    _presence = presence;
   }
 
   public DataTempProxy getDataObj() {
@@ -28,7 +28,7 @@ public class CacheItem {
     return _dataType;
   }
 
-  private boolean _present;
+  private DataPresence _presence;
   private DataTempProxy _dataObj;
 
   private final Class<?> _dataType;

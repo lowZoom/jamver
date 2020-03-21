@@ -3,6 +3,7 @@ package luj.game.server.internal.data.load.io;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.game.server.api.data.annotation.Transient;
 import luj.game.server.api.plugin.JamverDataLoadLoad;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.load.LoadFinishMsg;
 
@@ -22,14 +23,22 @@ public class DataIoLoader {
    * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.load.OnLoadFinish
    */
   public void load() {
-    Map<String, Object> valueMap = loadValue();
+    Map<String, Object> valueMap = findData();
     boolean present = !valueMap.isEmpty();
 
     LoadFinishMsg msg = new LoadFinishMsg(_dataType, _dataId, present, valueMap);
     _dataRef.tell(msg);
   }
 
-  private Map<String, Object> loadValue() {
+  private Map<String, Object> findData() {
+    if (_dataType.isAnnotationPresent(Transient.class)) {
+      return ImmutableMap.of();
+    }
+
+    return ioLoad();
+  }
+
+  private Map<String, Object> ioLoad() {
     DataRequestImpl dataReq = new DataRequestImpl(_dataType, _dataId, _dataIdField);
     LoadContextImpl ctx = new LoadContextImpl(_loadState, dataReq);
 

@@ -1,5 +1,8 @@
 package luj.game.server.internal.data.execute.finish;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +13,7 @@ import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
+import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
 import org.slf4j.Logger;
@@ -85,11 +89,18 @@ final class FinishWalker implements RequestWalkListener {
 //    LOG.debug("读取读取读取读取：{}", dataKey);
 
     CacheItem cacheItem = _dataCache.get(dataKey);
-    if (cacheItem == null || !cacheItem.isPresent()) {
+    checkNotNull(cacheItem, dataKey);
+
+    DataPresence presence = cacheItem.getPresence();
+    DataTempProxy dataObj = cacheItem.getDataObj();
+
+    if (presence == DataPresence.ABSENT) {
+      checkState(dataObj == null, dataKey);
       return null;
     }
 
-    return cacheItem.getDataObj();
+    checkState(presence == DataPresence.PRESENT, dataKey);
+    return checkNotNull(dataObj, dataKey);
   }
 
   private Data makeData(DataTempProxy dataProxy, DataResultProxy.FieldHook fieldHook) {

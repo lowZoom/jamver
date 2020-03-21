@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.load.cache;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import com.google.common.collect.ImmutableList;
@@ -10,6 +11,7 @@ import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
+import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.CommandQueueWaker;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
@@ -44,32 +46,36 @@ public class CacheLoadFinisher {
 
   private void updateCache() {
     String dataKey = new CacheKeyMaker(_dataType, _dataId).make();
-    checkState(_dataCache.get(dataKey) == null, dataKey);
 
-    CacheItem item = new CacheItem(_dataType);
-    item.setPresent(_present);
+    CacheItem cacheItem = _dataCache.get(dataKey);
+    checkNotNull(cacheItem, dataKey);
+    checkState(cacheItem.getPresence() == DataPresence.LOADING, dataKey);
+
+    LOG.debug("[game]缓存项读取完成：{}", dataKey);
+    cacheItem.setPresence(_present ? DataPresence.PRESENT : DataPresence.ABSENT);
 
     if (_present) {
       DataTempProxy dataObj = new DataInstanceCreator(_dataType, _dataValue).create();
-      item.setDataObj(dataObj);
+      cacheItem.setDataObj(dataObj);
     }
 
-    LOG.debug("[game]缓存新增项：{}", dataKey);
-    _dataCache.put(dataKey, item);
-
-    handleGlobalAbsent(item);
+    handleGlobalAbsent(cacheItem, dataKey);
   }
 
-  private void handleGlobalAbsent(CacheItem item) {
-    if (item.isPresent() || !_dataId.equals(DataTempProxy.GLOBAL)) {
+  private void handleGlobalAbsent(CacheItem item, String dataKey) {
+    DataPresence dataPresence = item.getPresence();
+    if (dataPresence == DataPresence.PRESENT || !_dataId.equals(DataTempProxy.GLOBAL)) {
       return;
     }
+
+    checkState(dataPresence == DataPresence.ABSENT, dataKey);
+    checkState(_dataId.equals(DataTempProxy.GLOBAL));
 
     Class<?> dataType = item.getDataType();
     DataTempProxy dataObj = new DataInstanceCreator(dataType).create();
     dataObj.getDataMap().put(DataTempProxy.ID, DataTempProxy.GLOBAL);
 
-    item.setPresent(true);
+    item.setPresence(DataPresence.PRESENT);
     item.setDataObj(dataObj);
 
     new DataCreateRequestor(ImmutableList.of(dataObj), _saveRef).request();

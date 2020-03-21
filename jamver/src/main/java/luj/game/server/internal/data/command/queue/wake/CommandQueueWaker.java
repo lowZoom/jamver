@@ -1,6 +1,5 @@
 package luj.game.server.internal.data.command.queue.wake;
 
-import java.util.List;
 import java.util.Queue;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
@@ -8,7 +7,7 @@ import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
-import luj.game.server.internal.data.execute.load.missing.LoadMissingCollector;
+import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
@@ -30,15 +29,14 @@ public class CommandQueueWaker {
 
   private boolean tryExecute(DataCommandRequest commandReq) {
     CacheRequest cacheReq = commandReq.getCacheReq();
-    List<LoadMissingCollector.Missing> missList =
-        new LoadMissingCollector(cacheReq, _dataCache).collect();
+    DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, _dataCache).check();
 
-    if (!missList.isEmpty()) {
-      new MissingLoadRequestor(missList, _loadRef).request();
+    if (!readyResult.isReady()) {
+      new MissingLoadRequestor(readyResult.getMissingList(), _dataCache, _loadRef).request();
       return false;
     }
 
-    //TODO: 后面要做成在此锁定数据后，发往execActor执行
+    //TODO: 后面要做成 在此锁定数据后，发往execActor执行
 
     GameplayDataActor.CommandKit cmdKit = commandReq.getCommandKit();
     Object cmdParam = commandReq.getCommandParam();

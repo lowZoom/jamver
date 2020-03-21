@@ -2,7 +2,6 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execut
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.List;
 import java.util.Map;
 import luj.ava.spring.Internal;
 import luj.cache.api.CacheSession;
@@ -12,7 +11,7 @@ import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.internal.data.command.queue.add.WaitQueueAdder;
 import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
 import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
-import luj.game.server.internal.data.execute.load.missing.LoadMissingCollector;
+import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
@@ -46,13 +45,12 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
         param, lujcache).make();
 
     CacheContainer dataCache = actor.getDataCache();
-    List<LoadMissingCollector.Missing> missList =
-        new LoadMissingCollector(cacheReq, dataCache).collect();
+    DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, dataCache).check();
 
-    ActorPreStartHandler.Actor loadRef = actor.getLoadRef();
-    if (!missList.isEmpty()) {
+    if (!readyResult.isReady()) {
       // 发起数据读取
-      new MissingLoadRequestor(missList, loadRef).request();
+      ActorPreStartHandler.Actor loadRef = actor.getLoadRef();
+      new MissingLoadRequestor(readyResult.getMissingList(), dataCache, loadRef).request();
 
       // 加入等待队列
       new WaitQueueAdder(actor.getCommandQueue(), cmdKit, param, cacheReq).add();

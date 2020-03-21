@@ -1,6 +1,6 @@
 package luj.game.server.internal.data.execute.load.missing;
 
-final class MissingImpl implements LoadMissingCollector.Missing {
+final class MissingImpl implements DataReadyChecker.Missing {
 
   MissingImpl(Class<?> dataType, Comparable<?> dataId) {
     _dataType = dataType;

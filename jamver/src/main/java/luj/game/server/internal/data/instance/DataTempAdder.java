@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import luj.cache.api.container.CacheContainer;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
+import luj.game.server.internal.data.cache.DataPresence;
 
 @Deprecated
 public class DataTempAdder {
@@ -20,8 +21,10 @@ public class DataTempAdder {
     checkNotNull(dataId, _dataType);
 
     CacheItem cacheItem = new CacheItem(_dataType);
-    cacheItem.setPresent(true);
+    cacheItem.setPresence(DataPresence.PRESENT);
     cacheItem.setDataObj(_dataObj);
+
+    //TODO: setLock(true)
 
     String dataKey = new CacheKeyMaker(_dataType, dataId).make();
     _dataCache.put(dataKey, cacheItem);
