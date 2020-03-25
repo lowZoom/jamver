@@ -50,6 +50,9 @@ public interface GameDataCommand<P, D> {
 
     <T> void set(Supplier<T> field, T value);
 
+    //TODO: 这个接口还要再斟酌一下
+    <T> void add(Supplier<Collection<T>> field, T element);
+
     boolean exists(Object data);
 
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType);

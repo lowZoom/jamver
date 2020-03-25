@@ -1,6 +1,7 @@
 package luj.game.server.internal.data.execute;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 import luj.cluster.api.actor.ActorMessageHandler;
@@ -42,6 +43,14 @@ public class DataServiceImpl implements GameDataCommand.Data {
 
     _curData.setDirty(true);
     _curData.getData().getDataMap().put(_curField, value);
+  }
+
+  @Override
+  public <T> void add(Supplier<Collection<T>> field, T element) {
+    Collection<T> c = field.get();
+
+    _curData.setDirty(true);
+    c.add(element);
   }
 
   @Override
