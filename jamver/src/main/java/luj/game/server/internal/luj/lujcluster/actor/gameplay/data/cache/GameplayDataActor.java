@@ -8,10 +8,7 @@ import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
-import luj.game.server.api.plugin.JamverDataRootInit;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSavePlugin;
 import org.slf4j.Logger;
 
 public class GameplayDataActor {
@@ -38,15 +35,14 @@ public class GameplayDataActor {
   }
 
   public GameplayDataActor(CacheContainer dataCache, Queue<DataCommandRequest> commandQueue,
-      CacheSession lujcache, Map<Class<?>, CommandKit> commandMap, JamverDataRootInit initPlugin,
-      DataLoadPlugin loadPlugin, DataSavePlugin savePlugin) {
+      CacheSession lujcache, Map<Class<?>, CommandKit> commandMap, DataAllPlugin allPlugin,
+      Object startParam) {
     _dataCache = dataCache;
     _commandQueue = commandQueue;
     _lujcache = lujcache;
     _commandMap = commandMap;
-    _initPlugin = initPlugin;
-    _loadPlugin = loadPlugin;
-    _savePlugin = savePlugin;
+    _allPlugin = allPlugin;
+    _startParam = startParam;
   }
 
   public Object getPluginState() {
@@ -89,16 +85,12 @@ public class GameplayDataActor {
     return _lujcache;
   }
 
-  public JamverDataRootInit getInitPlugin() {
-    return _initPlugin;
+  public DataAllPlugin getAllPlugin() {
+    return _allPlugin;
   }
 
-  public DataLoadPlugin getLoadPlugin() {
-    return _loadPlugin;
-  }
-
-  public DataSavePlugin getSavePlugin() {
-    return _savePlugin;
+  public Object getStartParam() {
+    return _startParam;
   }
 
   private Object _pluginState;
@@ -114,8 +106,6 @@ public class GameplayDataActor {
   private final Map<Class<?>, CommandKit> _commandMap;
   private final CacheSession _lujcache;
 
-  private final JamverDataRootInit _initPlugin;
-
-  private final DataLoadPlugin _loadPlugin;
-  private final DataSavePlugin _savePlugin;
+  private final DataAllPlugin _allPlugin;
+  private final Object _startParam;
 }

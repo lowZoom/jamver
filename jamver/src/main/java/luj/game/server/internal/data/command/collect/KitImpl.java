@@ -16,6 +16,7 @@ final class KitImpl implements GameplayDataActor.CommandKit {
     _logger = logger;
   }
 
+  @Override
   public Class<?> getCommandType() {
     return _commandType;
   }

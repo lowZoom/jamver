@@ -1,5 +1,6 @@
 package luj.game.server.internal.inject;
 
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSavePlugin;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +16,7 @@ public class ServerBeanCollector {
     try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext()) {
       ctx.setParent(_externalCtx);
 
+      ctx.register(DataAllPlugin.class);
       ctx.register(DataLoadPlugin.class);
       ctx.register(DataSavePlugin.class);
 

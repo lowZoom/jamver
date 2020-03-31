@@ -8,6 +8,10 @@ public interface JamverDataRootInit {
 
   interface Context {
 
+    /**
+     * @see JamverBootRootInit#onInit
+     */
+    <T> T getStartParam();
   }
 
   Object onInit(Context ctx);

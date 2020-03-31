@@ -37,9 +37,8 @@ public class ServerInstanceStarter {
           null, null,
           beanRoot.getClusterMessageList(),
           beanRoot.getClusterJoinList(),
-          beanRoot.getDataInitPlugin(),
-          beanRoot.getDataLoadPlugin(),
-          beanRoot.getDataSavePlugin(),
+          beanRoot.getBootInitPlugin(),
+          beanRoot.getDataAllPlugin(),
           LujCache.start(internalCtx)));
     }
   }

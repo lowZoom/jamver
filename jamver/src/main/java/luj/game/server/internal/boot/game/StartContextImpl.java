@@ -1,4 +1,4 @@
-package luj.game.server.internal.boot;
+package luj.game.server.internal.boot.game;
 
 import luj.game.server.api.boot.GameStartListener;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;

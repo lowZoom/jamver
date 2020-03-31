@@ -2,12 +2,14 @@ package luj.game.server.internal.luj.lujcluster;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import luj.ava.spring.Internal;
 import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.node.NodeStartListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
-import luj.game.server.internal.boot.StartTrigger;
+import luj.game.server.internal.boot.game.StartTrigger;
+import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.cluster.handle.collect.ClusterHandleMapCollector;
 import luj.game.server.internal.data.command.collect.CommandMapCollector;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
@@ -23,23 +25,26 @@ final class OnLujclusterStart implements NodeStartListener {
    */
   @Override
   public void onStart(Context ctx) throws Exception {
-    JambeanInLujcluster param = ctx.getStartParam();
+    JambeanInLujcluster clusterParam = ctx.getStartParam();
+    Object jamverParam = new BootStartInvoker(clusterParam.getBootInitPlugin()).invoke();
 
-    Actor dataRef = ctx.createApplicationActor(dataActor(param));
-    ctx.createApplicationActor(eventActor(param));
-    ctx.createApplicationActor(clusterActor(param, dataRef));
+    Actor dataRef = ctx.createApplicationActor(dataActor(clusterParam, jamverParam));
+    ctx.createApplicationActor(eventActor(clusterParam));
+    ctx.createApplicationActor(clusterActor(clusterParam, dataRef));
 
     //TODO: 异步后面再执行
-    new StartTrigger(param.getStartListenerList()).trigger();
+    new StartTrigger(clusterParam.getStartListenerList()).trigger();
   }
 
-  private GameplayDataActor dataActor(JambeanInLujcluster param) {
-    CacheSession lujcache = param.getLujcache();
+  private GameplayDataActor dataActor(JambeanInLujcluster clusterParam, Object jamverParam) {
+    CacheSession lujcache = clusterParam.getLujcache();
     CacheContainer dataCache = lujcache.createCache(null);
 
-    return new GameplayDataActor(dataCache, new LinkedList<>(), lujcache,
-        new CommandMapCollector(param.getDataCommandList(), param.getDataLoadList()).collect(),
-        param.getDataInitPlugin(), param.getDataLoadPlugin(), param.getDataSavePlugin());
+    Map<Class<?>, GameplayDataActor.CommandKit> cmdMap = new CommandMapCollector(
+        clusterParam.getDataCommandList(), clusterParam.getDataLoadList()).collect();
+
+    return new GameplayDataActor(dataCache, new LinkedList<>(), lujcache, cmdMap,
+        clusterParam.getDataAllPlugin(), jamverParam);
   }
 
   private GameplayEventActor eventActor(JambeanInLujcluster param) {

@@ -8,9 +8,8 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
-import luj.game.server.api.plugin.JamverDataRootInit;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSavePlugin;
+import luj.game.server.api.plugin.JamverBootRootInit;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 
 public class JambeanInLujcluster {
 
@@ -22,8 +21,8 @@ public class JambeanInLujcluster {
       GameEventListener.Service eventListenService,
       List<ServerMessageHandler<?>> clusterMessageList,
       List<ServerJoinListener> clusterJoinList,
-      JamverDataRootInit dataInitPlugin, DataLoadPlugin dataLoadPlugin,
-      DataSavePlugin dataSavePlugin,
+      JamverBootRootInit bootInitPlugin,
+      DataAllPlugin dataAllPlugin,
       CacheSession lujcache) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
@@ -32,9 +31,8 @@ public class JambeanInLujcluster {
     _eventListenService = eventListenService;
     _clusterMessageList = clusterMessageList;
     _clusterJoinList = clusterJoinList;
-    _dataInitPlugin = dataInitPlugin;
-    _dataLoadPlugin = dataLoadPlugin;
-    _dataSavePlugin = dataSavePlugin;
+    _bootInitPlugin = bootInitPlugin;
+    _dataAllPlugin = dataAllPlugin;
     _lujcache = lujcache;
   }
 
@@ -66,16 +64,12 @@ public class JambeanInLujcluster {
     return _clusterJoinList;
   }
 
-  public JamverDataRootInit getDataInitPlugin() {
-    return _dataInitPlugin;
+  public JamverBootRootInit getBootInitPlugin() {
+    return _bootInitPlugin;
   }
 
-  public DataLoadPlugin getDataLoadPlugin() {
-    return _dataLoadPlugin;
-  }
-
-  public DataSavePlugin getDataSavePlugin() {
-    return _dataSavePlugin;
+  public DataAllPlugin getDataAllPlugin() {
+    return _dataAllPlugin;
   }
 
   public CacheSession getLujcache() {
@@ -93,9 +87,8 @@ public class JambeanInLujcluster {
   private final List<ServerMessageHandler<?>> _clusterMessageList;
   private final List<ServerJoinListener> _clusterJoinList;
 
-  private final JamverDataRootInit _dataInitPlugin;
-  private final DataLoadPlugin _dataLoadPlugin;
-  private final DataSavePlugin _dataSavePlugin;
+  private final JamverBootRootInit _bootInitPlugin;
+  private final DataAllPlugin _dataAllPlugin;
 
   private final CacheSession _lujcache;
 }

@@ -6,9 +6,8 @@ import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
-import luj.game.server.api.plugin.JamverDataRootInit;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSavePlugin;
+import luj.game.server.api.plugin.JamverBootRootInit;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -36,16 +35,12 @@ public class ServerBeanRoot {
     return _clusterJoinList;
   }
 
-  public JamverDataRootInit getDataInitPlugin() {
-    return _dataInitPlugin;
+  public JamverBootRootInit getBootInitPlugin() {
+    return _bootInitPlugin;
   }
 
-  public DataLoadPlugin getDataLoadPlugin() {
-    return _dataLoadPlugin;
-  }
-
-  public DataSavePlugin getDataSavePlugin() {
-    return _dataSavePlugin;
+  public DataAllPlugin getDataAllPlugin() {
+    return _dataAllPlugin;
   }
 
   @Autowired(required = false)
@@ -64,11 +59,8 @@ public class ServerBeanRoot {
   private List<ServerJoinListener> _clusterJoinList;
 
   @Autowired
-  private JamverDataRootInit _dataInitPlugin;
+  private JamverBootRootInit _bootInitPlugin;
 
   @Autowired
-  private DataLoadPlugin _dataLoadPlugin;
-
-  @Autowired
-  private DataSavePlugin _dataSavePlugin;
+  private DataAllPlugin _dataAllPlugin;
 }
