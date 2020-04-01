@@ -30,16 +30,7 @@ public class ServerInstanceStarter {
       internalCtx.refresh();
 
       ClusterSession lujcluster = LujCluster.start(internalCtx);
-      lujcluster.startNode("127.0.0.1", 2555, "127.0.0.1:2555", new JambeanInLujcluster(
-          beanRoot.getStartListenerList(),
-          beanRoot.getDataCommandList(),
-          beanRoot.getDataLoadList(),
-          null, null,
-          beanRoot.getClusterMessageList(),
-          beanRoot.getClusterJoinList(),
-          beanRoot.getBootInitPlugin(),
-          beanRoot.getDataAllPlugin(),
-          LujCache.start(internalCtx)));
+      startCluster(lujcluster, internalCtx);
     }
   }
 
