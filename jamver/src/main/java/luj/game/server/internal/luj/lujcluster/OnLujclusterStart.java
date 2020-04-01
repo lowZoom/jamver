@@ -9,7 +9,6 @@ import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.node.NodeStartListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.boot.game.StartTrigger;
-import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.cluster.handle.collect.ClusterHandleMapCollector;
 import luj.game.server.internal.data.command.collect.CommandMapCollector;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
@@ -25,15 +24,14 @@ final class OnLujclusterStart implements NodeStartListener {
    */
   @Override
   public void onStart(Context ctx) throws Exception {
-    JambeanInLujcluster clusterParam = ctx.getStartParam();
-    Object jamverParam = new BootStartInvoker(clusterParam.getBootInitPlugin()).invoke();
+    JambeanInLujcluster param = ctx.getStartParam();
 
-    Actor dataRef = ctx.createApplicationActor(dataActor(clusterParam, jamverParam));
-    ctx.createApplicationActor(eventActor(clusterParam));
-    ctx.createApplicationActor(clusterActor(clusterParam, dataRef));
+    Actor dataRef = ctx.createApplicationActor(dataActor(param, param.getAppStartParam()));
+    ctx.createApplicationActor(eventActor(param));
+    ctx.createApplicationActor(clusterActor(param, dataRef));
 
     //TODO: 异步后面再执行
-    new StartTrigger(clusterParam.getStartListenerList()).trigger();
+    new StartTrigger(param.getStartListenerList()).trigger();
   }
 
   private GameplayDataActor dataActor(JambeanInLujcluster clusterParam, Object jamverParam) {

@@ -8,7 +8,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
-import luj.game.server.api.plugin.JamverBootRootInit;
+import luj.game.server.api.event.GameEventListener.Service;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 
 public class JambeanInLujcluster {
@@ -18,12 +18,11 @@ public class JambeanInLujcluster {
       List<GameDataCommand<?, ?>> dataCommandList,
       List<GameDataLoad<?, ?>> dataLoadList,
       List<GameEventListener<?>> eventListenerList,
-      GameEventListener.Service eventListenService,
+      Service eventListenService,
       List<ServerMessageHandler<?>> clusterMessageList,
       List<ServerJoinListener> clusterJoinList,
-      JamverBootRootInit bootInitPlugin,
       DataAllPlugin dataAllPlugin,
-      CacheSession lujcache) {
+      CacheSession lujcache, Object appStartParam) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
     _dataLoadList = dataLoadList;
@@ -31,9 +30,9 @@ public class JambeanInLujcluster {
     _eventListenService = eventListenService;
     _clusterMessageList = clusterMessageList;
     _clusterJoinList = clusterJoinList;
-    _bootInitPlugin = bootInitPlugin;
     _dataAllPlugin = dataAllPlugin;
     _lujcache = lujcache;
+    _appStartParam = appStartParam;
   }
 
   public List<GameStartListener> getStartListenerList() {
@@ -64,16 +63,16 @@ public class JambeanInLujcluster {
     return _clusterJoinList;
   }
 
-  public JamverBootRootInit getBootInitPlugin() {
-    return _bootInitPlugin;
-  }
-
   public DataAllPlugin getDataAllPlugin() {
     return _dataAllPlugin;
   }
 
   public CacheSession getLujcache() {
     return _lujcache;
+  }
+
+  public Object getAppStartParam() {
+    return _appStartParam;
   }
 
   private final List<GameStartListener> _startListenerList;
@@ -87,8 +86,12 @@ public class JambeanInLujcluster {
   private final List<ServerMessageHandler<?>> _clusterMessageList;
   private final List<ServerJoinListener> _clusterJoinList;
 
-  private final JamverBootRootInit _bootInitPlugin;
   private final DataAllPlugin _dataAllPlugin;
 
   private final CacheSession _lujcache;
+
+  /**
+   * @see luj.game.server.api.plugin.JamverBootRootInit.Return#param
+   */
+  private final Object _appStartParam;
 }

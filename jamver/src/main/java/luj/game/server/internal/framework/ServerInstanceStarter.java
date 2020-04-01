@@ -3,6 +3,8 @@ package luj.game.server.internal.framework;
 import luj.cache.api.LujCache;
 import luj.cluster.api.ClusterSession;
 import luj.cluster.api.LujCluster;
+import luj.game.server.api.plugin.JamverBootRootInit;
+import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
@@ -20,8 +22,6 @@ public class ServerInstanceStarter {
    * @see luj.game.server.internal.luj.lujcluster.OnLujclusterStart#onStart
    */
   public void start() {
-    ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
-
     try (AnnotationConfigApplicationContext internalCtx = new AnnotationConfigApplicationContext()) {
       internalCtx.getBeanFactory().registerSingleton(
           AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR, new BeanNameGen());
@@ -41,6 +41,27 @@ public class ServerInstanceStarter {
           beanRoot.getDataAllPlugin(),
           LujCache.start(internalCtx)));
     }
+  }
+
+  private void startCluster(ClusterSession lujcluster, ApplicationContext internalCtx) {
+    ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
+    JamverBootRootInit startPlugin = beanRoot.getBootInitPlugin();
+    BootStartInvoker.Result startCfg = new BootStartInvoker(startPlugin).invoke();
+
+    BootStartInvoker.Cluster clusterCfg = startCfg.clusterConfig();
+    String host = clusterCfg.selfHost();
+    int port = clusterCfg.selfPort();
+
+    lujcluster.startNode(host, port, clusterCfg.seedList(), new JambeanInLujcluster(
+        beanRoot.getStartListenerList(),
+        beanRoot.getDataCommandList(),
+        beanRoot.getDataLoadList(),
+        null, null,
+        beanRoot.getClusterMessageList(),
+        beanRoot.getClusterJoinList(),
+        beanRoot.getDataAllPlugin(),
+        LujCache.start(internalCtx),
+        startCfg.startParam()));
   }
 
   private final ApplicationContext _appContext;
