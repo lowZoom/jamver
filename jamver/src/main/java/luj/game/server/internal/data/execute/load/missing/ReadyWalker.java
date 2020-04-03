@@ -32,14 +32,8 @@ final class ReadyWalker implements RequestWalkListener {
     }
 
     CacheItem dataItem = cacheGet(dataType, dataId);
-    if (dataItem == null) {
-      _missingOut.add(new MissingImpl(dataType, dataId));
-      return null;
-    }
+    logUnusable(dataItem, dataType, dataId);
 
-    if (dataItem.getPresence() == DataPresence.LOADING) {
-      _lockedOrLoadingOut.add(dataItem);
-    }
     return dataItem;
   }
 
@@ -53,13 +47,22 @@ final class ReadyWalker implements RequestWalkListener {
     Collection<Comparable<?>> idList = idGetter.apply(dataInstance);
 
     for (Comparable<?> id : idList) {
-      if (cacheGet(dataType, id) != null) {
-        continue;
-      }
-      _missingOut.add(new MissingImpl(dataType, id));
+      CacheItem elemItem = cacheGet(dataType, id);
+      logUnusable(elemItem, dataType, id);
     }
 
     return ImmutableList.of();
+  }
+
+  private void logUnusable(CacheItem item, Class<?> dataType, Comparable<?> dataId) {
+    if (item == null) {
+      _missingOut.add(new MissingImpl(dataType, dataId));
+      return;
+    }
+
+    if (item.getPresence() == DataPresence.LOADING) {
+      _lockedOrLoadingOut.add(item);
+    }
   }
 
   private CacheItem cacheGet(Class<?> dataType, Object dataId) {
