@@ -37,6 +37,8 @@ public interface GameDataCommand<P, D> {
 
     Data data();
 
+//    Proto proto();
+
     <C> Config<C> config(Class<C> configType);
 
     Random random();
@@ -44,13 +46,15 @@ public interface GameDataCommand<P, D> {
     Network network();
   }
 
+  ///////////////////////////////////////////////////////
+
   interface Data {
 
     <T> T create(Class<T> dataType);
 
     <T> void set(Supplier<T> field, T value);
 
-    //TODO: 这个接口还要再斟酌一下
+    //TODO: 这个接口还要再斟酌一下（关于操作集合的形式）
     <T> void add(Supplier<Collection<T>> field, T element);
 
     boolean exists(Object data);
@@ -59,6 +63,15 @@ public interface GameDataCommand<P, D> {
 
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
   }
+  //----------------------------------------------------
+
+  interface Proto {
+
+    <T> T create(Class<T> protoType);
+
+    <T> void set(Supplier<T> field, T value);
+  }
+  //----------------------------------------------------
 
   interface Config<C> {
 
@@ -66,13 +79,13 @@ public interface GameDataCommand<P, D> {
 
     Collection<C> list();
   }
+  //----------------------------------------------------
 
   interface Random {
 
     boolean randBool(double likelihood);
   }
-
-  ///////////////////////////////////////////////////////
+  //----------------------------------------------------
 
   interface Network {
 
