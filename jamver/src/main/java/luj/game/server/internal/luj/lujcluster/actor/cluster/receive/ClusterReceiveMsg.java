@@ -4,20 +4,20 @@ import java.io.Serializable;
 
 public class ClusterReceiveMsg implements Serializable {
 
-  public ClusterReceiveMsg(String messageKey, Object message) {
+  public ClusterReceiveMsg(String messageKey, byte[] messageData) {
     _messageKey = messageKey;
-    _message = message;
+    _messageData = messageData;
   }
 
   public String getMessageKey() {
     return _messageKey;
   }
 
-  public Object getMessage() {
-    return _message;
+  public byte[] getMessageData() {
+    return _messageData;
   }
 
   private final String _messageKey;
 
-  private final Object _message;
+  private final byte[] _messageData;
 }

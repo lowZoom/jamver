@@ -37,7 +37,7 @@ public interface GameDataCommand<P, D> {
 
     Data data();
 
-//    Proto proto();
+    Proto proto();
 
     <C> Config<C> config(Class<C> configType);
 

@@ -10,6 +10,8 @@ final class OnNodeJoin implements NodeNewMemberListener {
   @Override
   public void onMember(Context ctx) throws Exception {
     JambeanInLujcluster jambean = ctx.getApplicationBean();
-    new ClusterJoinFirer(jambean.getClusterJoinList(), ctx.getMemberNode()).fire();
+
+    new ClusterJoinFirer(jambean.getClusterJoinList(), ctx.getMemberNode(),
+        jambean.getClusterProtoPlugin().getProtoEncode()).fire();
   }
 }

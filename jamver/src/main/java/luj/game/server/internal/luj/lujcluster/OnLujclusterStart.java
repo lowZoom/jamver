@@ -52,6 +52,7 @@ final class OnLujclusterStart implements NodeStartListener {
 
   private ClusterCommActor clusterActor(JambeanInLujcluster param, Actor dataRef) {
     List<ServerMessageHandler<?>> handlerList = param.getClusterMessageList();
-    return new ClusterCommActor(new ClusterHandleMapCollector(handlerList).collect(), dataRef);
+    return new ClusterCommActor(new ClusterHandleMapCollector(handlerList).collect(),
+        param.getClusterProtoPlugin(), dataRef);
   }
 }

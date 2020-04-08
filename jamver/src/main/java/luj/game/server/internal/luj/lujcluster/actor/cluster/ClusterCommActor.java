@@ -12,8 +12,9 @@ public class ClusterCommActor {
   }
 
   public ClusterCommActor(Map<String, ServerMessageHandler<?>> handlerMap,
-      NodeStartListener.Actor dataRef) {
+      ClusterProtoPlugin protoPlugin, NodeStartListener.Actor dataRef) {
     _handlerMap = handlerMap;
+    _protoPlugin = protoPlugin;
     _dataRef = dataRef;
   }
 
@@ -21,11 +22,16 @@ public class ClusterCommActor {
     return _handlerMap;
   }
 
+  public ClusterProtoPlugin getProtoPlugin() {
+    return _protoPlugin;
+  }
+
   public NodeStartListener.Actor getDataRef() {
     return _dataRef;
   }
 
   private final Map<String, ServerMessageHandler<?>> _handlerMap;
+  private final ClusterProtoPlugin _protoPlugin;
 
   private final NodeStartListener.Actor _dataRef;
 }

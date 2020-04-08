@@ -2,11 +2,10 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load;
 
 import luj.game.server.api.plugin.JamverDataLoadInit;
 import luj.game.server.api.plugin.JamverDataLoadLoad;
-import luj.game.server.internal.inject.ServerBeanCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @see ServerBeanCollector#collect
+ * @see luj.game.server.internal.inject.ServerBeanCollector#collect
  */
 public class DataLoadPlugin {
 

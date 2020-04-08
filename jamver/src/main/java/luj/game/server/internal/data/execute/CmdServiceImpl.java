@@ -14,6 +14,11 @@ final class CmdServiceImpl implements GameDataCommand.Service {
   }
 
   @Override
+  public GameDataCommand.Proto proto() {
+    return null;
+  }
+
+  @Override
   public <C> GameDataCommand.Config<C> config(Class<C> configType) {
     return null;
   }

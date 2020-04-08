@@ -4,16 +4,19 @@ import java.util.Map;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.node.NodeStartListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
+import luj.game.server.api.plugin.JamverClusterProtoEncode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ServmsgHandleInvoker {
 
   public ServmsgHandleInvoker(ActorMessageHandler.Node remoteNode, NodeStartListener.Actor dataRef,
-      Map<String, ServerMessageHandler<?>> handlerMap, String messageKey, Object message) {
+      Map<String, ServerMessageHandler<?>> handlerMap, JamverClusterProtoEncode encodePlugin,
+      String messageKey, Object message) {
     _remoteNode = remoteNode;
     _dataRef = dataRef;
     _handlerMap = handlerMap;
+    _encodePlugin = encodePlugin;
     _messageKey = messageKey;
     _message = message;
   }
@@ -25,7 +28,7 @@ public class ServmsgHandleInvoker {
       return;
     }
 
-    ServerImpl sender = new ServerImpl(_remoteNode);
+    ServerImpl sender = new ServerImpl(_remoteNode, _encodePlugin);
 
     DataServiceImpl dataSvc = new DataServiceImpl(_dataRef);
     HandleServiceImpl handleSvc = new HandleServiceImpl(dataSvc);
@@ -46,6 +49,7 @@ public class ServmsgHandleInvoker {
 
   private final NodeStartListener.Actor _dataRef;
   private final Map<String, ServerMessageHandler<?>> _handlerMap;
+  private final JamverClusterProtoEncode _encodePlugin;
 
   private final String _messageKey;
   private final Object _message;

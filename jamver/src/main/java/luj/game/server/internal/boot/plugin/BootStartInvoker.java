@@ -27,7 +27,7 @@ public class BootStartInvoker {
 
   public Result invoke() {
     ContextImpl ctx = new ContextImpl();
-    return (ReturnImpl) _startPlugin.onInit(ctx);
+    return (Result) _startPlugin.onInit(ctx);
   }
 
   private final JamverBootRootInit _startPlugin;

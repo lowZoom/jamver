@@ -7,6 +7,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.plugin.JamverBootRootInit;
+import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,6 +44,10 @@ public class ServerBeanRoot {
     return _dataAllPlugin;
   }
 
+  public ClusterProtoPlugin getClusterProtoPlugin() {
+    return _clusterProtoPlugin;
+  }
+
   @Autowired(required = false)
   private List<GameStartListener> _startListenerList;
 
@@ -63,4 +68,7 @@ public class ServerBeanRoot {
 
   @Autowired
   private DataAllPlugin _dataAllPlugin;
+
+  @Autowired
+  private ClusterProtoPlugin _clusterProtoPlugin;
 }
