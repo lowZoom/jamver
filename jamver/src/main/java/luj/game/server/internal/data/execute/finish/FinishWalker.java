@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import luj.ava.spring.Internal;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
@@ -19,14 +18,7 @@ import luj.game.server.internal.data.load.result.DataResultProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Internal
 final class FinishWalker implements RequestWalkListener {
-
-  @Deprecated
-  FinishWalker() {
-    this(null, null, null, null);
-    LOG.warn("该形式准备移除");
-  }
 
   FinishWalker(CacheContainer dataCache, LoadResultProxy loadResult, List<DataResultProxy> loadLog,
       DataResultProxy.FieldHook fieldHook) {

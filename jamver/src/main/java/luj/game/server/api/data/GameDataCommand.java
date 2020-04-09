@@ -41,9 +41,11 @@ public interface GameDataCommand<P, D> {
 
     <C> Config<C> config(Class<C> configType);
 
+    Network network();
+
     Random random();
 
-    Network network();
+    Time time();
   }
 
   ///////////////////////////////////////////////////////
@@ -84,6 +86,12 @@ public interface GameDataCommand<P, D> {
   interface Random {
 
     boolean randBool(double likelihood);
+  }
+  //----------------------------------------------------
+
+  interface Time {
+
+    long now();
   }
   //----------------------------------------------------
 

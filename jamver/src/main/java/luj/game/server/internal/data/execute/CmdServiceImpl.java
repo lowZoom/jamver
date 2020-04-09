@@ -24,12 +24,17 @@ final class CmdServiceImpl implements GameDataCommand.Service {
   }
 
   @Override
+  public GameDataCommand.Network network() {
+    return null;
+  }
+
+  @Override
   public GameDataCommand.Random random() {
     return null;
   }
 
   @Override
-  public GameDataCommand.Network network() {
+  public GameDataCommand.Time time() {
     return null;
   }
 
