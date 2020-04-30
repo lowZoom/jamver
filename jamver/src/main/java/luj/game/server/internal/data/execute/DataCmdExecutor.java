@@ -13,8 +13,8 @@ public class DataCmdExecutor {
   }
 
   public void execute() {
-    CmdServiceImpl commandSvc = new CmdServiceImpl(_dataSvc);
-
+    //TODO: event服务有待实现
+    CmdServiceImpl commandSvc = new CmdServiceImpl(_dataSvc, null);
     try {
       _cmdKit.getCommand().onExecute(new CmdContextImpl(
           _param, _loadResult, _cmdKit.getLogger(), commandSvc));
@@ -27,8 +27,9 @@ public class DataCmdExecutor {
   }
 
   private final GameplayDataActor.CommandKit _cmdKit;
-  private final Object _param;
 
+  private final Object _param;
   private final Object _loadResult;
+
   private final DataServiceImpl _dataSvc;
 }

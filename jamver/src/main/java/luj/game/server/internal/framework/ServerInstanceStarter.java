@@ -10,7 +10,6 @@ import luj.game.server.internal.inject.ServerBeanRoot;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigUtils;
 
 public class ServerInstanceStarter {
 
@@ -22,10 +21,7 @@ public class ServerInstanceStarter {
    * @see luj.game.server.internal.luj.lujcluster.OnLujclusterStart#onStart
    */
   public void start() {
-    try (AnnotationConfigApplicationContext internalCtx = new AnnotationConfigApplicationContext()) {
-      internalCtx.getBeanFactory().registerSingleton(
-          AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR, new BeanNameGen());
-
+    try (AnnotationConfigApplicationContext internalCtx = new SpringContextCreator().create()) {
       internalCtx.register(InternalInjectConf.class);
       internalCtx.refresh();
 

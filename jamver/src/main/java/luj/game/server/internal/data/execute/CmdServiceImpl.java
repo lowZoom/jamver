@@ -4,8 +4,9 @@ import luj.game.server.api.data.GameDataCommand;
 
 final class CmdServiceImpl implements GameDataCommand.Service {
 
-  CmdServiceImpl(GameDataCommand.Data dataSvc) {
+  CmdServiceImpl(GameDataCommand.Data dataSvc, GameDataCommand.Event eventSvc) {
     _dataSvc = dataSvc;
+    _eventSvc = eventSvc;
   }
 
   @Override
@@ -39,4 +40,6 @@ final class CmdServiceImpl implements GameDataCommand.Service {
   }
 
   private final GameDataCommand.Data _dataSvc;
+
+  private final GameDataCommand.Event _eventSvc;
 }

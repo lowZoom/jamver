@@ -27,7 +27,7 @@ final class OnLujclusterStart implements NodeStartListener {
     JambeanInLujcluster param = ctx.getStartParam();
 
     Actor dataRef = ctx.createApplicationActor(dataActor(param, param.getAppStartParam()));
-    ctx.createApplicationActor(eventActor(param));
+    ctx.createApplicationActor(eventActor(param, dataRef));
     ctx.createApplicationActor(clusterActor(param, dataRef));
 
     //TODO: 异步后面再执行
@@ -45,9 +45,9 @@ final class OnLujclusterStart implements NodeStartListener {
         clusterParam.getDataAllPlugin(), jamverParam);
   }
 
-  private GameplayEventActor eventActor(JambeanInLujcluster param) {
+  private GameplayEventActor eventActor(JambeanInLujcluster param, Actor dataRef) {
     return new GameplayEventActor(new EventListenerMapCollector(
-        param.getEventListenerList()).collect(), param.getEventListenService());
+        param.getEventListenerList()).collect(), param.getEventListenService(), dataRef);
   }
 
   private ClusterCommActor clusterActor(JambeanInLujcluster param, Actor dataRef) {

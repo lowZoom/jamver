@@ -4,11 +4,10 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import luj.ava.spring.Internal;
 import luj.game.server.api.event.GameEventListener;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.EventActorMsgHandler;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.GameplayEventActor;
 
 @Internal
-final class OnFireEvent implements EventActorMsgHandler<FireEventMsg> {
+final class OnFireEvent implements GameplayEventActor.Handler<FireEventMsg> {
 
   @Override
   public void onHandle(Context ctx) {

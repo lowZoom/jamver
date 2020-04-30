@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import luj.game.server.api.net.GameHttpHandler;
 import org.slf4j.Logger;
@@ -83,15 +84,14 @@ public interface GameDataCommand<P, D> {
   }
   //----------------------------------------------------
 
-  interface Random {
+  interface Event {
 
-    boolean randBool(double likelihood);
-  }
-  //----------------------------------------------------
+    interface Field {
 
-  interface Time {
+      <T> Field set(Supplier<T> field, T value);
+    }
 
-    long now();
+    <T> void fire(Class<T> eventType, BiConsumer<Field, T> builder);
   }
   //----------------------------------------------------
 
@@ -111,6 +111,18 @@ public interface GameDataCommand<P, D> {
 
     void request(String url, Map<String, Object> params,
         Class<? extends GameHttpHandler<?>> handler);
+  }
+  //----------------------------------------------------
+
+  interface Random {
+
+    boolean randBool(double likelihood);
+  }
+  //----------------------------------------------------
+
+  interface Time {
+
+    long now();
   }
 
   ///////////////////////////////////////////////////////
