@@ -25,6 +25,11 @@ final class CmdServiceImpl implements GameDataCommand.Service {
   }
 
   @Override
+  public GameDataCommand.Event event() {
+    return _eventSvc;
+  }
+
+  @Override
   public GameDataCommand.Network network() {
     return null;
   }

@@ -42,6 +42,8 @@ public interface GameDataCommand<P, D> {
 
     <C> Config<C> config(Class<C> configType);
 
+    Event event();
+
     Network network();
 
     Random random();
