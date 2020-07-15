@@ -7,9 +7,12 @@ import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.game.server.api.cluster.ServerMessageHandler;
+import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.DataServiceImpl;
 import luj.game.server.internal.data.execute.save.CommandSaveRequestor;
+import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
 import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
@@ -22,7 +25,8 @@ public class CommandExecFinisher {
   public CommandExecFinisher(Class<?> loadResultType, CacheRequest cacheReq,
       CacheContainer dataCache, Class<?> cmdType,
       GameplayDataActor.CommandKit commandKit, Object cmdParam,
-      ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef) {
+      ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef,
+      ServerMessageHandler.Server remoteRef) {
     _loadResultType = loadResultType;
     _cacheReq = cacheReq;
     _dataCache = dataCache;
@@ -31,6 +35,7 @@ public class CommandExecFinisher {
     _cmdParam = cmdParam;
     _dataRef = dataRef;
     _saveRef = saveRef;
+    _remoteRef = remoteRef;
   }
 
   public void finish() {
@@ -38,14 +43,16 @@ public class CommandExecFinisher {
     LOG.debug("[game]执行数据CMD：{}", _cmdType.getName());
 
     List<DataTempProxy> createLog = new ArrayList<>();
-    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, createLog);
+    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, createLog, _remoteRef);
 
     LoadResultProxy resultProxy = new LoadResultProxy(_loadResultType, new HashMap<>()).init();
     List<DataResultProxy> loadLog = new ArrayList<>();
     _cacheReq.walk(new FinishWalker(_dataCache, resultProxy, loadLog, dataSvc::specifySetField));
 
     Object loadResult = resultProxy.getInstance();
-    new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc).execute();
+    GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
+
+    new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc).execute();
 
     for (DataTempProxy data : createLog) {
       new DataTempAdder(_dataCache, data.getDataType(), data).add();
@@ -66,4 +73,6 @@ public class CommandExecFinisher {
 
   private final ActorMessageHandler.Ref _dataRef;
   private final ActorPreStartHandler.Actor _saveRef;
+
+  private final ServerMessageHandler.Server _remoteRef;
 }

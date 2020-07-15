@@ -4,9 +4,11 @@ import luj.game.server.api.data.GameDataCommand;
 
 final class CmdServiceImpl implements GameDataCommand.Service {
 
-  CmdServiceImpl(GameDataCommand.Data dataSvc, GameDataCommand.Event eventSvc) {
+  CmdServiceImpl(GameDataCommand.Data dataSvc,
+      GameDataCommand.Event eventSvc, GameDataCommand.Network networkSvc) {
     _dataSvc = dataSvc;
     _eventSvc = eventSvc;
+    _networkSvc = networkSvc;
   }
 
   @Override
@@ -31,7 +33,7 @@ final class CmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public GameDataCommand.Network network() {
-    return null;
+    return _networkSvc;
   }
 
   @Override
@@ -47,4 +49,5 @@ final class CmdServiceImpl implements GameDataCommand.Service {
   private final GameDataCommand.Data _dataSvc;
 
   private final GameDataCommand.Event _eventSvc;
+  private final GameDataCommand.Network _networkSvc;
 }

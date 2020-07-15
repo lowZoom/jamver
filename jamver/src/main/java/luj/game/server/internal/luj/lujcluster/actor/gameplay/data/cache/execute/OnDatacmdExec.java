@@ -8,12 +8,15 @@ import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.data.command.queue.add.WaitQueueAdder;
 import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
 import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Internal
 final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
@@ -23,8 +26,10 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     GameplayDataActor actor = ctx.getActorState(this);
     DatacmdExecMsg msg = ctx.getMessage(this);
 
-    Map<Class<?>, GameplayDataActor.CommandKit> cmdMap = actor.getCommandMap();
     Class<?> cmdType = msg.getCmdType();
+//    LOG.debug("尝试执行CMD：{}", cmdType.getSimpleName());
+
+    Map<Class<?>, GameplayDataActor.CommandKit> cmdMap = actor.getCommandMap();
     Object param = msg.getParam();
 
     GameplayDataActor.CommandKit cmdKit = cmdMap.get(cmdType);
@@ -47,19 +52,22 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     CacheContainer dataCache = actor.getDataCache();
     DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, dataCache).check();
 
+    //TODO: 还有网络连接
+    ServerMessageHandler.Server remoteRef = msg.getRemoteRef();
+
     if (!readyResult.isReady()) {
       // 发起数据读取
       ActorPreStartHandler.Actor loadRef = actor.getLoadRef();
       new MissingLoadRequestor(readyResult.getMissingList(), dataCache, loadRef).request();
 
       // 加入等待队列
-      new WaitQueueAdder(actor.getCommandQueue(), cmdKit, param, cacheReq).add();
+      new WaitQueueAdder(actor.getCommandQueue(), cmdKit, param, cacheReq, remoteRef).add();
 
       return;
     }
 
     new CommandExecFinisher(loadResultType, cacheReq, dataCache, cmdType, cmdKit,
-        param, ctx.getActorRef(), actor.getSaveRef()).finish();
+        param, ctx.getActorRef(), actor.getSaveRef(), remoteRef).finish();
   }
 
 //  private static final Logger LOG = LoggerFactory.getLogger(OnDatacmdExec.class);

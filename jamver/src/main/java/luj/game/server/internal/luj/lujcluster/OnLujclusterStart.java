@@ -31,7 +31,7 @@ final class OnLujclusterStart implements NodeStartListener {
     ctx.createApplicationActor(clusterActor(param, dataRef));
 
     //TODO: 异步后面再执行
-    new StartTrigger(param.getStartListenerList()).trigger();
+    new StartTrigger(param.getStartListenerList(), dataRef).trigger();
   }
 
   private GameplayDataActor dataActor(JambeanInLujcluster clusterParam, Object jamverParam) {

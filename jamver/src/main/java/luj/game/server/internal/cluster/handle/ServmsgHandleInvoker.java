@@ -30,7 +30,7 @@ public class ServmsgHandleInvoker {
 
     ServerImpl sender = new ServerImpl(_remoteNode, _encodePlugin);
 
-    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef);
+    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, sender);
     HandleServiceImpl handleSvc = new HandleServiceImpl(dataSvc);
 
     HandleContextImpl handleCtx = new HandleContextImpl(_message, sender, handleSvc);

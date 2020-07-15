@@ -7,8 +7,9 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute
 
 final class DataServiceImpl implements ServerMessageHandler.Data {
 
-  DataServiceImpl(NodeStartListener.Actor dataRef) {
+  DataServiceImpl(NodeStartListener.Actor dataRef, ServerMessageHandler.Server remoteRef) {
     _dataRef = dataRef;
+    _remoteRef = remoteRef;
   }
 
   /**
@@ -16,9 +17,11 @@ final class DataServiceImpl implements ServerMessageHandler.Data {
    */
   @Override
   public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param) {
-    DatacmdExecMsg msg = new DatacmdExecMsg(commandType, param);
+    DatacmdExecMsg msg = new DatacmdExecMsg(commandType, param, _remoteRef);
     _dataRef.tell(msg);
   }
 
   private final NodeStartListener.Actor _dataRef;
+
+  private final ServerMessageHandler.Server _remoteRef;
 }

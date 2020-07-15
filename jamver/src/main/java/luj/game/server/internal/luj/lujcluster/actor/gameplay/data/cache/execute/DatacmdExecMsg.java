@@ -1,10 +1,13 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute;
 
+import luj.game.server.api.cluster.ServerMessageHandler;
+
 public class DatacmdExecMsg {
 
-  public DatacmdExecMsg(Class<?> cmdType, Object param) {
+  public DatacmdExecMsg(Class<?> cmdType, Object param, ServerMessageHandler.Server remoteRef) {
     _cmdType = cmdType;
     _param = param;
+    _remoteRef = remoteRef;
   }
 
   public Class<?> getCmdType() {
@@ -15,7 +18,12 @@ public class DatacmdExecMsg {
     return _param;
   }
 
-  private final Class<?> _cmdType;
+  public ServerMessageHandler.Server getRemoteRef() {
+    return _remoteRef;
+  }
 
+  private final Class<?> _cmdType;
   private final Object _param;
+
+  private final ServerMessageHandler.Server _remoteRef;
 }

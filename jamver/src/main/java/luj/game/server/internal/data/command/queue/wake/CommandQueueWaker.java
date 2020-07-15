@@ -41,8 +41,11 @@ public class CommandQueueWaker {
     GameplayDataActor.CommandKit cmdKit = commandReq.getCommandKit();
     Object cmdParam = commandReq.getCommandParam();
 
-    new CommandExecFinisher(cmdKit.getLoadResultType(), cacheReq, _dataCache,
-        cmdKit.getCommandType(), cmdKit, cmdParam, _dataRef, _saveRef).finish();
+    Class<?> resultType = cmdKit.getLoadResultType();
+    Class<?> commandType = cmdKit.getCommandType();
+
+    new CommandExecFinisher(resultType, cacheReq, _dataCache, commandType, cmdKit, cmdParam,
+        _dataRef, _saveRef, commandReq.getRemoteRef()).finish();
 
     return true;
   }

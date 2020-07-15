@@ -99,6 +99,12 @@ public interface GameDataCommand<P, D> {
 
   interface Network {
 
+    Session session();
+
+    /**
+     * @see #session
+     */
+    @Deprecated
     Session session(Comparable<?> sessionId);
 
     Http http();
