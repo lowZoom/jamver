@@ -6,6 +6,7 @@ import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
+import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
@@ -17,6 +18,7 @@ public class JambeanInLujcluster {
       List<GameStartListener> startListenerList,
       List<GameDataCommand<?, ?>> dataCommandList,
       List<GameDataLoad<?, ?>> dataLoadList,
+      List<GameDataCommandGroup> commandGroupList,
       List<GameEventListener<?>> eventListenerList,
       GameEventListener.Service eventListenService,
       List<ServerMessageHandler<?>> clusterMessageList,
@@ -27,6 +29,7 @@ public class JambeanInLujcluster {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
     _dataLoadList = dataLoadList;
+    _commandGroupList = commandGroupList;
     _eventListenerList = eventListenerList;
     _eventListenService = eventListenService;
     _clusterMessageList = clusterMessageList;
@@ -47,6 +50,10 @@ public class JambeanInLujcluster {
 
   public List<GameDataLoad<?, ?>> getDataLoadList() {
     return _dataLoadList;
+  }
+
+  public List<GameDataCommandGroup> getCommandGroupList() {
+    return _commandGroupList;
   }
 
   public List<GameEventListener<?>> getEventListenerList() {
@@ -85,6 +92,7 @@ public class JambeanInLujcluster {
 
   private final List<GameDataCommand<?, ?>> _dataCommandList;
   private final List<GameDataLoad<?, ?>> _dataLoadList;
+  private final List<GameDataCommandGroup> _commandGroupList;
 
   private final List<GameEventListener<?>> _eventListenerList;
   private final GameEventListener.Service _eventListenService;

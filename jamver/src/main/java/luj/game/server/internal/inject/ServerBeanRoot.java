@@ -5,6 +5,7 @@ import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
+import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.plugin.JamverBootRootInit;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
@@ -26,6 +27,10 @@ public class ServerBeanRoot {
 
   public List<GameDataLoad<?, ?>> getDataLoadList() {
     return _dataLoadList;
+  }
+
+  public List<GameDataCommandGroup> getCommandGroupList() {
+    return _commandGroupList;
   }
 
   public List<ServerMessageHandler<?>> getClusterMessageList() {
@@ -56,6 +61,9 @@ public class ServerBeanRoot {
 
   @Autowired(required = false)
   private List<GameDataLoad<?, ?>> _dataLoadList;
+
+  @Autowired(required = false)
+  private List<GameDataCommandGroup> _commandGroupList;
 
   @Autowired(required = false)
   private List<ServerMessageHandler<?>> _clusterMessageList;

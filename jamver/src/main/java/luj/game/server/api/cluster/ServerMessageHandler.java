@@ -4,7 +4,9 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.function.Consumer;
 import luj.game.server.api.data.GameDataCommand;
+import luj.game.server.api.data.GameDataCommandGroup;
 import org.springframework.stereotype.Component;
 
 public interface ServerMessageHandler<M> {
@@ -43,7 +45,14 @@ public interface ServerMessageHandler<M> {
 
   interface Data {
 
+    interface Group {
+
+      <P> Group command(Class<? extends GameDataCommand<P, ?>> commandType, P param);
+    }
+
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
+
+    void executeCommandGroup(Class<? extends GameDataCommandGroup> type, Consumer<Group> group);
   }
 
   void onHandle(Context ctx) throws Exception;

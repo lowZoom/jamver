@@ -22,8 +22,8 @@ public class DataReadyChecker {
     Comparable<?> dataId();
   }
 
-  public DataReadyChecker(CacheRequest cacheReq, CacheContainer cache) {
-    _cacheReq = cacheReq;
+  public DataReadyChecker(List<CacheRequest> reqList, CacheContainer cache) {
+    _reqList = reqList;
     _cache = cache;
   }
 
@@ -31,11 +31,15 @@ public class DataReadyChecker {
     List<CacheItem> lockedOrLoading = new ArrayList<>();
     List<Missing> missing = new ArrayList<>();
 
-    _cacheReq.walk(new ReadyWalker(_cache, lockedOrLoading, missing));
+    ReadyWalker walker = new ReadyWalker(_cache, lockedOrLoading, missing);
+    for (CacheRequest req : _reqList) {
+      req.walk(walker);
+    }
+
     return new ResultImpl(lockedOrLoading, missing);
   }
 
-  private final CacheRequest _cacheReq;
+  private final List<CacheRequest> _reqList;
 
   private final CacheContainer _cache;
 }

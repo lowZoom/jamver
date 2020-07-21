@@ -5,10 +5,15 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 @Deprecated
 public class LoadResultProxy implements InvocationHandler {
+
+  public static LoadResultProxy create(Class<?> resultType) {
+    return new LoadResultProxy(resultType, new HashMap<>()).init();
+  }
 
   LoadResultProxy(Class<?> resultType, Map<String, Object> resultMap) {
     _resultType = resultType;

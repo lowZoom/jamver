@@ -15,13 +15,11 @@ import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-final class FinishWalker implements RequestWalkListener {
+public class ExecFinishWalker implements RequestWalkListener {
 
-  FinishWalker(CacheContainer dataCache, LoadResultProxy loadResult, List<DataResultProxy> loadLog,
-      DataResultProxy.FieldHook fieldHook) {
+  public ExecFinishWalker(CacheContainer dataCache, LoadResultProxy loadResult,
+      List<DataResultProxy> loadLog, DataResultProxy.FieldHook fieldHook) {
     _dataCache = dataCache;
     _loadResult = loadResult;
     _loadLog = loadLog;
@@ -124,7 +122,7 @@ final class FinishWalker implements RequestWalkListener {
     Object getReturn();
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(FinishWalker.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(FinishWalker.class);
 
   private final CacheContainer _dataCache;
 

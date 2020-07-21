@@ -3,6 +3,7 @@ package luj.game.server.internal.data.command.queue.add;
 import java.util.Queue;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.cluster.ServerMessageHandler;
+import luj.game.server.internal.data.command.queue.CommandRequestFactory;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
@@ -19,8 +20,8 @@ public class WaitQueueAdder {
   }
 
   public void add() {
-    DataCommandRequest commandReq = new DataCommandRequest(
-        _commandKit, _commandParam, _cacheReq, _remoteRef);
+    DataCommandRequest commandReq = new CommandRequestFactory(
+        _remoteRef).createCommand(_commandKit, _commandParam, _cacheReq);
 
     _waitQueue.add(commandReq);
   }

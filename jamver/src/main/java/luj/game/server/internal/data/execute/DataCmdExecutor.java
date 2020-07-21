@@ -6,7 +6,7 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.Gamepla
 public class DataCmdExecutor {
 
   public DataCmdExecutor(GameplayDataActor.CommandKit cmdKit, Object param, Object loadResult,
-      DataServiceImpl dataSvc, GameDataCommand.Network netSvc) {
+      GameDataCommand.Data dataSvc, GameDataCommand.Network netSvc) {
     _cmdKit = cmdKit;
     _param = param;
     _loadResult = loadResult;
@@ -33,6 +33,6 @@ public class DataCmdExecutor {
   private final Object _param;
   private final Object _loadResult;
 
-  private final DataServiceImpl _dataSvc;
+  private final GameDataCommand.Data _dataSvc;
   private final GameDataCommand.Network _netSvc;
 }

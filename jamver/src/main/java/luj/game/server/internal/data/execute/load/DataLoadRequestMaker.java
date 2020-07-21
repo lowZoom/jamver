@@ -3,33 +3,34 @@ package luj.game.server.internal.data.execute.load;
 import luj.cache.api.CacheSession;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.data.GameDataLoad;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 public class DataLoadRequestMaker {
 
-  public DataLoadRequestMaker(GameDataLoad<?, ?> loader, Class<?> loadResultType, Object param,
+  public DataLoadRequestMaker(GameplayDataActor.CommandKit cmdKit, Object param,
       CacheSession lujcache) {
-    _loader = loader;
-    _loadResultType = loadResultType;
+    _cmdKit = cmdKit;
     _param = param;
     _lujcache = lujcache;
   }
 
   public CacheRequest make() {
-    if (_loadResultType == Void.class) {
+    Class<?> loadResultType = _cmdKit.getLoadResultType();
+    if (loadResultType == Void.class) {
       return null;
     }
 
     CacheRequest req = _lujcache.createRequest(null);
-    ResultFieldProxy fieldHolder = new ResultFieldProxy(_loadResultType).init();
+    ResultFieldProxy fieldHolder = new ResultFieldProxy(loadResultType).init();
 
-    _loader.onLoad(new LoadContextImpl(_param, req, fieldHolder));
+    GameDataLoad<?, ?> loader = _cmdKit.getLoader();
+    loader.onLoad(new LoadContextImpl(_param, req, fieldHolder));
+
     return req;
   }
 
-  private final GameDataLoad<?, ?> _loader;
-  private final Class<?> _loadResultType;
-
+  private final GameplayDataActor.CommandKit _cmdKit;
   private final Object _param;
-  private final CacheSession _lujcache;
 
+  private final CacheSession _lujcache;
 }

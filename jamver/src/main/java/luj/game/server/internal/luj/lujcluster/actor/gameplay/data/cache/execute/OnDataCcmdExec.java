@@ -2,12 +2,12 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execut
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.google.common.collect.ImmutableList;
 import java.util.Map;
 import luj.ava.spring.Internal;
 import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
-import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.data.command.queue.add.WaitQueueAdder;
 import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
@@ -15,11 +15,9 @@ import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Internal
-final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
+final class OnDataCcmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
   @Override
   public void onHandle(Context ctx) {
@@ -43,22 +41,20 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     //TODO: 如果没有，进行数据借出锁定，创建结果对象，以供CMD使用
 
-    Class<?> loadResultType = cmdKit.getLoadResultType();
     CacheSession lujcache = actor.getLujcache();
-
-    CacheRequest cacheReq = new DataLoadRequestMaker(cmdKit.getLoader(), loadResultType,
-        param, lujcache).make();
+    CacheRequest cacheReq = new DataLoadRequestMaker(cmdKit, param, lujcache).make();
 
     CacheContainer dataCache = actor.getDataCache();
-    DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, dataCache).check();
+    DataReadyChecker.Result readyResult = new DataReadyChecker(
+        ImmutableList.of(cacheReq), dataCache).check();
 
     //TODO: 还有网络连接
     ServerMessageHandler.Server remoteRef = msg.getRemoteRef();
 
     if (!readyResult.isReady()) {
       // 发起数据读取
-      ActorPreStartHandler.Actor loadRef = actor.getLoadRef();
-      new MissingLoadRequestor(readyResult.getMissingList(), dataCache, loadRef).request();
+      new MissingLoadRequestor(readyResult.getMissingList(),
+          dataCache, actor.getLoadRef()).request();
 
       // 加入等待队列
       new WaitQueueAdder(actor.getCommandQueue(), cmdKit, param, cacheReq, remoteRef).add();
@@ -66,7 +62,7 @@ final class OnDatacmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
       return;
     }
 
-    new CommandExecFinisher(loadResultType, cacheReq, dataCache, cmdType, cmdKit,
+    new CommandExecFinisher(cmdKit.getLoadResultType(), cacheReq, dataCache, cmdType, cmdKit,
         param, ctx.getActorRef(), actor.getSaveRef(), remoteRef).finish();
   }
 

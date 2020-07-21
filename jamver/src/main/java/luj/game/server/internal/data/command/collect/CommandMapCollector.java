@@ -1,15 +1,15 @@
 package luj.game.server.internal.data.command.collect;
 
+import static java.util.stream.Collectors.toMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import luj.ava.reflect.type.TypeX;
 import luj.ava.stream.StreamX;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CommandMapCollector {
@@ -23,19 +23,25 @@ public class CommandMapCollector {
   public Map<Class<?>, GameplayDataActor.CommandKit> collect() {
     return StreamX.from(_loadList)
         .map(this::makeKit)
-        .collect(Collectors.toMap(KitImpl::getCommandType, Function.identity()));
+        .collect(toMap(KitImpl::getCommandType, Function.identity()));
   }
 
   private KitImpl makeKit(GameDataLoad<?, ?> load) {
+    KitImpl kit = new KitImpl();
     GameDataCommand<?, ?> cmd = findCommandBean(load.getClass());
-    Logger logger = LoggerFactory.getLogger(cmd.getClass());
+    kit._command = cmd;
 
-    Class<?> loadResultType = TypeX.ofInstance(load)
+    Class<?> cmdType = cmd.getClass();
+    kit._commandType = cmdType;
+    kit._logger = LoggerFactory.getLogger(cmdType);
+
+    kit._loader = load;
+    kit._loadResultType = TypeX.ofInstance(load)
         .getSupertype(GameDataLoad.class)
         .getTypeParam(1)
         .asClass();
 
-    return new KitImpl(cmd, cmd.getClass(), load, loadResultType, logger);
+    return kit;
   }
 
   private GameDataCommand<?, ?> findCommandBean(Class<?> loadType) {

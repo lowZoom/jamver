@@ -1,14 +1,14 @@
 package luj.game.server.internal.data.save.create.request;
 
 import java.util.List;
-import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.save.DataTransientChecker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.create.DataCreateMsg;
 
 public class DataCreateRequestor {
 
-  public DataCreateRequestor(List<DataTempProxy> createList, ActorPreStartHandler.Actor saveRef) {
+  public DataCreateRequestor(List<DataTempProxy> createList, Tellable saveRef) {
     _createList = createList;
     _saveRef = saveRef;
   }
@@ -30,5 +30,5 @@ public class DataCreateRequestor {
 
   private final List<DataTempProxy> _createList;
 
-  private final ActorPreStartHandler.Actor _saveRef;
+  private final Tellable _saveRef;
 }

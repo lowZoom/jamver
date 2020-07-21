@@ -1,12 +1,10 @@
 package luj.game.server.internal.data.execute.finish;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
-import luj.cluster.api.actor.ActorMessageHandler;
-import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
@@ -25,7 +23,7 @@ public class CommandExecFinisher {
   public CommandExecFinisher(Class<?> loadResultType, CacheRequest cacheReq,
       CacheContainer dataCache, Class<?> cmdType,
       GameplayDataActor.CommandKit commandKit, Object cmdParam,
-      ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef,
+      Tellable dataRef, Tellable saveRef,
       ServerMessageHandler.Server remoteRef) {
     _loadResultType = loadResultType;
     _cacheReq = cacheReq;
@@ -43,11 +41,13 @@ public class CommandExecFinisher {
     LOG.debug("[game]执行数据CMD：{}", _cmdType.getName());
 
     List<DataTempProxy> createLog = new ArrayList<>();
+    List<DataResultProxy> loadLog = new ArrayList<>();
+
+    LoadResultProxy resultProxy = LoadResultProxy.create(_loadResultType);
     DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, createLog, _remoteRef);
 
-    LoadResultProxy resultProxy = new LoadResultProxy(_loadResultType, new HashMap<>()).init();
-    List<DataResultProxy> loadLog = new ArrayList<>();
-    _cacheReq.walk(new FinishWalker(_dataCache, resultProxy, loadLog, dataSvc::specifySetField));
+    _cacheReq.walk(new ExecFinishWalker(
+        _dataCache, resultProxy, loadLog, dataSvc::specifySetField));
 
     Object loadResult = resultProxy.getInstance();
     GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
@@ -71,8 +71,8 @@ public class CommandExecFinisher {
   private final GameplayDataActor.CommandKit _commandKit;
   private final Object _cmdParam;
 
-  private final ActorMessageHandler.Ref _dataRef;
-  private final ActorPreStartHandler.Actor _saveRef;
+  private final Tellable _dataRef;
+  private final Tellable _saveRef;
 
   private final ServerMessageHandler.Server _remoteRef;
 }

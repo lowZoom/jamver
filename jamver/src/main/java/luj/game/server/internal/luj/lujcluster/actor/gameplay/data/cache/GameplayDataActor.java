@@ -7,6 +7,7 @@ import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.data.GameDataCommand;
+import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import org.slf4j.Logger;
@@ -34,13 +35,21 @@ public class GameplayDataActor {
     Logger getLogger();
   }
 
+  public interface GroupKit {
+
+    GameDataCommandGroup getGroup();
+
+    Class<?> getGroupType();
+  }
+
   public GameplayDataActor(CacheContainer dataCache, Queue<DataCommandRequest> commandQueue,
-      CacheSession lujcache, Map<Class<?>, CommandKit> commandMap, DataAllPlugin allPlugin,
-      Object startParam) {
+      CacheSession lujcache, Map<Class<?>, CommandKit> commandMap,
+      Map<Class<?>, GroupKit> cmdGroupMap, DataAllPlugin allPlugin, Object startParam) {
     _dataCache = dataCache;
     _commandQueue = commandQueue;
     _lujcache = lujcache;
     _commandMap = commandMap;
+    _cmdGroupMap = cmdGroupMap;
     _allPlugin = allPlugin;
     _startParam = startParam;
   }
@@ -81,6 +90,10 @@ public class GameplayDataActor {
     return _commandMap;
   }
 
+  public Map<Class<?>, GroupKit> getCmdGroupMap() {
+    return _cmdGroupMap;
+  }
+
   public CacheSession getLujcache() {
     return _lujcache;
   }
@@ -104,6 +117,7 @@ public class GameplayDataActor {
   /////////////////////////
 
   private final Map<Class<?>, CommandKit> _commandMap;
+  private final Map<Class<?>, GroupKit> _cmdGroupMap;
   private final CacheSession _lujcache;
 
   private final DataAllPlugin _allPlugin;

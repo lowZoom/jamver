@@ -1,15 +1,15 @@
 package luj.game.server.internal.data.command.queue.wake;
 
+import java.util.List;
 import java.util.Queue;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
-import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
+import luj.game.server.internal.data.command.queue.wake.behaviors.WakeBehaviorFactory;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 public class CommandQueueWaker {
 
@@ -28,7 +28,10 @@ public class CommandQueueWaker {
   }
 
   private boolean tryExecute(DataCommandRequest commandReq) {
-    CacheRequest cacheReq = commandReq.getCacheReq();
+    QueueWakeBehavior behavior = new WakeBehaviorFactory(
+        commandReq, _dataCache, _dataRef, _saveRef).create();
+
+    List<CacheRequest> cacheReq = behavior.getCacheReq();
     DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, _dataCache).check();
 
     if (!readyResult.isReady()) {
@@ -37,15 +40,7 @@ public class CommandQueueWaker {
     }
 
     //TODO: 后面要做成 在此锁定数据后，发往execActor执行
-
-    GameplayDataActor.CommandKit cmdKit = commandReq.getCommandKit();
-    Object cmdParam = commandReq.getCommandParam();
-
-    Class<?> resultType = cmdKit.getLoadResultType();
-    Class<?> commandType = cmdKit.getCommandType();
-
-    new CommandExecFinisher(resultType, cacheReq, _dataCache, commandType, cmdKit, cmdParam,
-        _dataRef, _saveRef, commandReq.getRemoteRef()).finish();
+    behavior.finishExec();
 
     return true;
   }
