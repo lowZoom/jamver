@@ -17,7 +17,7 @@ import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 @Internal
-final class OnDataCcmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
+final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
   @Override
   public void onHandle(Context ctx) {

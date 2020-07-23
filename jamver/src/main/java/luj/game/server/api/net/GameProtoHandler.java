@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import luj.game.server.api.data.GameDataCommand;
 import org.springframework.stereotype.Component;
 
@@ -51,7 +53,25 @@ public interface GameProtoHandler<P> {
 
   interface Data {
 
+    interface Param {
+
+      <V> Field<V> set(Supplier<V> field);
+    }
+
+    interface Field<V> {
+
+      Param $(V value);
+    }
+
+    /**
+     * TODO: 观望一段时间后废弃
+     *
+     * @see #executeCommand2(Class, BiConsumer)
+     */
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
+
+    <P> void executeCommand2(Class<? extends GameDataCommand<P, ?>> commandType,
+        BiConsumer<Param, P> param);
   }
 
   void onHandle(Context ctx);

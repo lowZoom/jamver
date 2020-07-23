@@ -40,5 +40,11 @@
       <artifactId>lujcache</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
+
+    <dependency>
+      <groupId>luj.bean</groupId>
+      <artifactId>lujbean</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 </project>
