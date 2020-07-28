@@ -6,6 +6,7 @@ import luj.game.server.api.net.GameProtoHandler;
 
 final class ParamImpl<T> implements GameProtoHandler.Data.Param, GameProtoHandler.Data.Field<T> {
 
+  @SuppressWarnings("unchecked")
   @Override
   public <V> GameProtoHandler.Data.Field<V> set(Supplier<V> field) {
     _field = (Supplier<T>) field;
