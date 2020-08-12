@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import luj.game.server.api.data.service.CommandService;
 import luj.game.server.api.net.GameHttpHandler;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -63,6 +64,8 @@ public interface GameDataCommand<P, D> {
     <T> void add(Supplier<Collection<T>> field, T element);
 
     boolean exists(Object data);
+
+    <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
 
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType);
 

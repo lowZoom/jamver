@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
+import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
@@ -59,6 +60,11 @@ public class DataServiceImpl implements GameDataCommand.Data {
   public boolean exists(Object data) {
     //FIXME: TEMP
     return data != null;
+  }
+
+  @Override
+  public <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType) {
+    throw new UnsupportedOperationException("command还没实现");
   }
 
   @Override
