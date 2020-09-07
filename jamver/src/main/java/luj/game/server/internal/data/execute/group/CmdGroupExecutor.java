@@ -2,7 +2,6 @@ package luj.game.server.internal.data.execute.group;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
@@ -19,7 +18,7 @@ public class CmdGroupExecutor {
 
   public CmdGroupExecutor(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
       List<DataTempProxy> createLog, List<DataResultProxy> loadLog, CacheContainer dataCache,
-      Tellable dataRef, ServerMessageHandler.Server remoteRef, BeanContext lujbean) {
+      Tellable dataRef, ServerMessageHandler.Server remoteRef) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
     _createLog = createLog;
@@ -27,7 +26,6 @@ public class CmdGroupExecutor {
     _dataCache = dataCache;
     _dataRef = dataRef;
     _remoteRef = remoteRef;
-    _lujbean = lujbean;
   }
 
   public void execute() {
@@ -56,7 +54,7 @@ public class CmdGroupExecutor {
     result._remoteRef = _remoteRef;
 
     LoadResultProxy resultProxy = LoadResultProxy.create(cmdKit.getLoadResultType());
-    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, _createLog, _remoteRef, _lujbean);
+    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, _createLog, _remoteRef);
     e.getCacheReq().walk(new ExecFinishWalker(
         _dataCache, resultProxy, _loadLog, dataSvc::specifySetField));
 
@@ -76,5 +74,4 @@ public class CmdGroupExecutor {
   private final Tellable _dataRef;
 
   private final ServerMessageHandler.Server _remoteRef;
-  private final BeanContext _lujbean;
 }

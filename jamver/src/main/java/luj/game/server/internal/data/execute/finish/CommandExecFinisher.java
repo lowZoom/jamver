@@ -2,7 +2,6 @@ package luj.game.server.internal.data.execute.finish;
 
 import java.util.ArrayList;
 import java.util.List;
-import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.cluster.api.actor.Tellable;
@@ -25,7 +24,7 @@ public class CommandExecFinisher {
       CacheContainer dataCache, Class<?> cmdType,
       GameplayDataActor.CommandKit commandKit, Object cmdParam,
       Tellable dataRef, Tellable saveRef,
-      ServerMessageHandler.Server remoteRef, BeanContext lujbean) {
+      ServerMessageHandler.Server remoteRef) {
     _loadResultType = loadResultType;
     _cacheReq = cacheReq;
     _dataCache = dataCache;
@@ -35,7 +34,6 @@ public class CommandExecFinisher {
     _dataRef = dataRef;
     _saveRef = saveRef;
     _remoteRef = remoteRef;
-    _lujbean = lujbean;
   }
 
   public void finish() {
@@ -46,7 +44,7 @@ public class CommandExecFinisher {
     List<DataResultProxy> loadLog = new ArrayList<>();
 
     LoadResultProxy resultProxy = LoadResultProxy.create(_loadResultType);
-    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, createLog, _remoteRef, _lujbean);
+    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, createLog, _remoteRef);
 
     _cacheReq.walk(new ExecFinishWalker(
         _dataCache, resultProxy, loadLog, dataSvc::specifySetField));
@@ -77,5 +75,4 @@ public class CommandExecFinisher {
   private final Tellable _saveRef;
 
   private final ServerMessageHandler.Server _remoteRef;
-  private final BeanContext _lujbean;
 }

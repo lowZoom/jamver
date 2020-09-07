@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.execute;
 
+import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
@@ -10,6 +11,7 @@ import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
+import luj.game.server.internal.data.service.set.FieldImpl;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
 
 public class DataServiceImpl implements GameDataCommand.Data {
@@ -42,10 +44,13 @@ public class DataServiceImpl implements GameDataCommand.Data {
    */
   @Override
   public <T> void set(Supplier<T> field, T value) {
-    field.get();
+    set(field).$(value);
+  }
 
-    _curData.setDirty(true);
-    _curData.getData().getDataMap().put(_curField, value);
+  @Override
+  public <T> Field<T> set(Supplier<T> field) {
+    field.get();
+    return new FieldImpl<>(_curData, _curField);
   }
 
   @Override
@@ -54,6 +59,12 @@ public class DataServiceImpl implements GameDataCommand.Data {
 
     _curData.setDirty(true);
     c.add(element);
+  }
+
+  @Override
+  public Comparable<?> id(Object data) {
+    DataResultProxy proxy = (DataResultProxy) Proxy.getInvocationHandler(data);
+    return (Comparable<?>) proxy.getData().getDataMap().get(DataTempProxy.ID);
   }
 
   @Override
