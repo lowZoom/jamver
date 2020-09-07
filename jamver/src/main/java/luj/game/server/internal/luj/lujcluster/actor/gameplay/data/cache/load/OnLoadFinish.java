@@ -28,7 +28,8 @@ final class OnLoadFinish implements GameplayDataActor.Handler<LoadFinishMsg> {
 
     Ref selfRef = ctx.getActorRef();
     new CacheLoadFinisher(dataType, dataId, present, valueMap, actor.getDataCache(),
-        actor.getCommandQueue(), selfRef, actor.getSaveRef(), actor.getLoadRef()).finish();
+        actor.getCommandQueue(), selfRef, actor.getSaveRef(), actor.getLoadRef(),
+        actor.getLujbean()).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnLoadFinish.class);

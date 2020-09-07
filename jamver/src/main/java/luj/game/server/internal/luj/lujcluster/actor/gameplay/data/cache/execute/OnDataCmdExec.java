@@ -63,7 +63,7 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     }
 
     new CommandExecFinisher(cmdKit.getLoadResultType(), cacheReq, dataCache, cmdType, cmdKit,
-        param, ctx.getActorRef(), actor.getSaveRef(), remoteRef).finish();
+        param, ctx.getActorRef(), actor.getSaveRef(), remoteRef, actor.getLujbean()).finish();
   }
 
 //  private static final Logger LOG = LoggerFactory.getLogger(OnDatacmdExec.class);

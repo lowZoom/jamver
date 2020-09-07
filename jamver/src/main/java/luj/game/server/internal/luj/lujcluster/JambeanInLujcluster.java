@@ -1,6 +1,7 @@
 package luj.game.server.internal.luj.lujcluster;
 
 import java.util.List;
+import luj.bean.api.BeanContext;
 import luj.cache.api.CacheSession;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerJoinListener;
@@ -25,7 +26,7 @@ public class JambeanInLujcluster {
       List<ServerJoinListener> clusterJoinList,
       DataAllPlugin dataAllPlugin,
       ClusterProtoPlugin clusterProtoPlugin,
-      CacheSession lujcache, Object appStartParam) {
+      CacheSession lujcache, BeanContext lujbean, Object appStartParam) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
     _dataLoadList = dataLoadList;
@@ -37,6 +38,7 @@ public class JambeanInLujcluster {
     _dataAllPlugin = dataAllPlugin;
     _clusterProtoPlugin = clusterProtoPlugin;
     _lujcache = lujcache;
+    _lujbean = lujbean;
     _appStartParam = appStartParam;
   }
 
@@ -84,6 +86,10 @@ public class JambeanInLujcluster {
     return _lujcache;
   }
 
+  public BeanContext getLujbean() {
+    return _lujbean;
+  }
+
   public Object getAppStartParam() {
     return _appStartParam;
   }
@@ -104,6 +110,7 @@ public class JambeanInLujcluster {
   private final ClusterProtoPlugin _clusterProtoPlugin;
 
   private final CacheSession _lujcache;
+  private final BeanContext _lujbean;
 
   /**
    * @see luj.game.server.api.plugin.JamverBootRootInit.Return#param

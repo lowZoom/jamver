@@ -21,7 +21,7 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.Gamepla
 final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg> {
 
   @Override
-  public void onHandle(Context ctx) throws Exception {
+  public void onHandle(Context ctx) {
     GameplayDataActor actor = ctx.getActorState(this);
     CmdGroupExecMsg msg = ctx.getMessage(this);
 
@@ -62,7 +62,7 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
     }
 
     new GroupExecFinisher(groupKit.getGroup(), elemList, dataCache,
-        ctx.getActorRef(), actor.getSaveRef(), remoteRef).finish();
+        ctx.getActorRef(), actor.getSaveRef(), remoteRef, actor.getLujbean()).finish();
   }
 
   private Elem makeElem(CmdGroupExecMsg.Command msg, GameplayDataActor actor) {

@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 import java.util.function.Consumer;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
+import luj.game.server.api.data.service.CommandService;
 import org.springframework.stereotype.Component;
 
 public interface ServerMessageHandler<M> {
@@ -50,6 +51,12 @@ public interface ServerMessageHandler<M> {
       <P> Group command(Class<? extends GameDataCommand<P, ?>> commandType, P param);
     }
 
+    <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
+
+    /**
+     * @see Data#command
+     */
+    @Deprecated
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
 
     void executeCommandGroup(Class<? extends GameDataCommandGroup> type, Consumer<Group> group);

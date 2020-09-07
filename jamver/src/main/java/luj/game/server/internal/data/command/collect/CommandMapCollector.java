@@ -1,7 +1,6 @@
 package luj.game.server.internal.data.command.collect;
 
-import static java.util.stream.Collectors.toMap;
-
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -23,7 +22,7 @@ public class CommandMapCollector {
   public Map<Class<?>, GameplayDataActor.CommandKit> collect() {
     return StreamX.from(_loadList)
         .map(this::makeKit)
-        .collect(toMap(KitImpl::getCommandType, Function.identity()));
+        .collect(ImmutableMap.toImmutableMap(KitImpl::getCommandType, Function.identity()));
   }
 
   private KitImpl makeKit(GameDataLoad<?, ?> load) {
@@ -32,15 +31,14 @@ public class CommandMapCollector {
     kit._command = cmd;
 
     Class<?> cmdType = cmd.getClass();
+    TypeX<?> cmdDecl = TypeX.of(cmdType).getSupertype(GameDataCommand.class);
     kit._commandType = cmdType;
-    kit._logger = LoggerFactory.getLogger(cmdType);
+    kit._paramType = cmdDecl.getTypeParam(0).asClass();
 
     kit._loader = load;
-    kit._loadResultType = TypeX.ofInstance(load)
-        .getSupertype(GameDataLoad.class)
-        .getTypeParam(1)
-        .asClass();
+    kit._loadResultType = cmdDecl.getTypeParam(1).asClass();
 
+    kit._logger = LoggerFactory.getLogger(cmdType);
     return kit;
   }
 

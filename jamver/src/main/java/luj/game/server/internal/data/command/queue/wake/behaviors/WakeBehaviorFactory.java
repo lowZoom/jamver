@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.command.queue.wake.behaviors;
 
+import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
@@ -9,11 +10,12 @@ import luj.game.server.internal.data.command.queue.wake.QueueWakeBehavior;
 public class WakeBehaviorFactory {
 
   public WakeBehaviorFactory(DataCommandRequest commandReq, CacheContainer dataCache,
-      ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef) {
+      ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef, BeanContext lujbean) {
     _commandReq = commandReq;
     _dataCache = dataCache;
     _dataRef = dataRef;
     _saveRef = saveRef;
+    _lujbean = lujbean;
   }
 
   public QueueWakeBehavior create() {
@@ -31,4 +33,6 @@ public class WakeBehaviorFactory {
 
   final ActorMessageHandler.Ref _dataRef;
   final ActorPreStartHandler.Actor _saveRef;
+
+  final BeanContext _lujbean;
 }

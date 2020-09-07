@@ -6,6 +6,7 @@ import static com.google.common.base.Preconditions.checkState;
 import com.google.common.collect.ImmutableList;
 import java.util.Map;
 import java.util.Queue;
+import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
@@ -25,7 +26,8 @@ public class CacheLoadFinisher {
   public CacheLoadFinisher(Class<?> dataType, Comparable<?> dataId, boolean present,
       Map<String, Object> dataValue, CacheContainer dataCache,
       Queue<DataCommandRequest> commandQueue, ActorMessageHandler.Ref dataRef,
-      ActorPreStartHandler.Actor saveRef, ActorPreStartHandler.Actor loadRef) {
+      ActorPreStartHandler.Actor saveRef, ActorPreStartHandler.Actor loadRef,
+      BeanContext lujbean) {
     _dataType = dataType;
     _dataId = dataId;
     _present = present;
@@ -35,13 +37,14 @@ public class CacheLoadFinisher {
     _dataRef = dataRef;
     _saveRef = saveRef;
     _loadRef = loadRef;
+    _lujbean = lujbean;
   }
 
   public void finish() {
     updateCache();
 
     // 有新数据可用后，唤醒之前等待的CMD
-    new CommandQueueWaker(_commandQueue, _dataCache, _dataRef, _saveRef, _loadRef).wake();
+    new CommandQueueWaker(_commandQueue, _dataCache, _dataRef, _saveRef, _loadRef, _lujbean).wake();
   }
 
   private void updateCache() {
@@ -95,4 +98,6 @@ public class CacheLoadFinisher {
   private final ActorMessageHandler.Ref _dataRef;
   private final ActorPreStartHandler.Actor _saveRef;
   private final ActorPreStartHandler.Actor _loadRef;
+
+  private final BeanContext _lujbean;
 }

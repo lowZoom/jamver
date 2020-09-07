@@ -26,8 +26,8 @@ final class BehavGroup implements QueueWakeBehavior {
     DataCommandRequest commandReq = _factory._commandReq;
 
     new GroupExecFinisher(commandReq.getCmdGroup(), commandReq.getGroupElemList(),
-        _factory._dataCache, _factory._dataRef, _factory._saveRef, commandReq.getRemoteRef())
-        .finish();
+        _factory._dataCache, _factory._dataRef, _factory._saveRef, commandReq.getRemoteRef(),
+        _factory._lujbean).finish();
   }
 
   private final WakeBehaviorFactory _factory;

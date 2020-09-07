@@ -2,6 +2,7 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache;
 
 import java.util.Map;
 import java.util.Queue;
+import luj.bean.api.BeanContext;
 import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.ActorMessageHandler;
@@ -10,6 +11,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
+import luj.game.server.internal.luj.lujcluster.actor.start.child.TopRefCollection;
 import org.slf4j.Logger;
 
 public class GameplayDataActor {
@@ -28,6 +30,8 @@ public class GameplayDataActor {
 
     Class<?> getCommandType();
 
+    Class<?> getParamType();
+
     GameDataLoad<?, ?> getLoader();
 
     Class<?> getLoadResultType();
@@ -44,12 +48,14 @@ public class GameplayDataActor {
 
   public GameplayDataActor(CacheContainer dataCache, Queue<DataCommandRequest> commandQueue,
       CacheSession lujcache, Map<Class<?>, CommandKit> commandMap,
-      Map<Class<?>, GroupKit> cmdGroupMap, DataAllPlugin allPlugin, Object startParam) {
+      Map<Class<?>, GroupKit> cmdGroupMap, BeanContext lujbean,
+      DataAllPlugin allPlugin, Object startParam) {
     _dataCache = dataCache;
     _commandQueue = commandQueue;
     _lujcache = lujcache;
     _commandMap = commandMap;
     _cmdGroupMap = cmdGroupMap;
+    _lujbean = lujbean;
     _allPlugin = allPlugin;
     _startParam = startParam;
   }
@@ -78,6 +84,14 @@ public class GameplayDataActor {
     _saveRef = saveRef;
   }
 
+  public TopRefCollection getSiblingRef() {
+    return _siblingRef;
+  }
+
+  public void setSiblingRef(TopRefCollection siblingRef) {
+    _siblingRef = siblingRef;
+  }
+
   public CacheContainer getDataCache() {
     return _dataCache;
   }
@@ -98,6 +112,10 @@ public class GameplayDataActor {
     return _lujcache;
   }
 
+  public BeanContext getLujbean() {
+    return _lujbean;
+  }
+
   public DataAllPlugin getAllPlugin() {
     return _allPlugin;
   }
@@ -111,6 +129,8 @@ public class GameplayDataActor {
   private ActorPreStartHandler.Actor _loadRef;
   private ActorPreStartHandler.Actor _saveRef;
 
+  private TopRefCollection _siblingRef;
+
   private final CacheContainer _dataCache;
   private final Queue<DataCommandRequest> _commandQueue;
 
@@ -118,7 +138,9 @@ public class GameplayDataActor {
 
   private final Map<Class<?>, CommandKit> _commandMap;
   private final Map<Class<?>, GroupKit> _cmdGroupMap;
+
   private final CacheSession _lujcache;
+  private final BeanContext _lujbean;
 
   private final DataAllPlugin _allPlugin;
   private final Object _startParam;

@@ -56,12 +56,25 @@ public interface GameDataCommand<P, D> {
 
   interface Data {
 
+    interface Field<V> {
+
+      void $(V value);
+    }
+
     <T> T create(Class<T> dataType);
 
+    /**
+     * @see #set(Supplier)
+     */
+    @Deprecated
     <T> void set(Supplier<T> field, T value);
+
+    <T> Field<T> set(Supplier<T> field);
 
     //TODO: 这个接口还要再斟酌一下（关于操作集合的形式）
     <T> void add(Supplier<Collection<T>> field, T element);
+
+    Comparable<?> id(Object data);
 
     boolean exists(Object data);
 
@@ -75,9 +88,7 @@ public interface GameDataCommand<P, D> {
 
   interface Proto {
 
-    <T> T create(Class<T> protoType);
-
-    <T> void set(Supplier<T> field, T value);
+    <T> T create(Class<T> protoType, BiConsumer<CommandService.Param, T> protoValue);
   }
   //----------------------------------------------------
 

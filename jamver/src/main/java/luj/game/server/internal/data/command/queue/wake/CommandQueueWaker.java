@@ -2,6 +2,7 @@ package luj.game.server.internal.data.command.queue.wake;
 
 import java.util.List;
 import java.util.Queue;
+import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.cluster.api.actor.ActorMessageHandler;
@@ -15,12 +16,13 @@ public class CommandQueueWaker {
 
   public CommandQueueWaker(Queue<DataCommandRequest> commandQueue, CacheContainer dataCache,
       ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef,
-      ActorPreStartHandler.Actor loadRef) {
+      ActorPreStartHandler.Actor loadRef, BeanContext lujbean) {
     _commandQueue = commandQueue;
     _dataCache = dataCache;
     _dataRef = dataRef;
     _saveRef = saveRef;
     _loadRef = loadRef;
+    _lujbean = lujbean;
   }
 
   public void wake() {
@@ -29,7 +31,7 @@ public class CommandQueueWaker {
 
   private boolean tryExecute(DataCommandRequest commandReq) {
     QueueWakeBehavior behavior = new WakeBehaviorFactory(
-        commandReq, _dataCache, _dataRef, _saveRef).create();
+        commandReq, _dataCache, _dataRef, _saveRef, _lujbean).create();
 
     List<CacheRequest> cacheReq = behavior.getCacheReq();
     DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, _dataCache).check();
@@ -51,4 +53,6 @@ public class CommandQueueWaker {
   private final ActorMessageHandler.Ref _dataRef;
   private final ActorPreStartHandler.Actor _saveRef;
   private final ActorPreStartHandler.Actor _loadRef;
+
+  private final BeanContext _lujbean;
 }

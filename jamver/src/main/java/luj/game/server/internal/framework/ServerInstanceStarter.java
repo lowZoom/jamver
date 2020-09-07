@@ -1,5 +1,6 @@
 package luj.game.server.internal.framework;
 
+import luj.bean.api.LujBean;
 import luj.cache.api.LujCache;
 import luj.cluster.api.ClusterSession;
 import luj.cluster.api.LujCluster;
@@ -17,9 +18,6 @@ public class ServerInstanceStarter {
     _appContext = appContext;
   }
 
-  /**
-   * @see luj.game.server.internal.luj.lujcluster.OnLujclusterStart#onStart
-   */
   public void start() {
     try (AnnotationConfigApplicationContext internalCtx = new SpringContextCreator().create()) {
       internalCtx.register(InternalInjectConf.class);
@@ -30,6 +28,9 @@ public class ServerInstanceStarter {
     }
   }
 
+  /**
+   * @see luj.game.server.internal.luj.lujcluster.OnLujclusterStart#onStart
+   */
   private void startCluster(ClusterSession lujcluster, ApplicationContext internalCtx) {
     ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
     JamverBootRootInit startPlugin = beanRoot.getBootInitPlugin();
@@ -49,6 +50,7 @@ public class ServerInstanceStarter {
         beanRoot.getDataAllPlugin(),
         beanRoot.getClusterProtoPlugin(),
         LujCache.start(internalCtx),
+        LujBean.start(),
         startCfg.startParam()));
   }
 

@@ -30,9 +30,10 @@ public class DataInstanceCreator {
     Method[] methodList = _dataType.getMethods();
 
     Map<String, Object> dataMap = new HashMap<>(ImmutableMap.<String, Object>builder()
+        .putAll(makeInitMap(methodList, int.class, m -> INT_ZERO))
         .putAll(makeInitMap(methodList, List.class, m -> new ArrayList<>()))
         .putAll(makeInitMap(methodList, Set.class, m -> new HashSet<>()))
-        .putAll(makeInitMap(methodList, int.class, m -> INT_ZERO))
+        .putAll(makeInitMap(methodList, Map.class, m -> new HashMap<>()))
         .build());
 
     dataMap.putAll(_initValue);
