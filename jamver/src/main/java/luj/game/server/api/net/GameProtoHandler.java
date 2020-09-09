@@ -62,5 +62,5 @@ public interface GameProtoHandler<P> {
     <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
   }
 
-  void onHandle(Context ctx);
+  void onHandle(Context ctx) throws Exception;
 }

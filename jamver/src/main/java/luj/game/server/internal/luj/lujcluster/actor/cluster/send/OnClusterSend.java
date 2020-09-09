@@ -3,8 +3,7 @@ package luj.game.server.internal.luj.lujcluster.actor.cluster.send;
 import com.google.common.collect.Multimap;
 import java.util.Collection;
 import luj.ava.spring.Internal;
-import luj.cluster.api.actor.Tellable;
-import luj.cluster.internal.node.message.receive.message.remote.NodeSendRemoteMsg;
+import luj.cluster.api.actor.ActorMessageHandler;
 import luj.game.server.internal.cluster.proto.encode.ClusterProtoEncoder;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.receive.ClusterReceiveMsg;
@@ -19,11 +18,11 @@ final class OnClusterSend implements ClusterCommActor.Handler<ClusterSendMsg> {
     ClusterCommActor self = ctx.getActorState(this);
     ClusterSendMsg msg = ctx.getMessage(this);
 
-    Multimap<String, Tellable> dispatchMap = self.getDispatchMap();
+    Multimap<String, ActorMessageHandler.Node> dispatchMap = self.getDispatchMap();
     String msgType = msg.getMessageType();
 
-    Collection<Tellable> refList = dispatchMap.get(msgType);
-    if (refList.isEmpty()) {
+    Collection<ActorMessageHandler.Node> nodeList = dispatchMap.get(msgType);
+    if (nodeList.isEmpty()) {
       LOG.warn("消息没有对应的处理节点，将被抛弃：{}", msgType);
       return;
     }
@@ -31,9 +30,9 @@ final class OnClusterSend implements ClusterCommActor.Handler<ClusterSendMsg> {
     ClusterProtoEncoder.Result encoded = new ClusterProtoEncoder(
         msg.getMessageObj(), self.getProtoPlugin().getProtoEncode()).encode();
 
-    for (Tellable ref : refList) {
-      ref.tell(new NodeSendRemoteMsg(ClusterReceiveMsg.class.getName(),
-          new ClusterReceiveMsg(msgType, encoded.protoData())));
+    for (ActorMessageHandler.Node node : nodeList) {
+      node.sendMessage(ClusterReceiveMsg.class.getName(),
+          new ClusterReceiveMsg(msgType, encoded.protoData()));
     }
   }
 

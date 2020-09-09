@@ -121,12 +121,19 @@ public interface GameDataCommand<P, D> {
     @Deprecated
     Session session(Comparable<?> sessionId);
 
+    Server server();
+
     Http http();
   }
 
   interface Session {
 
     void send(Object proto);
+  }
+
+  interface Server {
+
+    <T> void send(Class<T> msgType, BiConsumer<CommandService.Param, T> msgValue);
   }
 
   interface Http {

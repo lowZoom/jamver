@@ -44,7 +44,7 @@ public interface GameEventListener<E> {
 
   interface Server {
 
-    <T> void send(Class<T> msgType, BiConsumer<CommandService.Param, T> msg);
+    <T> void send(Class<T> msgType, BiConsumer<CommandService.Param, T> msgValue);
   }
 
   void onEvent(Context ctx);

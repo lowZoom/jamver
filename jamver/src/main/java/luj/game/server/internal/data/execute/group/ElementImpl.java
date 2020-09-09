@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.execute.group;
 
+import luj.bean.api.BeanContext;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
@@ -27,7 +28,7 @@ final class ElementImpl<C> implements GameDataCommandGroup.Element<C> {
     Object loadResult = _resultProxy.getInstance();
     GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 
-    new DataCmdExecutor(_cmdKit, _cmdParam, loadResult, _dataSvc, netSvc).execute();
+    new DataCmdExecutor(_cmdKit, _cmdParam, loadResult, _dataSvc, netSvc, _lujbean).execute();
   }
 
   GameplayDataActor.CommandKit _cmdKit;
@@ -37,4 +38,5 @@ final class ElementImpl<C> implements GameDataCommandGroup.Element<C> {
   GameDataCommand.Data _dataSvc;
 
   ServerMessageHandler.Server _remoteRef;
+  BeanContext _lujbean;
 }

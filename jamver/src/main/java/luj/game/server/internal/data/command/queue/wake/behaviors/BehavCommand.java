@@ -27,7 +27,7 @@ final class BehavCommand implements QueueWakeBehavior {
 
     new CommandExecFinisher(cmdKit.getLoadResultType(), commandReq.getCacheReq(),
         _factory._dataCache, cmdKit.getCommandType(), cmdKit, commandReq.getCommandParam(),
-        _factory._dataRef, _factory._saveRef, commandReq.getRemoteRef())
+        _factory._dataRef, _factory._saveRef, commandReq.getRemoteRef(), _factory._lujbean)
         .finish();
   }
 

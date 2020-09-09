@@ -4,7 +4,6 @@ import com.google.common.collect.Multimap;
 import java.util.Map;
 import luj.bean.api.BeanContext;
 import luj.cluster.api.actor.ActorMessageHandler;
-import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopRefCollection;
@@ -15,7 +14,7 @@ public class ClusterCommActor {
     // NOOP
   }
 
-  public ClusterCommActor(Multimap<String, Tellable> dispatchMap,
+  public ClusterCommActor(Multimap<String, ActorMessageHandler.Node> dispatchMap,
       Map<String, ServerMessageHandler<?>> handlerMap,
       Map<Class<?>, GameplayDataActor.CommandKit> commandMap, ClusterProtoPlugin protoPlugin,
       BeanContext lujbean) {
@@ -34,7 +33,7 @@ public class ClusterCommActor {
     _siblingRef = siblingRef;
   }
 
-  public Multimap<String, Tellable> getDispatchMap() {
+  public Multimap<String, ActorMessageHandler.Node> getDispatchMap() {
     return _dispatchMap;
   }
 
@@ -55,7 +54,7 @@ public class ClusterCommActor {
   }
 
   private TopRefCollection _siblingRef;
-  private final Multimap<String, Tellable> _dispatchMap;
+  private final Multimap<String, ActorMessageHandler.Node> _dispatchMap;
 
   //////////////
 

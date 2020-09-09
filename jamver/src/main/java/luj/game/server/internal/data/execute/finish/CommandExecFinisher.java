@@ -2,6 +2,7 @@ package luj.game.server.internal.data.execute.finish;
 
 import java.util.ArrayList;
 import java.util.List;
+import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.cluster.api.actor.Tellable;
@@ -21,10 +22,9 @@ import org.slf4j.LoggerFactory;
 public class CommandExecFinisher {
 
   public CommandExecFinisher(Class<?> loadResultType, CacheRequest cacheReq,
-      CacheContainer dataCache, Class<?> cmdType,
-      GameplayDataActor.CommandKit commandKit, Object cmdParam,
-      Tellable dataRef, Tellable saveRef,
-      ServerMessageHandler.Server remoteRef) {
+      CacheContainer dataCache, Class<?> cmdType, GameplayDataActor.CommandKit commandKit,
+      Object cmdParam, Tellable dataRef, Tellable saveRef, ServerMessageHandler.Server remoteRef,
+      BeanContext lujbean) {
     _loadResultType = loadResultType;
     _cacheReq = cacheReq;
     _dataCache = dataCache;
@@ -34,6 +34,7 @@ public class CommandExecFinisher {
     _dataRef = dataRef;
     _saveRef = saveRef;
     _remoteRef = remoteRef;
+    _lujbean = lujbean;
   }
 
   public void finish() {
@@ -52,7 +53,7 @@ public class CommandExecFinisher {
     Object loadResult = resultProxy.getInstance();
     GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 
-    new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc).execute();
+    new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
 
     for (DataTempProxy data : createLog) {
       new DataTempAdder(_dataCache, data.getDataType(), data).add();
@@ -75,4 +76,5 @@ public class CommandExecFinisher {
   private final Tellable _saveRef;
 
   private final ServerMessageHandler.Server _remoteRef;
+  private final BeanContext _lujbean;
 }

@@ -16,8 +16,6 @@ public interface CommandService<P> {
     Param $(V value);
   }
 
-  void execute();
-
   void execute(BiConsumer<Param, P> param);
 
   void schedule(Duration delay);

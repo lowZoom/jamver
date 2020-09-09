@@ -8,11 +8,6 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute
 
 final class CommandServiceImpl<P> implements CommandService<P> {
 
-  @Override
-  public void execute() {
-    execute(null);
-  }
-
   @SuppressWarnings("unchecked")
   @Override
   public void execute(BiConsumer<Param, P> param) {

@@ -2,6 +2,7 @@ package luj.game.server.internal.data.execute.group;
 
 import java.util.ArrayList;
 import java.util.List;
+import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
@@ -14,15 +15,16 @@ import luj.game.server.internal.data.load.result.DataResultProxy;
 
 public class GroupExecFinisher {
 
-  public GroupExecFinisher(GameDataCommandGroup cmdGroup,
-      List<GroupReqElement> elemList, CacheContainer dataCache,
-      Tellable dataRef, Tellable saveRef, ServerMessageHandler.Server remoteRef) {
+  public GroupExecFinisher(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
+      CacheContainer dataCache, Tellable dataRef, Tellable saveRef,
+      ServerMessageHandler.Server remoteRef, BeanContext lujbean) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
     _dataCache = dataCache;
     _dataRef = dataRef;
     _saveRef = saveRef;
     _remoteRef = remoteRef;
+    _lujbean = lujbean;
   }
 
   public void finish() {
@@ -30,7 +32,7 @@ public class GroupExecFinisher {
     List<DataResultProxy> loadLog = new ArrayList<>();
 
     new CmdGroupExecutor(_cmdGroup, _elemList, createLog,
-        loadLog, _dataCache, _dataRef, _remoteRef).execute();
+        loadLog, _dataCache, _dataRef, _remoteRef, _lujbean).execute();
 
     for (DataTempProxy data : createLog) {
       new DataTempAdder(_dataCache, data.getDataType(), data).add();
@@ -46,4 +48,5 @@ public class GroupExecFinisher {
   private final Tellable _saveRef;
 
   private final ServerMessageHandler.Server _remoteRef;
+  private final BeanContext _lujbean;
 }

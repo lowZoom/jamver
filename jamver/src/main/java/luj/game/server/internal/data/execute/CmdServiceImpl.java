@@ -1,15 +1,10 @@
 package luj.game.server.internal.data.execute;
 
+import luj.bean.api.BeanContext;
 import luj.game.server.api.data.GameDataCommand;
+import luj.game.server.internal.data.execute.service.proto.ProtoServiceFactory;
 
 final class CmdServiceImpl implements GameDataCommand.Service {
-
-  CmdServiceImpl(GameDataCommand.Data dataSvc,
-      GameDataCommand.Event eventSvc, GameDataCommand.Network networkSvc) {
-    _dataSvc = dataSvc;
-    _eventSvc = eventSvc;
-    _networkSvc = networkSvc;
-  }
 
   @Override
   public GameDataCommand.Data data() {
@@ -18,7 +13,7 @@ final class CmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public GameDataCommand.Proto proto() {
-    return null;
+    return new ProtoServiceFactory(_lujbean).create();
   }
 
   @Override
@@ -46,8 +41,10 @@ final class CmdServiceImpl implements GameDataCommand.Service {
     return null;
   }
 
-  private final GameDataCommand.Data _dataSvc;
+  GameDataCommand.Data _dataSvc;
 
-  private final GameDataCommand.Event _eventSvc;
-  private final GameDataCommand.Network _networkSvc;
+  GameDataCommand.Event _eventSvc;
+  GameDataCommand.Network _networkSvc;
+
+  BeanContext _lujbean;
 }
