@@ -54,6 +54,9 @@ public class DataServiceImpl implements GameDataCommand.Data {
     return new FieldImpl<>(_curData, _curField);
   }
 
+  /**
+   * @see luj.game.server.internal.data.types.map.DataMap#put
+   */
   @Override
   public <T> void add(Supplier<Collection<T>> field, T element) {
     Collection<T> c = field.get();

@@ -71,7 +71,10 @@ public interface GameDataCommand<P, D> {
 
     <T> Field<T> set(Supplier<T> field);
 
-    //TODO: 这个接口还要再斟酌一下（关于操作集合的形式）
+    /**
+     * @see luj.game.server.internal.data.types.map.DataMap
+     */
+    @Deprecated
     <T> void add(Supplier<Collection<T>> field, T element);
 
     Comparable<?> id(Object data);

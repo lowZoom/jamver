@@ -53,6 +53,7 @@ public class CommandExecFinisher {
     Object loadResult = resultProxy.getInstance();
     GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 
+    // 真正执行cmd逻辑
     new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
 
     for (DataTempProxy data : createLog) {

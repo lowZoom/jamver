@@ -31,6 +31,7 @@ public class GroupExecFinisher {
     List<DataTempProxy> createLog = new ArrayList<>();
     List<DataResultProxy> loadLog = new ArrayList<>();
 
+    // 真正执行cmd逻辑
     new CmdGroupExecutor(_cmdGroup, _elemList, createLog,
         loadLog, _dataCache, _dataRef, _remoteRef, _lujbean).execute();
 
