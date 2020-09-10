@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import luj.game.server.internal.data.types.map.DataMapFactory;
 
 public class DataInstanceCreator {
 
@@ -27,22 +29,23 @@ public class DataInstanceCreator {
 
   public DataTempProxy create() {
     checkState(_dataType.isInterface(), _dataType);
-    Method[] methodList = _dataType.getMethods();
+    Map<String, Object> dataMap = new HashMap<>(_initValue);
 
-    Map<String, Object> dataMap = new HashMap<>(ImmutableMap.<String, Object>builder()
-        .putAll(makeInitMap(methodList, int.class, m -> INT_ZERO))
-        .putAll(makeInitMap(methodList, List.class, m -> new ArrayList<>()))
-        .putAll(makeInitMap(methodList, Set.class, m -> new HashSet<>()))
-        .putAll(makeInitMap(methodList, Map.class, m -> new HashMap<>()))
-        .build());
+    List<Method> nullFields = Arrays.stream(_dataType.getMethods())
+        .filter(m -> !_initValue.containsKey(m.getName()))
+        .collect(Collectors.toList());
 
-    dataMap.putAll(_initValue);
+    dataMap.putAll(makeInitMap(nullFields, int.class, m -> INT_ZERO));
+    dataMap.putAll(makeInitMap(nullFields, List.class, m -> new ArrayList<>()));
+    dataMap.putAll(makeInitMap(nullFields, Set.class, m -> new HashSet<>()));
+    dataMap.putAll(makeInitMap(nullFields, Map.class, m -> DataMapFactory.SINGLETON.create()));
+
     return new DataTempProxy(_dataType, dataMap).init();
   }
 
-  private Map<String, Object> makeInitMap(Method[] methodList, Class<?> type,
+  private Map<String, Object> makeInitMap(List<Method> fieldList, Class<?> type,
       Function<Method, Object> valueInit) {
-    return Arrays.stream(methodList)
+    return fieldList.stream()
         .filter(m -> m.getReturnType() == type)
         .collect(toMap(Method::getName, valueInit));
   }

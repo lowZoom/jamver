@@ -58,7 +58,8 @@ public class CacheLoadFinisher {
     cacheItem.setPresence(_present ? DataPresence.PRESENT : DataPresence.ABSENT);
 
     if (_present) {
-      DataTempProxy dataObj = new DataInstanceCreator(_dataType, _dataValue).create();
+      Map<String, Object> valueMap = new DataValueDecoder(_dataValue).decode();
+      DataTempProxy dataObj = new DataInstanceCreator(_dataType, valueMap).create();
       cacheItem.setDataObj(dataObj);
     }
 

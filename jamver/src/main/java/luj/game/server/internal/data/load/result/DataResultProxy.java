@@ -4,26 +4,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.function.BiConsumer;
 import luj.game.server.internal.data.instance.DataTempProxy;
 
-@Deprecated
+//TODO: 预生成代码，没有生成代码的就用这个动态类
 public class DataResultProxy implements InvocationHandler {
 
   public interface FieldHook extends BiConsumer<DataResultProxy, String> {
     // NOOP
   }
 
-  public DataResultProxy(DataTempProxy data, FieldHook fieldHook) {
+  DataResultProxy(DataTempProxy data, FieldHook fieldHook) {
     _data = data;
     _fieldHook = fieldHook;
-  }
-
-  public DataResultProxy init() {
-    Class<?> dataType = _data.getDataType();
-    _instance = Proxy.newProxyInstance(dataType.getClassLoader(), new Class[]{dataType}, this);
-    return this;
   }
 
   public Object getInstance() {
@@ -50,8 +43,8 @@ public class DataResultProxy implements InvocationHandler {
     return _data.invoke(methodName);
   }
 
+  Object _instance;
   private boolean _dirty;
-  private Object _instance;
 
   private final DataTempProxy _data;
   private final FieldHook _fieldHook;

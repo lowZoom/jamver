@@ -10,6 +10,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
 import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.load.result.DataResultFactory;
 import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.data.service.set.FieldImpl;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
@@ -34,7 +35,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
     DataTempProxy dataObj = new DataInstanceCreator(dataType).create();
     _createLog.add(dataObj);
 
-    DataResultProxy result = new DataResultProxy(dataObj, this::specifySetField).init();
+    DataResultProxy result = new DataResultFactory(dataObj, this::specifySetField).create();
     return (T) result.getInstance();
   }
 

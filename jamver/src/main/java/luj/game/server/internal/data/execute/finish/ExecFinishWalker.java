@@ -14,6 +14,7 @@ import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.load.result.DataResultFactory;
 import luj.game.server.internal.data.load.result.DataResultProxy;
 
 public class ExecFinishWalker implements RequestWalkListener {
@@ -109,7 +110,7 @@ public class ExecFinishWalker implements RequestWalkListener {
 
   private DataResultProxy createResultAndLog(DataTempProxy dataObj,
       DataResultProxy.FieldHook fieldHook) {
-    DataResultProxy result = new DataResultProxy(dataObj, fieldHook).init();
+    DataResultProxy result = new DataResultFactory(dataObj, fieldHook).create();
     _loadLog.add(result);
 
     return result;

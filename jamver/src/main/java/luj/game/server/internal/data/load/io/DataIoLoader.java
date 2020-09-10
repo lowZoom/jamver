@@ -34,7 +34,6 @@ public class DataIoLoader {
     if (_dataType.isAnnotationPresent(Transient.class)) {
       return ImmutableMap.of();
     }
-
     return ioLoad();
   }
 
