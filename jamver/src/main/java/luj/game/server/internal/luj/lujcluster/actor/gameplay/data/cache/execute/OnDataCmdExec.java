@@ -48,7 +48,7 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     DataReadyChecker.Result readyResult = new DataReadyChecker(
         ImmutableList.of(cacheReq), dataCache).check();
 
-    //TODO: 还有网络连接
+    //TODO: 还有客户端网络连接
     ServerMessageHandler.Server remoteRef = msg.getRemoteRef();
 
     if (!readyResult.isReady()) {

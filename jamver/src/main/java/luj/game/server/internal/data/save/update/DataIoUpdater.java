@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.save.update;
 
+import java.util.HashMap;
 import java.util.Map;
 import luj.game.server.api.plugin.JamverDataSaveUpdate;
 
@@ -17,8 +18,11 @@ public class DataIoUpdater {
 
   public void update() {
     IdImpl id = new IdImpl(_dataId, _idField);
-    UpdateContextImpl ctx = new UpdateContextImpl(_saveState, _dataType, id, _dataValue);
 
+    // 拷一份避免被外部修改
+    Map<String, Object> valueMap = new HashMap<>(_dataValue);
+
+    UpdateContextImpl ctx = new UpdateContextImpl(_saveState, _dataType, id, valueMap);
     _updatePlugin.onUpdate(ctx);
   }
 

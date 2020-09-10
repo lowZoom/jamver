@@ -20,7 +20,7 @@ final class ReadyWalker implements RequestWalkListener {
   }
 
   /**
-   * @see luj.game.server.internal.data.execute.finish.FinishWalker#loadData
+   * @see luj.game.server.internal.data.execute.finish.ExecFinishWalker#loadData
    */
   @Override
   public Object onWalk(Context ctx) {
