@@ -10,9 +10,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.DataServiceImpl;
-import luj.game.server.internal.data.execute.save.CommandSaveRequestor;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
-import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -56,10 +54,7 @@ public class CommandExecFinisher {
     // 真正执行cmd逻辑
     new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
 
-    for (DataTempProxy data : createLog) {
-      new DataTempAdder(_dataCache, data.getDataType(), data).add();
-    }
-    new CommandSaveRequestor(_saveRef, createLog, loadLog).request();
+    new ExecDataFinisher(_dataCache, _saveRef, createLog, loadLog).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(CommandExecFinisher.class);

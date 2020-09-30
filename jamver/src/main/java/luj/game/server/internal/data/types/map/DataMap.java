@@ -1,91 +1,92 @@
 package luj.game.server.internal.data.types.map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import luj.game.server.internal.data.types.HasOp;
+import luj.game.server.internal.data.types.map.history.MapDataUpdater;
+import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
 public class DataMap<K, V> implements Map<K, V>, HasOp {
 
-  DataMap(HashMap<K, V> value, MapOp op) {
-    _value = value;
+  DataMap(MapWithHistory<K, V> data, MapOp op) {
+    _data = data;
     _op = op;
   }
 
   @Override
   public int size() {
-    return _value.size();
+    return _data.getData().size();
   }
 
   @Override
   public boolean isEmpty() {
-    return _value.isEmpty();
+    return _data.getData().isEmpty();
   }
 
   @Override
   public boolean containsKey(Object key) {
-    return _value.containsKey(key);
+    return _data.getData().containsKey(key);
   }
 
   @Override
   public V get(Object key) {
-    return _value.get(key);
+    return _data.getData().get(key);
   }
 
   @Override
   public V getOrDefault(Object key, V defaultValue) {
-    return _value.getOrDefault(key, defaultValue);
+    return _data.getData().getOrDefault(key, defaultValue);
   }
 
   @Override
   public Set<K> keySet() {
-    return _value.keySet();
+    return _data.getData().keySet();
   }
 
   @Override
   public Collection<V> values() {
-    return _value.values();
+    return _data.getData().values();
   }
 
   @Override
   public Set<Entry<K, V>> entrySet() {
-    return _value.entrySet();
+    return _data.getData().entrySet();
   }
 
   @Override
   public void forEach(BiConsumer<? super K, ? super V> action) {
-    _value.forEach(action);
+    _data.getData().forEach(action);
   }
 
   @Override
   public V put(K key, V value) {
-    V old = _value.put(checkNotNull(key), value);
+    V old = MapDataUpdater.SINGLETON.update(_data, key, value);
     _dirtyMarker.run();
     return old;
   }
 
   @Override
   public void putAll(Map<? extends K, ? extends V> m) {
-    _value.putAll(m);
+    _data.getData().putAll(m);
+
     _dirtyMarker.run();
+    //TODO: 增加修改历史
   }
 
   @Override
   public V remove(Object key) {
-    V old = _value.remove(key);
+    V old = _data.getData().remove(key);
     _dirtyMarker.run();
     return old;
   }
 
   @Override
   public void clear() {
-    _value.clear();
+    _data.getData().clear();
     _dirtyMarker.run();
   }
 
@@ -93,6 +94,11 @@ public class DataMap<K, V> implements Map<K, V>, HasOp {
   @Override
   public <T> T getDataOp() {
     return (T) _op;
+  }
+
+  @Override
+  public String toString() {
+    return _data.getData().toString();
   }
 
   @Deprecated
@@ -158,6 +164,6 @@ public class DataMap<K, V> implements Map<K, V>, HasOp {
 
   Runnable _dirtyMarker;
 
-  final HashMap<K, V> _value;
+  final MapWithHistory<K, V> _data;
   final MapOp _op;
 }

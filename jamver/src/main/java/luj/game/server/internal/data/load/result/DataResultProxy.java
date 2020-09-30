@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 import luj.game.server.internal.data.instance.DataTempProxy;
 
-//TODO: 预生成代码，没有生成代码的才用这个动态类
+//TODO: 后面会预生成代码，没有生成代码的才用这个动态类作为fallback
 public class DataResultProxy implements InvocationHandler {
 
   public interface FieldHook extends BiConsumer<DataResultProxy, String> {

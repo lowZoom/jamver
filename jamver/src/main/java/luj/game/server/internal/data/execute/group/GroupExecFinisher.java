@@ -8,8 +8,7 @@ import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
-import luj.game.server.internal.data.execute.save.CommandSaveRequestor;
-import luj.game.server.internal.data.instance.DataTempAdder;
+import luj.game.server.internal.data.execute.finish.ExecDataFinisher;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultProxy;
 
@@ -35,10 +34,7 @@ public class GroupExecFinisher {
     new CmdGroupExecutor(_cmdGroup, _elemList, createLog,
         loadLog, _dataCache, _dataRef, _remoteRef, _lujbean).execute();
 
-    for (DataTempProxy data : createLog) {
-      new DataTempAdder(_dataCache, data.getDataType(), data).add();
-    }
-    new CommandSaveRequestor(_saveRef, createLog, loadLog).request();
+    new ExecDataFinisher(_dataCache, _saveRef, createLog, loadLog).finish();
   }
 
   private final GameDataCommandGroup _cmdGroup;

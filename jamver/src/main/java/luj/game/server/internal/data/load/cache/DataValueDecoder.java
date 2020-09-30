@@ -8,6 +8,9 @@ import java.util.Map;
 import luj.game.server.internal.data.types.map.DataMap;
 import luj.game.server.internal.data.types.map.DataMapFactory;
 
+/**
+ * 将数据库读出来的普通数据类型，转成带修改历史的数据类型
+ */
 final class DataValueDecoder {
 
   DataValueDecoder(Map<String, Object> rawValue) {
