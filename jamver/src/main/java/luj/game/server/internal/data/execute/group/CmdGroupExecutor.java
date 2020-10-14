@@ -12,13 +12,12 @@ import luj.game.server.internal.data.execute.DataServiceImpl;
 import luj.game.server.internal.data.execute.finish.ExecFinishWalker;
 import luj.game.server.internal.data.execute.finish.LoadResultProxy;
 import luj.game.server.internal.data.instance.DataTempProxy;
-import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 public class CmdGroupExecutor {
 
   public CmdGroupExecutor(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
-      List<DataTempProxy> createLog, List<DataResultProxy> loadLog, CacheContainer dataCache,
+      List<DataTempProxy> createLog, List<DataTempProxy> loadLog, CacheContainer dataCache,
       Tellable dataRef, ServerMessageHandler.Server remoteRef, BeanContext lujbean) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
@@ -71,7 +70,7 @@ public class CmdGroupExecutor {
   private final List<GroupReqElement> _elemList;
 
   private final List<DataTempProxy> _createLog;
-  private final List<DataResultProxy> _loadLog;
+  private final List<DataTempProxy> _loadLog;
 
   private final CacheContainer _dataCache;
   private final Tellable _dataRef;

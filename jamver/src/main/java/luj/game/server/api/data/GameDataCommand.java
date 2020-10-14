@@ -71,12 +71,6 @@ public interface GameDataCommand<P, D> {
 
     <T> Field<T> set(Supplier<T> field);
 
-    /**
-     * @see luj.game.server.internal.data.types.map.DataMap
-     */
-    @Deprecated
-    <T> void add(Supplier<Collection<T>> field, T element);
-
     Comparable<?> id(Object data);
 
     boolean exists(Object data);

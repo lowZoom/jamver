@@ -5,7 +5,7 @@ import java.util.Map;
 import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
 public enum DataMapFactory {
-  SINGLETON;
+  GET;
 
   public <K, V> Map<K, V> create() {
     return create(new HashMap<>());

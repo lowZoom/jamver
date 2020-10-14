@@ -64,30 +64,26 @@ public class DataMap<K, V> implements Map<K, V>, HasOp {
 
   @Override
   public V put(K key, V value) {
-    V old = MapDataUpdater.SINGLETON.update(_data, key, value);
-    _dirtyMarker.run();
-    return old;
+    return MapDataUpdater.GET.update(_data, key, value);
   }
 
   @Override
   public void putAll(Map<? extends K, ? extends V> m) {
     _data.getData().putAll(m);
-
-    _dirtyMarker.run();
     //TODO: 增加修改历史
   }
 
   @Override
   public V remove(Object key) {
     V old = _data.getData().remove(key);
-    _dirtyMarker.run();
+    //TODO: 增加修改历史
     return old;
   }
 
   @Override
   public void clear() {
     _data.getData().clear();
-    _dirtyMarker.run();
+    //TODO: 增加修改历史
   }
 
   @SuppressWarnings("unchecked")
@@ -162,8 +158,7 @@ public class DataMap<K, V> implements Map<K, V>, HasOp {
     throw new UnsupportedOperationException("merge");
   }
 
-  Runnable _dirtyMarker;
-
   final MapWithHistory<K, V> _data;
+
   final MapOp _op;
 }

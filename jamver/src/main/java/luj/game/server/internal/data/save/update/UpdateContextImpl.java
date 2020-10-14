@@ -1,16 +1,15 @@
 package luj.game.server.internal.data.save.update;
 
-import java.util.Map;
 import luj.game.server.api.plugin.JamverDataSaveUpdate;
 
 final class UpdateContextImpl implements JamverDataSaveUpdate.Context {
 
   UpdateContextImpl(Object saveState, Class<?> dataType,
-      JamverDataSaveUpdate.Id dataId, Map<String, Object> dataValue) {
+      JamverDataSaveUpdate.Id dataId, JamverDataSaveUpdate.Changed changedFields) {
     _saveState = saveState;
     _dataType = dataType;
     _dataId = dataId;
-    _dataValue = dataValue;
+    _changedFields = changedFields;
   }
 
   @SuppressWarnings("unchecked")
@@ -30,8 +29,8 @@ final class UpdateContextImpl implements JamverDataSaveUpdate.Context {
   }
 
   @Override
-  public Map<String, Object> getDataValue() {
-    return _dataValue;
+  public JamverDataSaveUpdate.Changed getChangedFields() {
+    return _changedFields;
   }
 
   private final Object _saveState;
@@ -39,5 +38,5 @@ final class UpdateContextImpl implements JamverDataSaveUpdate.Context {
   private final Class<?> _dataType;
   private final JamverDataSaveUpdate.Id _dataId;
 
-  private final Map<String, Object> _dataValue;
+  private final JamverDataSaveUpdate.Changed _changedFields;
 }

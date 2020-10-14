@@ -30,6 +30,11 @@ public class MapWithHistory<K, V> {
     return _data;
   }
 
+  @Override
+  public String toString() {
+    return _data.toString();
+  }
+
   private Map<K, V> _updateHistory;
   private Set<K> _removeHistory;
 

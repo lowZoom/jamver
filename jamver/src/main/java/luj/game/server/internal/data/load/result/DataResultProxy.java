@@ -23,14 +23,6 @@ public class DataResultProxy implements InvocationHandler {
     return checkNotNull(_instance);
   }
 
-  public boolean isDirty() {
-    return _dirty;
-  }
-
-  public void setDirty(boolean dirty) {
-    _dirty = dirty;
-  }
-
   public DataTempProxy getData() {
     return _data;
   }
@@ -44,7 +36,6 @@ public class DataResultProxy implements InvocationHandler {
   }
 
   Object _instance;
-  private boolean _dirty;
 
   private final DataTempProxy _data;
   private final FieldHook _fieldHook;

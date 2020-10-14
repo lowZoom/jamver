@@ -12,7 +12,6 @@ import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.DataServiceImpl;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
 import luj.game.server.internal.data.instance.DataTempProxy;
-import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +39,7 @@ public class CommandExecFinisher {
     LOG.debug("[game]执行数据CMD：{}", _cmdType.getName());
 
     List<DataTempProxy> createLog = new ArrayList<>();
-    List<DataResultProxy> loadLog = new ArrayList<>();
+    List<DataTempProxy> loadLog = new ArrayList<>();
 
     LoadResultProxy resultProxy = LoadResultProxy.create(_loadResultType);
     DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, createLog, _remoteRef);
@@ -51,7 +50,8 @@ public class CommandExecFinisher {
     Object loadResult = resultProxy.getInstance();
     GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 
-    // 真正执行cmd逻辑
+    // 真正调用外部cmd逻辑
+    //TODO: 出错的时候要清除修改
     new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
 
     new ExecDataFinisher(_dataCache, _saveRef, createLog, loadLog).finish();

@@ -15,6 +15,7 @@ final class OnDataUpdate implements DataSaveActor.Handler<DataUpdateMsg> {
 
     DataSavePlugin plugin = actor.getSavePlugin();
     new DataIoUpdater(plugin.getSaveUpdate(), actor.getSaveState(), msg.getDataType(),
-        msg.getDataMap(), msg.getDataId(), msg.getIdField()).update();
+        msg.getPrimitiveUpdated(), msg.getSetUpdated(), msg.getMapUpdated(), msg.getDataId(),
+        msg.getIdField()).update();
   }
 }

@@ -10,7 +10,6 @@ import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
 import luj.game.server.internal.data.execute.finish.ExecDataFinisher;
 import luj.game.server.internal.data.instance.DataTempProxy;
-import luj.game.server.internal.data.load.result.DataResultProxy;
 
 public class GroupExecFinisher {
 
@@ -28,7 +27,7 @@ public class GroupExecFinisher {
 
   public void finish() {
     List<DataTempProxy> createLog = new ArrayList<>();
-    List<DataResultProxy> loadLog = new ArrayList<>();
+    List<DataTempProxy> loadLog = new ArrayList<>();
 
     // 真正执行cmd逻辑
     new CmdGroupExecutor(_cmdGroup, _elemList, createLog,

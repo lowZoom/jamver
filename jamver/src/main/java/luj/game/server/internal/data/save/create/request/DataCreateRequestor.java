@@ -20,7 +20,7 @@ public class DataCreateRequestor {
   }
 
   private boolean isTransient(DataTempProxy dataObj) {
-    return new DataTransientChecker(dataObj).check();
+    return DataTransientChecker.GET.check(dataObj);
   }
 
   private void sendCreateMsg(DataTempProxy dataObj) {

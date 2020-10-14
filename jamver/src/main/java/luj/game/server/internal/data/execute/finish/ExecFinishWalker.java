@@ -20,7 +20,7 @@ import luj.game.server.internal.data.load.result.DataResultProxy;
 public class ExecFinishWalker implements RequestWalkListener {
 
   public ExecFinishWalker(CacheContainer dataCache, LoadResultProxy loadResult,
-      List<DataResultProxy> loadLog, DataResultProxy.FieldHook fieldHook) {
+      List<DataTempProxy> loadLog, DataResultProxy.FieldHook fieldHook) {
     _dataCache = dataCache;
     _loadResult = loadResult;
     _loadLog = loadLog;
@@ -111,7 +111,7 @@ public class ExecFinishWalker implements RequestWalkListener {
   private DataResultProxy createResultAndLog(DataTempProxy dataObj,
       DataResultProxy.FieldHook fieldHook) {
     DataResultProxy result = new DataResultFactory(dataObj, fieldHook).create();
-    _loadLog.add(result);
+    _loadLog.add(dataObj);
 
     return result;
   }
@@ -128,7 +128,7 @@ public class ExecFinishWalker implements RequestWalkListener {
   private final CacheContainer _dataCache;
 
   private final LoadResultProxy _loadResult;
-  private final List<DataResultProxy> _loadLog;
+  private final List<DataTempProxy> _loadLog;
 
   @Deprecated
   private final DataResultProxy.FieldHook _fieldHook;

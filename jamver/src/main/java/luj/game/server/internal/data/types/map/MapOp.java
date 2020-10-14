@@ -1,20 +1,26 @@
 package luj.game.server.internal.data.types.map;
 
-import static com.google.common.base.Preconditions.checkState;
+import luj.game.server.internal.data.instance.value.ChangedApplicable;
+import luj.game.server.internal.data.instance.value.ChangedEncodable;
+import luj.game.server.internal.data.types.map.history.MapChangeEncoder;
+import luj.game.server.internal.data.types.map.history.MapChangedChecker;
+import luj.game.server.internal.data.types.map.history.MapModificationApplier;
 
-import luj.game.server.internal.data.load.result.dirty.DirtyMarkable;
-
-final class MapOp implements DirtyMarkable {
+final class MapOp implements ChangedEncodable, ChangedApplicable {
 
   @Override
-  public void setDirtyMarker(Runnable marker) {
-    checkState(_map._dirtyMarker == null);
-    _map._dirtyMarker = marker;
+  public boolean isChanged() {
+    return MapChangedChecker.GET.isChanged(_map._data);
   }
 
   @Override
-  public void clearDirtyMarker() {
-    _map._dirtyMarker = null;
+  public Object encodeChanged() {
+    return MapChangeEncoder.GET.encode(_map._data);
+  }
+
+  @Override
+  public void applyChanged() {
+    MapModificationApplier.GET.apply(_map._data);
   }
 
   DataMap<?, ?> _map;

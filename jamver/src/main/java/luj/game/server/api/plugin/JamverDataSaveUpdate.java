@@ -1,6 +1,7 @@
 package luj.game.server.api.plugin;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface JamverDataSaveUpdate {
 
@@ -12,7 +13,7 @@ public interface JamverDataSaveUpdate {
 
     Id getDataId();
 
-    Map<String, Object> getDataValue();
+    Changed getChangedFields();
   }
 
   interface Id {
@@ -20,6 +21,29 @@ public interface JamverDataSaveUpdate {
     Object getValue();
 
     String getField();
+  }
+
+  interface Changed {
+
+    Map<String, Object> primitive();
+
+    Map<String, SetChanged> set();
+
+    Map<String, MapChanged> map();
+  }
+
+  interface SetChanged {
+
+    Set<Object> added();
+
+    Set<Object> removed();
+  }
+
+  interface MapChanged {
+
+    Map<Object, Object> updated();
+
+    Set<Object> removed();
   }
 
   void onUpdate(Context ctx);

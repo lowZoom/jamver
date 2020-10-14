@@ -1,7 +1,6 @@
 package luj.game.server.internal.data.execute;
 
 import java.lang.reflect.Proxy;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 import luj.cluster.api.actor.Tellable;
@@ -52,17 +51,6 @@ public class DataServiceImpl implements GameDataCommand.Data {
   public <T> Field<T> set(Supplier<T> field) {
     field.get();
     return new FieldImpl<>(_curData, _curField);
-  }
-
-  /**
-   * @see luj.game.server.internal.data.types.map.DataMap#put
-   */
-  @Override
-  public <T> void add(Supplier<Collection<T>> field, T element) {
-    Collection<T> c = field.get();
-
-    _curData.setDirty(true);
-    c.add(element);
   }
 
   @Override
