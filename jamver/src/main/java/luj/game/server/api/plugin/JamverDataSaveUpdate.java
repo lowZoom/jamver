@@ -3,6 +3,7 @@ package luj.game.server.api.plugin;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public interface JamverDataSaveUpdate {
 
   interface Context {

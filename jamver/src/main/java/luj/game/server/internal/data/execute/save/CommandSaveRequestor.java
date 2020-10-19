@@ -29,6 +29,8 @@ public class CommandSaveRequestor {
   }
 
   public void request() {
+    //TODO: 不分开，作为一个事务一起发
+
     new DataCreateRequestor(_createLog, _saveRef).request();
 
     _modifyLog.stream()

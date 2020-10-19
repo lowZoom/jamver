@@ -2,6 +2,7 @@ package luj.game.server.api.plugin;
 
 import java.util.Map;
 
+@Deprecated
 public interface JamverDataSaveCreate {
 
   interface Context {
