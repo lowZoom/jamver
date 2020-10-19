@@ -1,11 +1,16 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import luj.ava.spring.Internal;
 import luj.game.server.api.plugin.JamverDataLoadInit;
 import luj.game.server.api.plugin.JamverDataSaveInit;
 import luj.game.server.internal.data.init.DataRootInitializer;
 import luj.game.server.internal.data.load.io.init.DataLoadInitializer;
 import luj.game.server.internal.data.save.init.DataSaveInitializer;
+import luj.game.server.internal.data.save.wait.IoWaitBatch;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSaveActor;
@@ -42,6 +47,11 @@ final class OnPrestart implements GameplayDataActor.PreStart {
     JamverDataSaveInit initPlugin = savePlugin.getSaveInit();
     Object saveState = new DataSaveInitializer(initPlugin, pluginState).init();
 
-    return new DataSaveActor(saveState, savePlugin);
+    ExecutorService ioRunner = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
+        .setNameFormat("data-save-io-%d")
+        .build());
+
+    IoWaitBatch waitBatch = new IoWaitBatch(new HashMap<>(), new HashMap<>());
+    return new DataSaveActor(saveState, savePlugin, ioRunner, waitBatch);
   }
 }

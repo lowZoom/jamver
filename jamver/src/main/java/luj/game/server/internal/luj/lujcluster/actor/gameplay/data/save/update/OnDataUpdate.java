@@ -1,21 +1,31 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update;
 
 import luj.ava.spring.Internal;
-import luj.game.server.internal.data.save.update.DataIoUpdater;
+import luj.game.server.internal.data.save.io.start.SaveIoStartRequestor;
+import luj.game.server.internal.data.save.wait.DataIoWaitAdder;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSaveActor;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSavePlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Internal
 final class OnDataUpdate implements DataSaveActor.Handler<DataUpdateMsg> {
 
   @Override
   public void onHandle(Context ctx) {
+    DataSaveActor self = ctx.getActorState(this);
     DataUpdateMsg msg = ctx.getMessage(this);
-    DataSaveActor actor = ctx.getActorState(this);
 
-    DataSavePlugin plugin = actor.getSavePlugin();
-    new DataIoUpdater(plugin.getSaveUpdate(), actor.getSaveState(), msg.getDataType(),
-        msg.getPrimitiveUpdated(), msg.getSetUpdated(), msg.getMapUpdated(), msg.getDataId(),
-        msg.getIdField()).update();
+    LOG.debug("请求数据更新落地：{}#{}", msg.getDataType().getSimpleName(), msg.getDataId());
+    new DataIoWaitAdder(self.getWaitBatch(), msg).add();
+
+    if (self.isIoRunning()) {
+      LOG.debug("已有数据正在保存，进入等待，数量：{}", self.getWaitBatch().getUpdateMap().size());
+      return;
+    }
+
+    Ref selfRef = ctx.getActorRef();
+    new SaveIoStartRequestor(self, selfRef).request();
   }
+
+  private static final Logger LOG = LoggerFactory.getLogger(OnDataUpdate.class);
 }

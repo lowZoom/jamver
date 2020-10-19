@@ -2,6 +2,7 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save;
 
 import luj.game.server.api.plugin.JamverDataSaveCreate;
 import luj.game.server.api.plugin.JamverDataSaveInit;
+import luj.game.server.api.plugin.JamverDataSaveIo;
 import luj.game.server.api.plugin.JamverDataSaveUpdate;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,10 @@ public class DataSavePlugin {
     return _saveUpdate;
   }
 
+  public JamverDataSaveIo<?> getSaveIo() {
+    return _saveIo;
+  }
+
   @Autowired
   private JamverDataSaveInit _saveInit;
 
@@ -31,4 +36,7 @@ public class DataSavePlugin {
 
   @Autowired
   private JamverDataSaveUpdate _saveUpdate;
+
+  @Autowired
+  private JamverDataSaveIo<?> _saveIo;
 }

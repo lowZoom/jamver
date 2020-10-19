@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import luj.game.server.internal.data.types.HasOp;
+import luj.game.server.internal.data.types.map.history.MapDataRemover;
 import luj.game.server.internal.data.types.map.history.MapDataUpdater;
 import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
@@ -73,11 +74,10 @@ public class DataMap<K, V> implements Map<K, V>, HasOp {
     //TODO: 增加修改历史
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public V remove(Object key) {
-    V old = _data.getData().remove(key);
-    //TODO: 增加修改历史
-    return old;
+    return MapDataRemover.GET.remove(_data, (K) key);
   }
 
   @Override

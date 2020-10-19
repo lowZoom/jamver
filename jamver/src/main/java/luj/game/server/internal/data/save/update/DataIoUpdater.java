@@ -34,7 +34,12 @@ public class DataIoUpdater {
     changed._map = _mapChanged.entrySet().stream()
         .collect(toMap(Map.Entry::getKey, e -> makeMap(e.getValue())));
 
-    UpdateContextImpl ctx = new UpdateContextImpl(_saveState, _dataType, id, changed);
+    UpdateContextImpl ctx = new UpdateContextImpl();
+    ctx._saveState = _saveState;
+    ctx._dataType = _dataType;
+    ctx._dataId = id;
+    ctx._changedFields = changed;
+
     _updatePlugin.onUpdate(ctx);
   }
 
