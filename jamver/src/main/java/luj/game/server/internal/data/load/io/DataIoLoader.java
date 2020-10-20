@@ -34,6 +34,8 @@ public class DataIoLoader {
     if (_dataType.isAnnotationPresent(Transient.class)) {
       return ImmutableMap.of();
     }
+
+    //TODO: 另开线程池并发处理
     return ioLoad();
   }
 

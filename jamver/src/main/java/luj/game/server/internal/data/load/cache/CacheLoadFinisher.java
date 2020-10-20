@@ -17,7 +17,7 @@ import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.CommandQueueWaker;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
 import luj.game.server.internal.data.instance.DataTempProxy;
-import luj.game.server.internal.data.save.create.request.DataCreateRequestor;
+import luj.game.server.internal.data.save.create.DataCreateRequestor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

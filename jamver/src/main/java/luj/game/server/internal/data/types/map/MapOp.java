@@ -1,12 +1,14 @@
 package luj.game.server.internal.data.types.map;
 
-import luj.game.server.internal.data.instance.value.ChangedApplicable;
-import luj.game.server.internal.data.instance.value.ChangedEncodable;
+import luj.game.server.internal.data.instance.value.change.ChangedApplicable;
+import luj.game.server.internal.data.instance.value.change.ChangedEncodable;
+import luj.game.server.internal.data.instance.value.create.CreatedEncodable;
 import luj.game.server.internal.data.types.map.history.MapChangeEncoder;
 import luj.game.server.internal.data.types.map.history.MapChangedChecker;
+import luj.game.server.internal.data.types.map.history.MapInitEncoder;
 import luj.game.server.internal.data.types.map.history.MapModificationApplier;
 
-final class MapOp implements ChangedEncodable, ChangedApplicable {
+final class MapOp implements ChangedEncodable, ChangedApplicable, CreatedEncodable {
 
   @Override
   public boolean isChanged() {
@@ -21,6 +23,11 @@ final class MapOp implements ChangedEncodable, ChangedApplicable {
   @Override
   public void applyChanged() {
     MapModificationApplier.GET.apply(_map._data);
+  }
+
+  @Override
+  public Object encodeInit() {
+    return MapInitEncoder.GET.encode(_map._data);
   }
 
   DataMap<?, ?> _map;

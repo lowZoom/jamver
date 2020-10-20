@@ -7,8 +7,8 @@ import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.execute.save.CommandSaveRequestor;
 import luj.game.server.internal.data.instance.DataTempAdder;
 import luj.game.server.internal.data.instance.DataTempProxy;
-import luj.game.server.internal.data.instance.value.DataDirtyChecker;
-import luj.game.server.internal.data.instance.value.DataModificationApplier;
+import luj.game.server.internal.data.instance.value.change.DataDirtyChecker;
+import luj.game.server.internal.data.instance.value.change.DataModificationApplier;
 
 public class ExecDataFinisher {
 

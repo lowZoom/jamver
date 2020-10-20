@@ -10,6 +10,9 @@ public enum SetChangeEncoder {
   @SuppressWarnings("unchecked")
   public DUpdateMsgSet encode(SetWithHistory<?> set) {
     SetWithHistory<Object> setVar = (SetWithHistory<Object>) set;
-    return new DUpdateMsgSet(CollectionX.nonNull(setVar.getAddHistory()), ImmutableSet.of());
+
+    return new DUpdateMsgSet(
+        ImmutableSet.copyOf(CollectionX.nonNull(setVar.getAddHistory())),
+        ImmutableSet.copyOf(CollectionX.nonNull(setVar.getRemoveHistory())));
   }
 }

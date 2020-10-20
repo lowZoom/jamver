@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.instance.value;
+package luj.game.server.internal.data.instance.value.change;
 
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.types.HasOp;

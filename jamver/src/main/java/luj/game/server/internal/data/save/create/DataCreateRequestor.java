@@ -1,10 +1,15 @@
-package luj.game.server.internal.data.save.create.request;
+package luj.game.server.internal.data.save.create;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.instance.value.create.CreatedEncodable;
 import luj.game.server.internal.data.save.DataTransientChecker;
+import luj.game.server.internal.data.types.HasOp;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.create.DataCreateMsg;
+import scala.Tuple2;
 
 public class DataCreateRequestor {
 
@@ -24,7 +29,16 @@ public class DataCreateRequestor {
   }
 
   private void sendCreateMsg(DataTempProxy dataObj) {
-    DataCreateMsg msg = new DataCreateMsg(dataObj.getDataType(), dataObj.getDataMap());
+    Map<String, Object> fieldMap = dataObj.getDataMapV2().getData();
+    Map<String, Object> initMap = new HashMap<>(fieldMap);
+
+    // 集合类的要拷贝一份，与缓存数据隔开，避免被修改
+    fieldMap.entrySet().stream()
+        .filter(e -> e.getValue() instanceof HasOp)
+        .map(e -> new Tuple2<>(e.getKey(), ((HasOp) e.getValue()).<CreatedEncodable>getDataOp()))
+        .forEach(t -> initMap.put(t._1, t._2.encodeInit()));
+
+    DataCreateMsg msg = new DataCreateMsg(dataObj.getDataType(), initMap);
     _saveRef.tell(msg);
   }
 
