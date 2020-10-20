@@ -25,6 +25,6 @@ final class OnSaveWake implements DataSaveActor.Handler<SaveWakeMsg> {
   }
 
   private boolean isWaiting(IoWaitBatch batch) {
-    return !batch.getCreateMap().isEmpty() || !batch.getUpdateMap().isEmpty();
+    return !batch.getCreateList().isEmpty() || !batch.getUpdateMap().isEmpty();
   }
 }

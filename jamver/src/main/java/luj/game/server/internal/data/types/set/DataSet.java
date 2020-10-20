@@ -1,9 +1,12 @@
 package luj.game.server.internal.data.types.set;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import luj.game.server.internal.data.types.HasOp;
+import luj.game.server.internal.data.types.set.history.SetChangedChecker;
 import luj.game.server.internal.data.types.set.history.SetDataAdder;
 import luj.game.server.internal.data.types.set.history.SetWithHistory;
 
@@ -57,12 +60,14 @@ public class DataSet<E> implements Set<E>, HasOp {
 
   @Override
   public Object[] toArray() {
-    throw new UnsupportedOperationException("toArray");
+    checkState(!SetChangedChecker.GET.isChanged(_value));
+    return _value.getData().toArray();
   }
 
   @Override
   public <T> T[] toArray(T[] a) {
-    throw new UnsupportedOperationException("toArray");
+    checkState(!SetChangedChecker.GET.isChanged(_value));
+    return _value.getData().toArray(a);
   }
 
   @Override

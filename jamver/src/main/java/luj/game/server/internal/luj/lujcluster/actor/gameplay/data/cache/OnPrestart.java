@@ -1,6 +1,7 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -51,7 +52,7 @@ final class OnPrestart implements GameplayDataActor.PreStart {
         .setNameFormat("data-save-io-%d")
         .build());
 
-    IoWaitBatch waitBatch = new IoWaitBatch(new HashMap<>(), new HashMap<>());
+    IoWaitBatch waitBatch = new IoWaitBatch(new ArrayList<>(), new HashMap<>());
     return new DataSaveActor(saveState, savePlugin, ioRunner, waitBatch);
   }
 }

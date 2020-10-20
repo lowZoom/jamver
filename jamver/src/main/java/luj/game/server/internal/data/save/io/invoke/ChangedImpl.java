@@ -2,13 +2,13 @@ package luj.game.server.internal.data.save.io.invoke;
 
 import java.util.Map;
 import luj.game.server.api.plugin.JamverDataSaveIo;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DataUpdateMsg;
+import luj.game.server.internal.data.save.wait.BatchUpdateItem;
 
 final class ChangedImpl implements JamverDataSaveIo.Changed {
 
   @Override
   public Class<?> dataType() {
-    return _msg.getDataType();
+    return _item.getDataType();
   }
 
   @Override
@@ -18,7 +18,7 @@ final class ChangedImpl implements JamverDataSaveIo.Changed {
 
   @Override
   public Map<String, Object> primitive() {
-    return _msg.getPrimitiveUpdated();
+    return _item.getPrimitiveUpdated();
   }
 
   @Override
@@ -31,7 +31,7 @@ final class ChangedImpl implements JamverDataSaveIo.Changed {
     return _map;
   }
 
-  DataUpdateMsg _msg;
+  BatchUpdateItem _item;
   JamverDataSaveIo.Id _id;
 
   Map<String, JamverDataSaveIo.SetChanged> _set;

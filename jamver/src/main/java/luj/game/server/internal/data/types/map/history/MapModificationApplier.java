@@ -15,14 +15,14 @@ public enum MapModificationApplier {
     MapWithHistory<K, Object> mapVar = (MapWithHistory<K, Object>) map;
     Map<K, Object> value = mapVar.getData();
 
-    Map<K, Object> updateHistory = MapX.nonNull(mapVar.getUpdateHistory());
-    value.putAll(updateHistory);
-
     Set<K> removeHistory = CollectionX.nonNull(mapVar.getRemoveHistory());
     for (K key : removeHistory) {
       Object old = value.remove(key);
       checkNotNull(old);
     }
+
+    Map<K, Object> updateHistory = MapX.nonNull(mapVar.getUpdateHistory());
+    value.putAll(updateHistory);
 
     mapVar.setUpdateHistory(null);
     mapVar.setRemoveHistory(null);

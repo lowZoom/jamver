@@ -28,8 +28,6 @@ public interface JamverDataSaveIo<S> {
 
     Class<?> dataType();
 
-    Id dataId();
-
     Map<String, Object> primitive();
 
     Map<String, Set<Object>> set();

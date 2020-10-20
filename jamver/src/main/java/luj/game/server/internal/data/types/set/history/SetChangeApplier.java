@@ -11,7 +11,13 @@ public enum SetChangeApplier {
     SetWithHistory<Object> setVar = (SetWithHistory<Object>) set;
     Set<Object> value = setVar.getData();
 
+    Set<?> removeHistory = CollectionX.nonNull(set.getRemoveHistory());
+    value.removeAll(removeHistory);
+
     Set<?> addHistory = CollectionX.nonNull(set.getAddHistory());
     value.addAll(addHistory);
+
+    set.setAddHistory(null);
+    set.setRemoveHistory(null);
   }
 }

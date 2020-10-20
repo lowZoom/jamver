@@ -5,7 +5,7 @@ import java.util.Set;
 import luj.game.server.api.plugin.JamverDataSaveIo;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DUpdateMsgMap;
 
-final class CMapImpl implements JamverDataSaveIo.MapChanged {
+final class ChMapImpl implements JamverDataSaveIo.MapChanged {
 
   @Override
   public Map<Object, Object> updated() {

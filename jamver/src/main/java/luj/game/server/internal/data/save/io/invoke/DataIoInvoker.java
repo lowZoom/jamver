@@ -3,19 +3,22 @@ package luj.game.server.internal.data.save.io.invoke;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.util.stream.Collectors.toMap;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import luj.game.server.api.plugin.JamverDataSaveIo;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.create.DataCreateMsg;
+import luj.game.server.internal.data.save.wait.BatchCreateItem;
+import luj.game.server.internal.data.save.wait.BatchUpdateItem;
+import luj.game.server.internal.data.types.HasOp;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DUpdateMsgMap;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DUpdateMsgSet;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DataUpdateMsg;
 
 public class DataIoInvoker {
 
   public DataIoInvoker(JamverDataSaveIo<?> ioPlugin, Object saveState,
-      List<DataCreateMsg> createList, List<DataUpdateMsg> updateList) {
+      List<BatchCreateItem> createList, List<BatchUpdateItem> updateList) {
     _ioPlugin = ioPlugin;
     _saveState = saveState;
     _createList = createList;
@@ -26,8 +29,9 @@ public class DataIoInvoker {
     IoContextImpl ctx = new IoContextImpl();
     ctx._saveState = _saveState;
 
-    ctx._created = ImmutableList.of();// _createList.stream()
-//        .collect(.toli)
+    ctx._created = _createList.stream()
+        .map(this::wrapCreate)
+        .collect(toImmutableList());
 
     ctx._changed = _updateList.stream()
         .map(this::wrapUpdate)
@@ -36,31 +40,51 @@ public class DataIoInvoker {
     _ioPlugin.onIo(ctx);
   }
 
-  private ChangedImpl wrapUpdate(DataUpdateMsg msg) {
+  private CreatedImpl wrapCreate(BatchCreateItem item) {
+    CreatedImpl created = new CreatedImpl();
+    created._item = item;
+
+    Set<Map.Entry<String, Object>> datas = item.getDataValue().entrySet();
+    created._primitive = datas.stream()
+        .filter(e -> !(e.getValue() instanceof HasOp))
+        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    created._set = datas.stream()
+        .filter(e -> e.getValue() instanceof Set)
+        .collect(toMap(Map.Entry::getKey, e -> ImmutableSet.copyOf((Set<?>) e.getValue())));
+
+    created._map = datas.stream()
+        .filter(e -> e.getValue() instanceof Map)
+        .collect(toMap(Map.Entry::getKey, e -> ImmutableMap.copyOf((Map<?, ?>) e.getValue())));
+
+    return created;
+  }
+
+  private ChangedImpl wrapUpdate(BatchUpdateItem item) {
     ChangedImpl changed = new ChangedImpl();
-    changed._msg = msg;
+    changed._item = item;
 
     IdImpl id = new IdImpl();
-    id._msg = msg;
+    id._item = item;
     changed._id = id;
 
-    changed._set = msg.getSetUpdated().entrySet().stream()
+    changed._set = item.getSetUpdated().entrySet().stream()
         .collect(toMap(Map.Entry::getKey, e -> wrapSet(e.getValue())));
 
-    changed._map = msg.getMapUpdated().entrySet().stream()
+    changed._map = item.getMapUpdated().entrySet().stream()
         .collect(toMap(Map.Entry::getKey, e -> wrapMap(e.getValue())));
 
     return changed;
   }
 
-  private CSetImpl wrapSet(DUpdateMsgSet msg) {
-    CSetImpl set = new CSetImpl();
+  private ChSetImpl wrapSet(DUpdateMsgSet msg) {
+    ChSetImpl set = new ChSetImpl();
     set._msg = msg;
     return set;
   }
 
-  private CMapImpl wrapMap(DUpdateMsgMap msg) {
-    CMapImpl map = new CMapImpl();
+  private ChMapImpl wrapMap(DUpdateMsgMap msg) {
+    ChMapImpl map = new ChMapImpl();
     map._msg = msg;
     return map;
   }
@@ -68,6 +92,6 @@ public class DataIoInvoker {
   private final JamverDataSaveIo<?> _ioPlugin;
   private final Object _saveState;
 
-  private final List<DataCreateMsg> _createList;
-  private final List<DataUpdateMsg> _updateList;
+  private final List<BatchCreateItem> _createList;
+  private final List<BatchUpdateItem> _updateList;
 }

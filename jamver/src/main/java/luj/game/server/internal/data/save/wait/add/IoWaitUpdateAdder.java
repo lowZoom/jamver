@@ -1,12 +1,14 @@
-package luj.game.server.internal.data.save.wait;
+package luj.game.server.internal.data.save.wait.add;
 
 import java.util.HashMap;
 import java.util.Map;
+import luj.game.server.internal.data.save.wait.BatchUpdateItem;
+import luj.game.server.internal.data.save.wait.IoWaitBatch;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DataUpdateMsg;
 
-public class DataIoWaitAdder {
+public class IoWaitUpdateAdder {
 
-  public DataIoWaitAdder(IoWaitBatch batch, DataUpdateMsg msg) {
+  public IoWaitUpdateAdder(IoWaitBatch batch, DataUpdateMsg msg) {
     _batch = batch;
     _msg = msg;
   }

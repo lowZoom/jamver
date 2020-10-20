@@ -4,7 +4,7 @@ import java.util.Set;
 import luj.game.server.api.plugin.JamverDataSaveIo;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DUpdateMsgSet;
 
-final class CSetImpl implements JamverDataSaveIo.SetChanged {
+final class ChSetImpl implements JamverDataSaveIo.SetChanged {
 
   @Override
   public Set<Object> added() {

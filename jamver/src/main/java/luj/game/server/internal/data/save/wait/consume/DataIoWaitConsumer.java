@@ -1,20 +1,18 @@
 package luj.game.server.internal.data.save.wait.consume;
 
+import com.google.common.collect.ImmutableList;
 import java.util.List;
-import java.util.stream.Collectors;
 import luj.game.server.internal.data.save.wait.BatchCreateItem;
 import luj.game.server.internal.data.save.wait.BatchUpdateItem;
 import luj.game.server.internal.data.save.wait.IoWaitBatch;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.create.DataCreateMsg;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DataUpdateMsg;
 
 public class DataIoWaitConsumer {
 
   public interface Result {
 
-    List<DataCreateMsg> created();
+    List<BatchCreateItem> created();
 
-    List<DataUpdateMsg> updated();
+    List<BatchUpdateItem> updated();
   }
 
   public DataIoWaitConsumer(IoWaitBatch batch) {
@@ -22,34 +20,18 @@ public class DataIoWaitConsumer {
   }
 
   public Result consume() {
-    List<DataCreateMsg> createList = _batch.getCreateMap().values().stream()
-        .map(this::encodeCreate)
-        .collect(Collectors.toList());
-
-    List<DataUpdateMsg> updateList = _batch.getUpdateMap().values().stream()
-        .map(this::encodeUpdate)
-        .collect(Collectors.toList());
-
     ResultImpl result = new ResultImpl();
-    result._createList = createList;
-    result._updateList = updateList;
+
+    // 清空前复制保留
+    result._createList = ImmutableList.copyOf(_batch.getCreateList());
+    result._updateList = ImmutableList.copyOf(_batch.getUpdateMap().values());
 
     clearBatch();
     return result;
   }
 
-  private DataCreateMsg encodeCreate(BatchCreateItem item) {
-    return new DataCreateMsg(item.getDataType(), item.getDataValue());
-
-  }
-
-  private DataUpdateMsg encodeUpdate(BatchUpdateItem item) {
-    return new DataUpdateMsg(item.getDataType(), item.getDataId(), item.getIdField(),
-        item.getPrimitiveUpdated(), item.getSetUpdated(), item.getMapUpdated());
-  }
-
   private void clearBatch() {
-    _batch.getCreateMap().clear();
+    _batch.getCreateList().clear();
     _batch.getUpdateMap().clear();
   }
 
