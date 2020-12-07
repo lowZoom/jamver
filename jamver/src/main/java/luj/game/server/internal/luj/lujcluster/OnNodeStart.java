@@ -24,7 +24,7 @@ import luj.game.server.internal.luj.lujcluster.actor.start.child.StartRefMsg;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopRefCollection;
 
 @Internal
-final class OnLujclusterStart implements NodeStartListener {
+final class OnNodeStart implements NodeStartListener {
 
   /**
    * @see luj.game.server.internal.framework.ServerInstanceStarter#start
