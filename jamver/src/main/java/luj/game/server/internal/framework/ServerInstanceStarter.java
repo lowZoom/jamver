@@ -29,7 +29,7 @@ public class ServerInstanceStarter {
   }
 
   /**
-   * @see luj.game.server.internal.luj.lujcluster.OnLujclusterStart#onStart
+   * @see luj.game.server.internal.luj.lujcluster.OnNodeStart#onStart
    */
   private void startCluster(ClusterSession lujcluster, ApplicationContext internalCtx) {
     ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();

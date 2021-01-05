@@ -43,8 +43,8 @@ final class OnNodeStart implements NodeStartListener {
         ctx.createApplicationActor(clusterActor(param, cmdMap))
     );
 
-    List<Tellable> refList = ImmutableList
-        .of(allRef.getDataRef(), allRef.getEventRef(), allRef.getClusterRef());
+    List<Tellable> refList = ImmutableList.of(
+        allRef.getDataRef(), allRef.getEventRef(), allRef.getClusterRef());
 
     CountDownLatch startLatch = new CountDownLatch(refList.size());
     StartRefMsg msg = new StartRefMsg(allRef, startLatch);
