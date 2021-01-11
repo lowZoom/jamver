@@ -11,6 +11,8 @@ import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.behaviors.WakeBehaviorFactory;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommandQueueWaker {
 
@@ -42,10 +44,16 @@ public class CommandQueueWaker {
     }
 
     //TODO: 后面要做成 在此锁定数据后，发往execActor执行
-    behavior.finishExec();
+    try {
+      behavior.finishExec();
+    } catch (RuntimeException e) {
+      LOG.error(e.getMessage(), e);
+    }
 
     return true;
   }
+
+  private static final Logger LOG = LoggerFactory.getLogger(CommandQueueWaker.class);
 
   private final Queue<DataCommandRequest> _commandQueue;
   private final CacheContainer _dataCache;
