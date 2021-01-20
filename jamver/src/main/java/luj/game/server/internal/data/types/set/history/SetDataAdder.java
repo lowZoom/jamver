@@ -8,6 +8,7 @@ public enum SetDataAdder {
 
   public <E> boolean add(SetWithHistory<E> set, E elem) {
     boolean isNew = getOrNewAddHistory(set).add(elem);
+    //TODO: 清理移除历史
     return isNew;
   }
 

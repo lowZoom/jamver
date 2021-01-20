@@ -8,6 +8,7 @@ import java.util.Set;
 import luj.game.server.internal.data.types.HasOp;
 import luj.game.server.internal.data.types.set.history.SetChangedChecker;
 import luj.game.server.internal.data.types.set.history.SetDataAdder;
+import luj.game.server.internal.data.types.set.history.SetDataRemover;
 import luj.game.server.internal.data.types.set.history.SetWithHistory;
 
 public class DataSet<E> implements Set<E>, HasOp {
@@ -34,6 +35,7 @@ public class DataSet<E> implements Set<E>, HasOp {
 
   @Override
   public boolean contains(Object o) {
+    //TODO: 要考虑修改历史
     throw new UnsupportedOperationException("");
   }
 
@@ -43,8 +45,18 @@ public class DataSet<E> implements Set<E>, HasOp {
   }
 
   @Override
-  public boolean remove(Object o) {
+  public boolean addAll(Collection<? extends E> c) {
     throw new UnsupportedOperationException("");
+  }
+
+  @Override
+  public boolean remove(Object o) {
+    return SetDataRemover.GET.remove(_value, o);
+  }
+
+  @Override
+  public boolean removeAll(Collection<?> c) {
+    return SetDataRemover.GET.removeAll(_value, c);
   }
 
   @Override
@@ -76,17 +88,7 @@ public class DataSet<E> implements Set<E>, HasOp {
   }
 
   @Override
-  public boolean addAll(Collection<? extends E> c) {
-    throw new UnsupportedOperationException("");
-  }
-
-  @Override
   public boolean retainAll(Collection<?> c) {
-    throw new UnsupportedOperationException("");
-  }
-
-  @Override
-  public boolean removeAll(Collection<?> c) {
     throw new UnsupportedOperationException("");
   }
 
