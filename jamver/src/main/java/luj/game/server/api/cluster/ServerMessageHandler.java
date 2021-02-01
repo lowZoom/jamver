@@ -54,7 +54,7 @@ public interface ServerMessageHandler<M> {
     <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
 
     /**
-     * @see Data#command
+     * @see #command
      */
     @Deprecated
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
