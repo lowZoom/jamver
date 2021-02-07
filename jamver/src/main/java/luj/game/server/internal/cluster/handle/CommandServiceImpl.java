@@ -11,8 +11,8 @@ final class CommandServiceImpl<P> implements CommandService<P> {
   @SuppressWarnings("unchecked")
   @Override
   public void execute(BiConsumer<Param, P> param) {
-    Object paramObj = new CommandParamMaker(_paramType,
-        (BiConsumer<CommandService.Param, Object>) param, _dataSvc._lujbean).make();
+    Object paramObj = (_paramType == Void.class) ? null : new CommandParamMaker(
+        _paramType, (BiConsumer<CommandService.Param, Object>) param, _dataSvc._lujbean).make();
 
     DatacmdExecMsg msg = new DatacmdExecMsg(_commandType, paramObj, _dataSvc._remoteRef);
     _dataSvc._dataRef.tell(msg);
