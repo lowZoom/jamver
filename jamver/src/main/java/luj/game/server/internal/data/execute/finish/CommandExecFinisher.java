@@ -9,7 +9,7 @@ import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
-import luj.game.server.internal.data.execute.DataServiceImpl;
+import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -42,7 +42,8 @@ public class CommandExecFinisher {
     List<DataTempProxy> loadLog = new ArrayList<>();
 
     LoadResultProxy resultProxy = LoadResultProxy.create(_loadResultType);
-    DataServiceImpl dataSvc = new DataServiceImpl(_dataRef, createLog, _remoteRef);
+    DataServiceImpl dataSvc = new DataServiceImpl(
+        _dataRef, createLog, _remoteRef, _commandKit.getParentMap(), _lujbean);
 
     _cacheReq.walk(new ExecFinishWalker(
         _dataCache, resultProxy, loadLog, dataSvc::specifySetField));

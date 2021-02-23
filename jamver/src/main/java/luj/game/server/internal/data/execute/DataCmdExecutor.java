@@ -17,7 +17,7 @@ public class DataCmdExecutor {
   }
 
   public void execute() {
-    CmdServiceImpl commandSvc = new CmdServiceImpl();
+    DataCmdServiceImpl commandSvc = new DataCmdServiceImpl();
     commandSvc._dataSvc = _dataSvc;
     commandSvc._networkSvc = _netSvc;
     commandSvc._lujbean = _lujbean;

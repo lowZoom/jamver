@@ -113,7 +113,7 @@ public interface GameDataCommand<P, D> {
     Session session();
 
     /**
-     * @see #session
+     * @see #session()
      */
     @Deprecated
     Session session(Comparable<?> sessionId);

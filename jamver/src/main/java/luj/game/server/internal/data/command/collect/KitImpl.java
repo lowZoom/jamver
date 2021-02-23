@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.command.collect;
 
+import java.util.Map;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -37,6 +38,11 @@ final class KitImpl implements GameplayDataActor.CommandKit {
     return _logger;
   }
 
+  @Override
+  public Map<Class<?>, GameplayDataActor.CommandKit> getParentMap() {
+    return _commandMap;
+  }
+
   GameDataCommand<?, ?> _command;
   Class<?> _commandType;
   Class<?> _paramType;
@@ -45,4 +51,5 @@ final class KitImpl implements GameplayDataActor.CommandKit {
   Class<?> _loadResultType;
 
   Logger _logger;
+  Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
 }

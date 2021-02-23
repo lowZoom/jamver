@@ -37,6 +37,8 @@ public class GameplayDataActor {
     Class<?> getLoadResultType();
 
     Logger getLogger();
+
+    Map<Class<?>, CommandKit> getParentMap();
   }
 
   public interface GroupKit {

@@ -4,7 +4,7 @@ import luj.bean.api.BeanContext;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.service.proto.ProtoServiceFactory;
 
-final class CmdServiceImpl implements GameDataCommand.Service {
+final class DataCmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public GameDataCommand.Data data() {

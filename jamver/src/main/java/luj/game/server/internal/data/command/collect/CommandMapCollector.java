@@ -1,6 +1,7 @@
 package luj.game.server.internal.data.command.collect;
 
-import com.google.common.collect.ImmutableMap;
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -20,9 +21,16 @@ public class CommandMapCollector {
   }
 
   public Map<Class<?>, GameplayDataActor.CommandKit> collect() {
-    return StreamX.from(_loadList)
+    Map<Class<?>, GameplayDataActor.CommandKit> cmdMap = StreamX.from(_loadList)
         .map(this::makeKit)
-        .collect(ImmutableMap.toImmutableMap(KitImpl::getCommandType, Function.identity()));
+        .collect(toImmutableMap(KitImpl::getCommandType, Function.identity()));
+
+    for (GameplayDataActor.CommandKit kit : cmdMap.values()) {
+      KitImpl impl = (KitImpl) kit;
+      impl._commandMap = cmdMap;
+    }
+
+    return cmdMap;
   }
 
   private KitImpl makeKit(GameDataLoad<?, ?> load) {
