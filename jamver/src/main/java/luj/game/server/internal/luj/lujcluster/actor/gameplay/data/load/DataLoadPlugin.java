@@ -17,9 +17,9 @@ public class DataLoadPlugin {
     return _dataLoader;
   }
 
-  @Autowired
+  @Autowired(required = false)
   private JamverDataLoadInit _loadInit;
 
-  @Autowired
+  @Autowired(required = false)
   private JamverDataLoadLoad _dataLoader;
 }

@@ -22,7 +22,7 @@ public class DataAllPlugin {
     return _savePlugin;
   }
 
-  @Autowired
+  @Autowired(required = false)
   private JamverDataRootInit _rootInitPlugin;
 
   @Autowired

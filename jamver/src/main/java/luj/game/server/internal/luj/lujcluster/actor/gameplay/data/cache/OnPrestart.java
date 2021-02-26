@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import luj.ava.spring.Internal;
 import luj.game.server.api.plugin.JamverDataLoadInit;
+import luj.game.server.api.plugin.JamverDataRootInit;
 import luj.game.server.api.plugin.JamverDataSaveInit;
 import luj.game.server.internal.data.init.DataRootInitializer;
 import luj.game.server.internal.data.load.io.init.DataLoadInitializer;
@@ -16,6 +17,8 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoad
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSaveActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSavePlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Internal
 final class OnPrestart implements GameplayDataActor.PreStart {
@@ -24,29 +27,41 @@ final class OnPrestart implements GameplayDataActor.PreStart {
   public void onHandle(Context ctx) {
     GameplayDataActor self = ctx.getActorState(this);
     DataAllPlugin allPlugin = self.getAllPlugin();
-    Object startParam = self.getStartParam();
 
-    Object rootState = new DataRootInitializer(allPlugin.getRootInitPlugin(), startParam).init();
+    JamverDataRootInit initPlugin = allPlugin.getRootInitPlugin();
+    boolean skipInit = initPlugin == null;
+
+    Object rootState = initRoot(self, skipInit);
     self.setPluginState(rootState);
 
     Actor selfRef = ctx.getActor();
-    Actor loadRef = ctx.createActor(loadActor(allPlugin.getLoadPlugin(), rootState, selfRef));
-    self.setLoadRef(loadRef);
+    self.setLoadRef(ctx.createActor(loadActor(
+        allPlugin.getLoadPlugin(), rootState, selfRef, skipInit)));
 
-    Actor saveRef = ctx.createActor(saveActor(allPlugin.getSavePlugin(), rootState));
+    Actor saveRef = ctx.createActor(saveActor(allPlugin.getSavePlugin(), rootState, skipInit));
     self.setSaveRef(saveRef);
   }
 
-  private DataLoadActor loadActor(DataLoadPlugin loadPlugin, Object pluginState, Actor dataRef) {
+  private Object initRoot(GameplayDataActor self, boolean skipInit) {
+    if (skipInit) {
+      LOG.debug("未发现数据模块初始化，跳过");
+      return null;
+    }
+    return new DataRootInitializer(self.getAllPlugin()
+        .getRootInitPlugin(), self.getStartParam()).init();
+  }
+
+  private DataLoadActor loadActor(DataLoadPlugin loadPlugin,
+      Object pluginState, Actor dataRef, boolean skipInit) {
     JamverDataLoadInit initPlugin = loadPlugin.getLoadInit();
-    Object loadState = new DataLoadInitializer(initPlugin, pluginState).init();
+    Object loadState = skipInit ? null : new DataLoadInitializer(initPlugin, pluginState).init();
 
     return new DataLoadActor(loadState, loadPlugin, dataRef);
   }
 
-  private DataSaveActor saveActor(DataSavePlugin savePlugin, Object pluginState) {
+  private DataSaveActor saveActor(DataSavePlugin savePlugin, Object pluginState, boolean skipInit) {
     JamverDataSaveInit initPlugin = savePlugin.getSaveInit();
-    Object saveState = new DataSaveInitializer(initPlugin, pluginState).init();
+    Object saveState = skipInit ? null : new DataSaveInitializer(initPlugin, pluginState).init();
 
     ExecutorService ioRunner = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
         .setNameFormat("data-save-io-%d")
@@ -55,4 +70,6 @@ final class OnPrestart implements GameplayDataActor.PreStart {
     IoWaitBatch waitBatch = new IoWaitBatch(new ArrayList<>(), new HashMap<>());
     return new DataSaveActor(saveState, savePlugin, ioRunner, waitBatch);
   }
+
+  private static final Logger LOG = LoggerFactory.getLogger(OnPrestart.class);
 }

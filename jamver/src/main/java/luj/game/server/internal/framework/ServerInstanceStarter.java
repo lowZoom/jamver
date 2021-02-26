@@ -9,6 +9,8 @@ import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -40,6 +42,10 @@ public class ServerInstanceStarter {
     String host = clusterCfg.selfHost();
     int port = clusterCfg.selfPort();
 
+    if (host == null) {
+      LOG.debug("未启用集群模块");
+    }
+
     lujcluster.startNode(host, port, clusterCfg.seedList(), new JambeanInLujcluster(
         beanRoot.getStartListenerList(),
         beanRoot.getDataCommandList(),
@@ -53,6 +59,8 @@ public class ServerInstanceStarter {
         LujBean.start(),
         startCfg.startParam()));
   }
+
+  private static final Logger LOG = LoggerFactory.getLogger(ServerInstanceStarter.class);
 
   private final ApplicationContext _appContext;
 }

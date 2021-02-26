@@ -2,11 +2,10 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save;
 
 import luj.game.server.api.plugin.JamverDataSaveInit;
 import luj.game.server.api.plugin.JamverDataSaveIo;
-import luj.game.server.internal.inject.ServerBeanCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @see ServerBeanCollector#collect
+ * @see luj.game.server.internal.inject.ServerBeanCollector#collect
  */
 public class DataSavePlugin {
 
@@ -18,9 +17,9 @@ public class DataSavePlugin {
     return _saveIo;
   }
 
-  @Autowired
+  @Autowired(required = false)
   private JamverDataSaveInit _saveInit;
 
-  @Autowired
+  @Autowired(required = false)
   private JamverDataSaveIo<?> _saveIo;
 }

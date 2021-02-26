@@ -17,9 +17,9 @@ public class ClusterProtoPlugin {
     return _protoDecode;
   }
 
-  @Autowired
+  @Autowired(required = false)
   private JamverClusterProtoEncode _protoEncode;
 
-  @Autowired
+  @Autowired(required = false)
   private JamverClusterProtoDecode _protoDecode;
 }
