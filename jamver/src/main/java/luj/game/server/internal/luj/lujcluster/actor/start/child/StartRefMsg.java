@@ -4,12 +4,12 @@ import java.util.concurrent.CountDownLatch;
 
 public class StartRefMsg {
 
-  public StartRefMsg(TopRefCollection refCollection, CountDownLatch startLatch) {
+  public StartRefMsg(TopLevelRefs refCollection, CountDownLatch startLatch) {
     _refCollection = refCollection;
     _startLatch = startLatch;
   }
 
-  public TopRefCollection getRefCollection() {
+  public TopLevelRefs getRefCollection() {
     return _refCollection;
   }
 
@@ -17,7 +17,7 @@ public class StartRefMsg {
     return _startLatch;
   }
 
-  private final TopRefCollection _refCollection;
+  private final TopLevelRefs _refCollection;
 
   private final CountDownLatch _startLatch;
 }

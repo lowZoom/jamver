@@ -9,6 +9,7 @@ import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
+import luj.net.api.LujNet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -48,15 +49,14 @@ public class ServerInstanceStarter {
 
     lujcluster.startNode(host, port, clusterCfg.seedList(), new JambeanInLujcluster(
         beanRoot.getStartListenerList(),
-        beanRoot.getDataCommandList(),
-        beanRoot.getDataLoadList(),
+        beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
         beanRoot.getCommandGroupList(), null, null,
-        beanRoot.getClusterMessageList(),
-        beanRoot.getClusterJoinList(),
+        beanRoot.getClusterMessageList(), beanRoot.getClusterJoinList(),
         beanRoot.getDataAllPlugin(),
         beanRoot.getClusterProtoPlugin(),
-        LujCache.start(internalCtx),
-        LujBean.start(),
+        beanRoot.getNetReceivePlugin(),
+        LujCache.start(internalCtx), LujBean.start(),
+        LujNet.create(internalCtx), startCfg.networkConfig(),
         startCfg.startParam()));
   }
 

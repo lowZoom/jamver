@@ -7,14 +7,17 @@ import luj.game.server.api.plugin.JamverBootRootInit;
 
 final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Result {
 
-  ReturnImpl(ClusterImpl cluster) {
-    _cluster = cluster;
-  }
-
   @Override
   public JamverBootRootInit.Return cluster(
       Function<JamverBootRootInit.Cluster, JamverBootRootInit.Cluster> val) {
     checkState(val.apply(_cluster) == _cluster);
+    return this;
+  }
+
+  @Override
+  public JamverBootRootInit.Return network(
+      Function<JamverBootRootInit.Network, JamverBootRootInit.Network> val) {
+    checkState(val.apply(_network) == _network);
     return this;
   }
 
@@ -35,6 +38,11 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
   }
 
   @Override
+  public BootStartInvoker.Network networkConfig() {
+    return _network;
+  }
+
+  @Override
   public Object startParam() {
     return _param;
   }
@@ -42,6 +50,7 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
   /////////////////////////////////////////////
 
   ClusterImpl _cluster;
+  NetworkImpl _network;
 
   Object _param;
 }

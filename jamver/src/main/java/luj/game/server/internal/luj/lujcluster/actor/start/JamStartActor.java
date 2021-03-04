@@ -3,7 +3,7 @@ package luj.game.server.internal.luj.lujcluster.actor.start;
 import java.util.concurrent.CountDownLatch;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
-import luj.game.server.internal.luj.lujcluster.actor.start.child.TopRefCollection;
+import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 
 public class JamStartActor {
 
@@ -12,7 +12,7 @@ public class JamStartActor {
   }
 
   public JamStartActor(CountDownLatch startLatch,
-      JambeanInLujcluster startParam, TopRefCollection refCollection) {
+      JambeanInLujcluster startParam, TopLevelRefs refCollection) {
     _startLatch = startLatch;
     _startParam = startParam;
     _refCollection = refCollection;
@@ -26,12 +26,12 @@ public class JamStartActor {
     return _startParam;
   }
 
-  public TopRefCollection getRefCollection() {
+  public TopLevelRefs getRefCollection() {
     return _refCollection;
   }
 
   private final CountDownLatch _startLatch;
 
   private final JambeanInLujcluster _startParam;
-  private final TopRefCollection _refCollection;
+  private final TopLevelRefs _refCollection;
 }

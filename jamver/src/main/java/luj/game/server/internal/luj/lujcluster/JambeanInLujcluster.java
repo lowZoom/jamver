@@ -10,23 +10,26 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
+import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
+import luj.game.server.internal.luj.lujcluster.actor.network.NetReceivePlugin;
+import luj.net.api.NetContext;
 
 public class JambeanInLujcluster {
 
   public JambeanInLujcluster(
       List<GameStartListener> startListenerList,
-      List<GameDataCommand<?, ?>> dataCommandList,
-      List<GameDataLoad<?, ?>> dataLoadList,
+      List<GameDataCommand<?, ?>> dataCommandList, List<GameDataLoad<?, ?>> dataLoadList,
       List<GameDataCommandGroup> commandGroupList,
-      List<GameEventListener<?>> eventListenerList,
-      GameEventListener.Service eventListenService,
-      List<ServerMessageHandler<?>> clusterMessageList,
-      List<ServerJoinListener> clusterJoinList,
+      List<GameEventListener<?>> eventListenerList, GameEventListener.Service eventListenService,
+      List<ServerMessageHandler<?>> clusterMessageList, List<ServerJoinListener> clusterJoinList,
       DataAllPlugin dataAllPlugin,
       ClusterProtoPlugin clusterProtoPlugin,
-      CacheSession lujcache, BeanContext lujbean, Object appStartParam) {
+      NetReceivePlugin netReceivePlugin,
+      CacheSession lujcache, BeanContext lujbean,
+      NetContext lujnet, BootStartInvoker.Network netParam,
+      Object appStartParam) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
     _dataLoadList = dataLoadList;
@@ -37,8 +40,11 @@ public class JambeanInLujcluster {
     _clusterJoinList = clusterJoinList;
     _dataAllPlugin = dataAllPlugin;
     _clusterProtoPlugin = clusterProtoPlugin;
+    _netReceivePlugin = netReceivePlugin;
     _lujcache = lujcache;
     _lujbean = lujbean;
+    _lujnet = lujnet;
+    _netParam = netParam;
     _appStartParam = appStartParam;
   }
 
@@ -82,12 +88,24 @@ public class JambeanInLujcluster {
     return _clusterProtoPlugin;
   }
 
+  public NetReceivePlugin getNetReceivePlugin() {
+    return _netReceivePlugin;
+  }
+
   public CacheSession getLujcache() {
     return _lujcache;
   }
 
   public BeanContext getLujbean() {
     return _lujbean;
+  }
+
+  public NetContext getLujnet() {
+    return _lujnet;
+  }
+
+  public BootStartInvoker.Network getNetParam() {
+    return _netParam;
   }
 
   public Object getAppStartParam() {
@@ -108,9 +126,13 @@ public class JambeanInLujcluster {
 
   private final DataAllPlugin _dataAllPlugin;
   private final ClusterProtoPlugin _clusterProtoPlugin;
+  private final NetReceivePlugin _netReceivePlugin;
 
   private final CacheSession _lujcache;
   private final BeanContext _lujbean;
+
+  private final NetContext _lujnet;
+  private final BootStartInvoker.Network _netParam;
 
   /**
    * @see luj.game.server.api.plugin.JamverBootRootInit.Return#param

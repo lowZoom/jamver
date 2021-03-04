@@ -10,6 +10,7 @@ import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.plugin.JamverBootRootInit;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
+import luj.game.server.internal.luj.lujcluster.actor.network.NetReceivePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -53,6 +54,10 @@ public class ServerBeanRoot {
     return _clusterProtoPlugin;
   }
 
+  public NetReceivePlugin getNetReceivePlugin() {
+    return _netReceivePlugin;
+  }
+
   @Autowired(required = false)
   private List<GameStartListener> _startListenerList;
 
@@ -79,4 +84,7 @@ public class ServerBeanRoot {
 
   @Autowired
   private ClusterProtoPlugin _clusterProtoPlugin;
+
+  @Autowired
+  private NetReceivePlugin _netReceivePlugin;
 }

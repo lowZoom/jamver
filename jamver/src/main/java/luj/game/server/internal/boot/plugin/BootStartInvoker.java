@@ -9,6 +9,8 @@ public class BootStartInvoker {
 
     Cluster clusterConfig();
 
+    Network networkConfig();
+
     Object startParam();
   }
 
@@ -19,6 +21,18 @@ public class BootStartInvoker {
     int selfPort();
 
     List<String> seedList();
+  }
+
+  public interface Network {
+
+    interface Address {
+
+      String host();
+
+      int port();
+    }
+
+    List<Address> bind();
   }
 
   public BootStartInvoker(JamverBootRootInit startPlugin) {

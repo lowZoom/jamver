@@ -2,12 +2,14 @@ package luj.game.server.internal.luj.lujcluster.actor.start.child;
 
 import luj.cluster.api.actor.Tellable;
 
-public class TopRefCollection {
+public class TopLevelRefs {
 
-  public TopRefCollection(Tellable dataRef, Tellable eventRef, Tellable clusterRef) {
+  public TopLevelRefs(Tellable dataRef, Tellable eventRef, Tellable clusterRef,
+      Tellable networkRef) {
     _dataRef = dataRef;
     _eventRef = eventRef;
     _clusterRef = clusterRef;
+    _networkRef = networkRef;
   }
 
   public Tellable getDataRef() {
@@ -22,7 +24,13 @@ public class TopRefCollection {
     return _clusterRef;
   }
 
+  public Tellable getNetworkRef() {
+    return _networkRef;
+  }
+
   private final Tellable _dataRef;
   private final Tellable _eventRef;
+
   private final Tellable _clusterRef;
+  private final Tellable _networkRef;
 }

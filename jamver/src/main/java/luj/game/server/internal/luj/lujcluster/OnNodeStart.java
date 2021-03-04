@@ -19,9 +19,10 @@ import luj.game.server.internal.event.listener.collect.EventListenerMapCollector
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.GameplayEventActor;
+import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.JamStartActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.StartRefMsg;
-import luj.game.server.internal.luj.lujcluster.actor.start.child.TopRefCollection;
+import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 
 @Internal
 final class OnNodeStart implements NodeStartListener {
@@ -37,14 +38,15 @@ final class OnNodeStart implements NodeStartListener {
     Map<Class<?>, GameplayDataActor.CommandKit> cmdMap = new CommandMapCollector(
         param.getDataCommandList(), param.getDataLoadList()).collect();
 
-    TopRefCollection allRef = new TopRefCollection(
+    TopLevelRefs allRef = new TopLevelRefs(
         ctx.createApplicationActor(dataActor(param, cmdMap)),
         ctx.createApplicationActor(eventActor(param)),
-        ctx.createApplicationActor(clusterActor(param, cmdMap))
+        ctx.createApplicationActor(clusterActor(param, cmdMap)),
+        ctx.createApplicationActor(networkActor(param))
     );
 
-    List<Tellable> refList = ImmutableList.of(
-        allRef.getDataRef(), allRef.getEventRef(), allRef.getClusterRef());
+    List<Tellable> refList = ImmutableList.of(allRef.getDataRef(),
+        allRef.getEventRef(), allRef.getClusterRef(), allRef.getNetworkRef());
 
     CountDownLatch startLatch = new CountDownLatch(refList.size());
     StartRefMsg msg = new StartRefMsg(allRef, startLatch);
@@ -81,5 +83,9 @@ final class OnNodeStart implements NodeStartListener {
         new ClusterHandleMapCollector(param.getClusterMessageList()).collect();
     return new ClusterCommActor(ArrayListMultimap.create(),
         handlerMap, cmdMap, param.getClusterProtoPlugin(), param.getLujbean());
+  }
+
+  private NetRootActor networkActor(JambeanInLujcluster param) {
+    return new NetRootActor(param.getLujnet(), param.getNetReceivePlugin(), param.getNetParam());
   }
 }

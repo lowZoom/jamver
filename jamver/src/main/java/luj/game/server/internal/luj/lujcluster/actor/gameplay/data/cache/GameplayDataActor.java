@@ -11,7 +11,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
-import luj.game.server.internal.luj.lujcluster.actor.start.child.TopRefCollection;
+import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import org.slf4j.Logger;
 
 public class GameplayDataActor {
@@ -86,11 +86,11 @@ public class GameplayDataActor {
     _saveRef = saveRef;
   }
 
-  public TopRefCollection getSiblingRef() {
+  public TopLevelRefs getSiblingRef() {
     return _siblingRef;
   }
 
-  public void setSiblingRef(TopRefCollection siblingRef) {
+  public void setSiblingRef(TopLevelRefs siblingRef) {
     _siblingRef = siblingRef;
   }
 
@@ -131,7 +131,7 @@ public class GameplayDataActor {
   private ActorPreStartHandler.Actor _loadRef;
   private ActorPreStartHandler.Actor _saveRef;
 
-  private TopRefCollection _siblingRef;
+  private TopLevelRefs _siblingRef;
 
   private final CacheContainer _dataCache;
   private final Queue<DataCommandRequest> _commandQueue;

@@ -14,6 +14,8 @@ public interface JamverBootRootInit {
 
     Return cluster(Function<Cluster, Cluster> val);
 
+    Return network(Function<Network, Network> val);
+
     Return param(Object val);
   }
 
@@ -24,6 +26,18 @@ public interface JamverBootRootInit {
     Cluster selfPort(int val);
 
     Cluster seedList(List<String> val);
+  }
+
+  interface Network {
+
+    interface Address {
+
+      Address host(String val);
+
+      Address port(int port);
+    }
+
+    Network bind(Function<Address, Address> addr);
   }
 
   Return onInit(Context ctx);

@@ -6,7 +6,7 @@ import luj.bean.api.BeanContext;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
-import luj.game.server.internal.luj.lujcluster.actor.start.child.TopRefCollection;
+import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 
 public class ClusterCommActor {
 
@@ -25,11 +25,11 @@ public class ClusterCommActor {
     _lujbean = lujbean;
   }
 
-  public TopRefCollection getSiblingRef() {
+  public TopLevelRefs getSiblingRef() {
     return _siblingRef;
   }
 
-  public void setSiblingRef(TopRefCollection siblingRef) {
+  public void setSiblingRef(TopLevelRefs siblingRef) {
     _siblingRef = siblingRef;
   }
 
@@ -53,7 +53,7 @@ public class ClusterCommActor {
     return _lujbean;
   }
 
-  private TopRefCollection _siblingRef;
+  private TopLevelRefs _siblingRef;
   private final Multimap<String, ActorMessageHandler.Node> _dispatchMap;
 
   //////////////

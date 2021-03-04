@@ -1,12 +1,25 @@
 package luj.game.server.internal.boot.plugin;
 
+import java.util.LinkedList;
 import luj.game.server.api.plugin.JamverBootRootInit;
 
 final class ContextImpl implements JamverBootRootInit.Context {
 
   @Override
   public ReturnImpl startConfig() {
-    ClusterImpl cluster = new ClusterImpl();
-    return new ReturnImpl(cluster);
+    ReturnImpl result = new ReturnImpl();
+    result._cluster = new ClusterImpl();
+    result._network = createNetwork();
+    return result;
+  }
+
+  private NetworkImpl createNetwork() {
+    NetworkImpl network = new NetworkImpl();
+
+    NetAddrImpl address = new NetAddrImpl();
+    network._address = address;
+
+    address._addrList = new LinkedList<>();
+    return network;
   }
 }

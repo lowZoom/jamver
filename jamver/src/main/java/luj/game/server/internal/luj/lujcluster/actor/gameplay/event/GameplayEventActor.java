@@ -5,7 +5,7 @@ import java.util.Map;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.event.GameEventListener;
-import luj.game.server.internal.luj.lujcluster.actor.start.child.TopRefCollection;
+import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 
 public class GameplayEventActor {
 
@@ -23,11 +23,11 @@ public class GameplayEventActor {
     _listenService = listenService;
   }
 
-  public TopRefCollection getSiblingRef() {
+  public TopLevelRefs getSiblingRef() {
     return _siblingRef;
   }
 
-  public void setSiblingRef(TopRefCollection siblingRef) {
+  public void setSiblingRef(TopLevelRefs siblingRef) {
     _siblingRef = siblingRef;
   }
 
@@ -39,7 +39,7 @@ public class GameplayEventActor {
     return _listenService;
   }
 
-  private TopRefCollection _siblingRef;
+  private TopLevelRefs _siblingRef;
 
   private final Map<Class<?>, List<GameEventListener<?>>> _listenerMap;
   private final GameEventListener.Service _listenService;
