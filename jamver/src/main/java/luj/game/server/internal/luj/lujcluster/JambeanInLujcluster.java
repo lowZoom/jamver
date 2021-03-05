@@ -10,6 +10,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
+import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
@@ -18,12 +19,12 @@ import luj.net.api.NetContext;
 
 public class JambeanInLujcluster {
 
-  public JambeanInLujcluster(
-      List<GameStartListener> startListenerList,
+  public JambeanInLujcluster(List<GameStartListener> startListenerList,
       List<GameDataCommand<?, ?>> dataCommandList, List<GameDataLoad<?, ?>> dataLoadList,
       List<GameDataCommandGroup> commandGroupList,
       List<GameEventListener<?>> eventListenerList, GameEventListener.Service eventListenService,
       List<ServerMessageHandler<?>> clusterMessageList, List<ServerJoinListener> clusterJoinList,
+      List<GameProtoHandler<?>> protoHandlerList,
       DataAllPlugin dataAllPlugin,
       ClusterProtoPlugin clusterProtoPlugin,
       NetReceivePlugin netReceivePlugin,
@@ -38,6 +39,7 @@ public class JambeanInLujcluster {
     _eventListenService = eventListenService;
     _clusterMessageList = clusterMessageList;
     _clusterJoinList = clusterJoinList;
+    _protoHandlerList = protoHandlerList;
     _dataAllPlugin = dataAllPlugin;
     _clusterProtoPlugin = clusterProtoPlugin;
     _netReceivePlugin = netReceivePlugin;
@@ -88,6 +90,10 @@ public class JambeanInLujcluster {
     return _clusterProtoPlugin;
   }
 
+  public List<GameProtoHandler<?>> getProtoHandlerList() {
+    return _protoHandlerList;
+  }
+
   public NetReceivePlugin getNetReceivePlugin() {
     return _netReceivePlugin;
   }
@@ -123,6 +129,8 @@ public class JambeanInLujcluster {
 
   private final List<ServerMessageHandler<?>> _clusterMessageList;
   private final List<ServerJoinListener> _clusterJoinList;
+
+  private final List<GameProtoHandler<?>> _protoHandlerList;
 
   private final DataAllPlugin _dataAllPlugin;
   private final ClusterProtoPlugin _clusterProtoPlugin;

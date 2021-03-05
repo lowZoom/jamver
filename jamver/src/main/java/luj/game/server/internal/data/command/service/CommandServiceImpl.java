@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.execute.service.data;
+package luj.game.server.internal.data.command.service;
 
 import java.time.Duration;
 import java.util.function.BiConsumer;
@@ -11,11 +11,11 @@ final class CommandServiceImpl<P> implements CommandService<P> {
   @SuppressWarnings("unchecked")
   @Override
   public void execute(BiConsumer<Param, P> param) {
-    Object paramObj = (_paramType == Void.class) ? null : new CommandParamMaker(_paramType,
-        (BiConsumer<CommandService.Param, Object>) param, _dataSvc.getLujbean()).make();
+    Object paramObj = (_paramType == Void.class) ? null : new CommandParamMaker(
+        _paramType, (BiConsumer<CommandService.Param, Object>) param, _factory._lujbean).make();
 
-    DatacmdExecMsg msg = new DatacmdExecMsg(_commandType, paramObj, _dataSvc.getRemoteRef());
-    _dataSvc.getDataRef().tell(msg);
+    DatacmdExecMsg msg = new DatacmdExecMsg(_commandType, paramObj, _factory._remoteRef);
+    _factory._dataRef.tell(msg);
   }
 
   @Override
@@ -36,5 +36,5 @@ final class CommandServiceImpl<P> implements CommandService<P> {
   Class<?> _commandType;
   Class<?> _paramType;
 
-  DataServiceImpl _dataSvc;
+  CommandServiceFactory _factory;
 }

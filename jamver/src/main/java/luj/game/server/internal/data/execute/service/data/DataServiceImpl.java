@@ -1,7 +1,5 @@
 package luj.game.server.internal.data.execute.service.data;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +9,7 @@ import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.service.CommandService;
+import luj.game.server.internal.data.command.service.CommandServiceFactory;
 import luj.game.server.internal.data.instance.DataInstanceCreator;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultFactory;
@@ -34,18 +33,6 @@ public class DataServiceImpl implements GameDataCommand.Data {
   public void specifySetField(DataResultProxy data, String fieldName) {
     _curData = data;
     _curField = fieldName;
-  }
-
-  public Tellable getDataRef() {
-    return _dataRef;
-  }
-
-  public ServerMessageHandler.Server getRemoteRef() {
-    return _remoteRef;
-  }
-
-  public BeanContext getLujbean() {
-    return _lujbean;
   }
 
   @SuppressWarnings("unchecked")
@@ -87,15 +74,8 @@ public class DataServiceImpl implements GameDataCommand.Data {
 
   @Override
   public <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType) {
-    CommandServiceImpl<P> svc = new CommandServiceImpl<>();
-    svc._commandType = commandType;
-
-    GameplayDataActor.CommandKit cmdKit = _commandMap.get(commandType);
-    checkNotNull(cmdKit, commandType.getName());
-    svc._paramType = cmdKit.getParamType();
-
-    svc._dataSvc = this;
-    return svc;
+    return new CommandServiceFactory(_lujbean, _dataRef,
+        _remoteRef, commandType, _commandMap).create();
   }
 
   @Override

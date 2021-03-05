@@ -9,10 +9,10 @@ final class OnStartRef implements NetRootActor.Handler<StartRefMsg> {
 
   @Override
   public void onHandle(Context ctx) {
-//    NetRootActor self = ctx.getActorState(this);
+    NetRootActor self = ctx.getActorState(this);
     StartRefMsg msg = ctx.getMessage(this);
 
-//    self.setSiblingRef(msg.getRefCollection());
+    self.setSiblingRef(msg.getRefCollection());
     msg.getStartLatch().countDown();
   }
 }

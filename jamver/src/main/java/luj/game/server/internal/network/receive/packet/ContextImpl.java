@@ -10,5 +10,12 @@ final class ContextImpl implements JamverNetReceivePacket.Context {
     return (P) _packet;
   }
 
+  @Override
+  public JamverNetReceivePacket.Result finish() {
+    return _result;
+  }
+
   Object _packet;
+
+  ResultImpl _result;
 }

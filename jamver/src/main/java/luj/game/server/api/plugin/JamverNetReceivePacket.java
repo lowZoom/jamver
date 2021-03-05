@@ -5,7 +5,16 @@ public interface JamverNetReceivePacket<P> {
   interface Context {
 
     <P> P getPacket(JamverNetReceivePacket<P> plugin);
+
+    Result finish();
   }
 
-  void onReceive(Context ctx);
+  interface Result {
+
+    Result protoType(Class<?> type);
+
+    Result protoObj(Object proto);
+  }
+
+  Result receive(Context ctx);
 }

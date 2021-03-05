@@ -23,17 +23,23 @@ public interface GameProtoHandler<P> {
 
     <P> P proto(GameProtoHandler<P> handler);
 
+    Connection connection();
+
     //FIXME: 不应该出现在框架层
     Player player();
 
     Service service();
   }
 
+  interface Connection {
+
+    Integer id();
+  }
+
+  @Deprecated
   interface Player {
 
     Long getPlayerId();
-
-    void sendProto(Object proto);
   }
 
   interface Service {
@@ -55,6 +61,7 @@ public interface GameProtoHandler<P> {
     /**
      * TODO: 观望一段时间后废弃
      *
+     * @see #command
      * @see CommandService#execute
      */
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);

@@ -5,10 +5,21 @@ import luj.game.server.api.plugin.JamverNetReceivePacket;
 public enum JamPacketReceiveInvoker {
   GET;
 
-  public void invoke(JamverNetReceivePacket<?> plugin, Object packet) {
+  public interface Result {
+
+    Class<?> protoType();
+
+    Object protoInstance();
+  }
+
+  public Result invoke(JamverNetReceivePacket<?> plugin, Object packet) {
     ContextImpl ctx = new ContextImpl();
     ctx._packet = packet;
 
-    plugin.onReceive(ctx);
+    ResultImpl result = new ResultImpl();
+    ctx._result = result;
+
+    plugin.receive(ctx);
+    return result;
   }
 }

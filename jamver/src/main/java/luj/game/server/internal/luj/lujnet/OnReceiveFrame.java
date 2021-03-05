@@ -48,7 +48,7 @@ final class OnReceiveFrame implements FrameDataReceiver {
       return;
     }
 
-    ReceivePacketMsg msg = new ReceivePacketMsg(packet);
+    ReceivePacketMsg msg = new ReceivePacketMsg(connState.getConnectionId(), packet);
     Tellable netRef = connState.getBindParam().getNetRef();
     netRef.tell(msg);
   }
