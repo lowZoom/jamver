@@ -2,19 +2,25 @@ package luj.game.server.internal.luj.lujnet;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import luj.cluster.api.actor.Tellable;
+import luj.game.server.api.plugin.JamverNetAcceptInit;
 import luj.game.server.api.plugin.JamverNetReceiveFrame;
 
 public class JambeanInLujnet {
 
-  public JambeanInLujnet(JamverNetReceiveFrame framePlugin, Tellable netRef,
-      AtomicInteger nextConnectionId) {
-    _framePlugin = framePlugin;
+  public JambeanInLujnet(JamverNetAcceptInit acceptInitPlugin,
+      JamverNetReceiveFrame frameReceivePlugin, Tellable netRef, AtomicInteger nextConnectionId) {
+    _acceptInitPlugin = acceptInitPlugin;
+    _frameReceivePlugin = frameReceivePlugin;
     _netRef = netRef;
     _nextConnectionId = nextConnectionId;
   }
 
-  public JamverNetReceiveFrame getFramePlugin() {
-    return _framePlugin;
+  public JamverNetReceiveFrame getFrameReceivePlugin() {
+    return _frameReceivePlugin;
+  }
+
+  public JamverNetAcceptInit getAcceptInitPlugin() {
+    return _acceptInitPlugin;
   }
 
   public Tellable getNetRef() {
@@ -25,8 +31,9 @@ public class JambeanInLujnet {
     return _nextConnectionId;
   }
 
-  private final JamverNetReceiveFrame _framePlugin;
-  private final Tellable _netRef;
+  private final JamverNetAcceptInit _acceptInitPlugin;
+  private final JamverNetReceiveFrame _frameReceivePlugin;
 
+  private final Tellable _netRef;
   private final AtomicInteger _nextConnectionId;
 }

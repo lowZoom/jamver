@@ -1,5 +1,6 @@
 package luj.game.server.internal.luj.lujcluster.actor.network;
 
+import luj.game.server.api.plugin.JamverNetAcceptInit;
 import luj.game.server.api.plugin.JamverNetReceiveFrame;
 import luj.game.server.api.plugin.JamverNetReceivePacket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @see luj.game.server.internal.inject.ServerBeanCollector#collect
  */
-public class NetReceivePlugin {
+public class NetAllPlugin {
+
+  public JamverNetAcceptInit getAcceptInit() {
+    return _acceptInit;
+  }
 
   public JamverNetReceiveFrame getReceiveFrame() {
     return _receiveFrame;
@@ -17,9 +22,12 @@ public class NetReceivePlugin {
     return _receivePacket;
   }
 
-  @Autowired
+  @Autowired(required = false)
+  private JamverNetAcceptInit _acceptInit;
+
+  @Autowired(required = false)
   private JamverNetReceiveFrame _receiveFrame;
 
-  @Autowired
+  @Autowired(required = false)
   private JamverNetReceivePacket<?> _receivePacket;
 }

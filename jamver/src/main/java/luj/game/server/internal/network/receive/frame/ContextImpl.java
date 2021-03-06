@@ -1,13 +1,19 @@
 package luj.game.server.internal.network.receive.frame;
 
+import io.netty.buffer.ByteBuf;
 import luj.game.server.api.plugin.JamverNetReceiveFrame;
 
 final class ContextImpl implements JamverNetReceiveFrame.Context {
 
+  @Override
+  public ByteBuf getLastFrame() {
+    return _lastFrame;
+  }
+
   @SuppressWarnings("unchecked")
   @Override
-  public <T> T getLastFrame() {
-    return (T) _lastFrame;
+  public <T> T getConnectionState() {
+    return (T) _connState;
   }
 
   @Override
@@ -15,7 +21,8 @@ final class ContextImpl implements JamverNetReceiveFrame.Context {
     return _result;
   }
 
-  Object _lastFrame;
+  ByteBuf _lastFrame;
+  Object _connState;
 
   ResultImpl _result;
 }

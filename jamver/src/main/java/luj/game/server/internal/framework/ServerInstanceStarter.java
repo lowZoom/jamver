@@ -52,7 +52,7 @@ public class ServerInstanceStarter {
         beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
         beanRoot.getCommandGroupList(), null, null,
         beanRoot.getClusterMessageList(), beanRoot.getClusterJoinList(),
-        beanRoot.getProtoHandlerList(),
+        beanRoot.getNetAcceptHandler(), beanRoot.getProtoHandlerList(),
         beanRoot.getDataAllPlugin(),
         beanRoot.getClusterProtoPlugin(),
         beanRoot.getNetReceivePlugin(),

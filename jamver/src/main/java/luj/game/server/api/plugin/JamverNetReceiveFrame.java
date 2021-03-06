@@ -1,5 +1,6 @@
 package luj.game.server.api.plugin;
 
+import io.netty.buffer.ByteBuf;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -17,7 +18,9 @@ public interface JamverNetReceiveFrame {
 
   interface Context {
 
-    <T> T getLastFrame();
+    ByteBuf getLastFrame();
+
+    <T> T getConnectionState();
 
     Result then();
   }

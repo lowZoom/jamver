@@ -4,8 +4,9 @@ import luj.game.server.api.plugin.JamverNetReceiveFrame;
 
 public class NetConnState {
 
-  public NetConnState(Integer connectionId, JambeanInLujnet bindParam) {
+  public NetConnState(Integer connectionId, Object pluginState, JambeanInLujnet bindParam) {
     _connectionId = connectionId;
+    _pluginState = pluginState;
     _bindParam = bindParam;
   }
 
@@ -15,6 +16,10 @@ public class NetConnState {
 
   public Integer getConnectionId() {
     return _connectionId;
+  }
+
+  public Object getPluginState() {
+    return _pluginState;
   }
 
   public void setNextReceiver(JamverNetReceiveFrame nextReceiver) {
@@ -28,5 +33,7 @@ public class NetConnState {
   private JamverNetReceiveFrame _nextReceiver;
 
   private final Integer _connectionId;
+  private final Object _pluginState;
+
   private final JambeanInLujnet _bindParam;
 }

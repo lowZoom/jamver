@@ -16,9 +16,10 @@ final class OnReceiveFrame implements FrameDataReceiver {
   public Result receive(Context ctx) throws Exception {
     NetConnState connState = ctx.getConnectionState();
     JamverNetReceiveFrame curRecv = getCurrentReceiver(connState);
-    Object lastFrame = ctx.getLastFrame();
 
-    JamFrameReceiveInvoker.Result result = JamFrameReceiveInvoker.GET.invoke(curRecv, lastFrame);
+    JamFrameReceiveInvoker.Result result = JamFrameReceiveInvoker.GET
+        .invoke(curRecv, connState.getPluginState(), ctx.getLastFrame());
+
     JamverNetReceiveFrame nextRecv = result.nextReceiver();
     connState.setNextReceiver(nextRecv);
 
@@ -39,7 +40,7 @@ final class OnReceiveFrame implements FrameDataReceiver {
     }
 
     JambeanInLujnet jambean = connState.getBindParam();
-    return jambean.getFramePlugin();
+    return jambean.getFrameReceivePlugin();
   }
 
   private void tryReceivePacket(JamFrameReceiveInvoker.Result result, NetConnState connState) {

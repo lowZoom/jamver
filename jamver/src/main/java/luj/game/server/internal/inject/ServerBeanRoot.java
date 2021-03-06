@@ -8,10 +8,11 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.net.GameProtoHandler;
+import luj.game.server.api.net.NetAcceptHandler;
 import luj.game.server.api.plugin.JamverBootRootInit;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
-import luj.game.server.internal.luj.lujcluster.actor.network.NetReceivePlugin;
+import luj.game.server.internal.luj.lujcluster.actor.network.NetAllPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -43,6 +44,10 @@ public class ServerBeanRoot {
     return _clusterJoinList;
   }
 
+  public NetAcceptHandler getNetAcceptHandler() {
+    return _netAcceptHandler;
+  }
+
   public List<GameProtoHandler<?>> getProtoHandlerList() {
     return _protoHandlerList;
   }
@@ -59,7 +64,7 @@ public class ServerBeanRoot {
     return _clusterProtoPlugin;
   }
 
-  public NetReceivePlugin getNetReceivePlugin() {
+  public NetAllPlugin getNetReceivePlugin() {
     return _netReceivePlugin;
   }
 
@@ -82,6 +87,9 @@ public class ServerBeanRoot {
   private List<ServerJoinListener> _clusterJoinList;
 
   @Autowired(required = false)
+  private NetAcceptHandler _netAcceptHandler;
+
+  @Autowired(required = false)
   private List<GameProtoHandler<?>> _protoHandlerList;
 
   @Autowired
@@ -94,5 +102,5 @@ public class ServerBeanRoot {
   private ClusterProtoPlugin _clusterProtoPlugin;
 
   @Autowired
-  private NetReceivePlugin _netReceivePlugin;
+  private NetAllPlugin _netReceivePlugin;
 }

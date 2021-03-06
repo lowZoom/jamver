@@ -60,7 +60,7 @@ final class OnNodeStart implements NodeStartListener {
     }
 
     //FIXME: 临时用单独的actor实现，最后应该把上面的整合进来
-    JamStartActor startState = new JamStartActor(startLatch, param, allRef);
+    JamStartActor startState = new JamStartActor(startLatch, param, allRef, cmdMap);
     ctx.createApplicationActor(startState);
   }
 
@@ -93,7 +93,8 @@ final class OnNodeStart implements NodeStartListener {
   private NetRootActor networkActor(JambeanInLujcluster clusterParam,
       Map<Class<?>, GameProtoHandler<?>> handlerMap,
       Map<Class<?>, GameplayDataActor.CommandKit> cmdMap) {
-    return new NetRootActor(handlerMap, cmdMap, clusterParam.getLujnet(),
-        clusterParam.getNetReceivePlugin(), clusterParam.getNetParam(), clusterParam.getLujbean());
+    return new NetRootActor(clusterParam.getNetAcceptHandler(), handlerMap, cmdMap,
+        clusterParam.getLujnet(), clusterParam.getNetReceivePlugin(), clusterParam.getNetParam(),
+        clusterParam.getLujbean());
   }
 }

@@ -1,8 +1,10 @@
 package luj.game.server.internal.luj.lujcluster.actor.start;
 
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 
 public class JamStartActor {
@@ -11,11 +13,12 @@ public class JamStartActor {
     // NOOP
   }
 
-  public JamStartActor(CountDownLatch startLatch,
-      JambeanInLujcluster startParam, TopLevelRefs refCollection) {
+  public JamStartActor(CountDownLatch startLatch, JambeanInLujcluster startParam,
+      TopLevelRefs refCollection, Map<Class<?>, GameplayDataActor.CommandKit> commandMap) {
     _startLatch = startLatch;
     _startParam = startParam;
     _refCollection = refCollection;
+    _commandMap = commandMap;
   }
 
   public CountDownLatch getStartLatch() {
@@ -30,8 +33,14 @@ public class JamStartActor {
     return _refCollection;
   }
 
+  public Map<Class<?>, GameplayDataActor.CommandKit> getCommandMap() {
+    return _commandMap;
+  }
+
   private final CountDownLatch _startLatch;
 
   private final JambeanInLujcluster _startParam;
   private final TopLevelRefs _refCollection;
+
+  private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
 }

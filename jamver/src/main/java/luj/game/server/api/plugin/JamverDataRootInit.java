@@ -10,7 +10,7 @@ public interface JamverDataRootInit {
   interface Context {
 
     /**
-     * @see luj.game.server.api.plugin.JamverBootRootInit.Return#param
+     * @see JamverBootRootInit.Return#param
      */
     <T> T getStartParam();
   }

@@ -1,7 +1,7 @@
 package luj.game.server.internal.luj.lujcluster.actor.start;
 
 import luj.ava.spring.Internal;
-import luj.game.server.internal.boot.game.StartTrigger;
+import luj.game.server.internal.boot.game.StartListenTrigger;
 
 @Internal
 final class OnPrestart implements JamStartActor.PreStart {
@@ -11,7 +11,6 @@ final class OnPrestart implements JamStartActor.PreStart {
     JamStartActor self = ctx.getActorState(this);
     self.getStartLatch().await();
 
-    new StartTrigger(self.getStartParam().getStartListenerList(),
-        self.getRefCollection().getDataRef()).trigger();
+    new StartListenTrigger(self).trigger();
   }
 }

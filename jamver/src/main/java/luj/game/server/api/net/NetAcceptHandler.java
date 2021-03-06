@@ -16,6 +16,7 @@ public interface NetAcceptHandler {
 
   interface Connection {
 
+    Integer id();
   }
 
   interface Address {

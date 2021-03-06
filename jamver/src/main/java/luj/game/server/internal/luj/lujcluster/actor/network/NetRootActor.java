@@ -5,6 +5,7 @@ import luj.bean.api.BeanContext;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.net.GameProtoHandler;
+import luj.game.server.api.net.NetAcceptHandler;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
@@ -20,13 +21,15 @@ public class NetRootActor {
     // NOOP
   }
 
-  public NetRootActor(Map<Class<?>, GameProtoHandler<?>> handlerMap,
+  public NetRootActor(NetAcceptHandler acceptHandler,
+      Map<Class<?>, GameProtoHandler<?>> protoHandlerMap,
       Map<Class<?>, GameplayDataActor.CommandKit> commandMap, NetContext lujnet,
-      NetReceivePlugin receivePlugin, BootStartInvoker.Network netParam, BeanContext lujbean) {
-    _handlerMap = handlerMap;
+      NetAllPlugin allPlugin, BootStartInvoker.Network netParam, BeanContext lujbean) {
+    _acceptHandler = acceptHandler;
+    _protoHandlerMap = protoHandlerMap;
     _commandMap = commandMap;
     _lujnet = lujnet;
-    _receivePlugin = receivePlugin;
+    _allPlugin = allPlugin;
     _netParam = netParam;
     _lujbean = lujbean;
   }
@@ -39,16 +42,20 @@ public class NetRootActor {
     _siblingRef = siblingRef;
   }
 
-  public Map<Class<?>, GameProtoHandler<?>> getHandlerMap() {
-    return _handlerMap;
+  public NetAcceptHandler getAcceptHandler() {
+    return _acceptHandler;
+  }
+
+  public Map<Class<?>, GameProtoHandler<?>> getProtoHandlerMap() {
+    return _protoHandlerMap;
   }
 
   public Map<Class<?>, GameplayDataActor.CommandKit> getCommandMap() {
     return _commandMap;
   }
 
-  public NetReceivePlugin getReceivePlugin() {
-    return _receivePlugin;
+  public NetAllPlugin getAllPlugin() {
+    return _allPlugin;
   }
 
   public BootStartInvoker.Network getNetParam() {
@@ -65,10 +72,11 @@ public class NetRootActor {
 
   private TopLevelRefs _siblingRef;
 
-  private final Map<Class<?>, GameProtoHandler<?>> _handlerMap;
+  private final NetAcceptHandler _acceptHandler;
+  private final Map<Class<?>, GameProtoHandler<?>> _protoHandlerMap;
   private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
 
-  private final NetReceivePlugin _receivePlugin;
+  private final NetAllPlugin _allPlugin;
   private final BootStartInvoker.Network _netParam;
 
   private final NetContext _lujnet;

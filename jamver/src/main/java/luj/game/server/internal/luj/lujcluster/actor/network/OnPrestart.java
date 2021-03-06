@@ -1,8 +1,8 @@
 package luj.game.server.internal.luj.lujcluster.actor.network;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import luj.ava.spring.Internal;
-import luj.game.server.api.plugin.JamverNetReceiveFrame;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.luj.lujnet.JambeanInLujnet;
 import luj.net.api.server.NetServer;
@@ -16,21 +16,26 @@ final class OnPrestart implements NetRootActor.PreStart {
   public void onHandle(Context ctx) {
     NetRootActor self = ctx.getActorState(this);
     BootStartInvoker.Network netCfg = self.getNetParam();
-    NetServer server = self.getLujnet().createServer();
 
-    NetReceivePlugin receivePlugin = self.getReceivePlugin();
-    JamverNetReceiveFrame framePlugin = receivePlugin.getReceiveFrame();
+    List<BootStartInvoker.Network.Address> bindList = netCfg.bind();
+    if (bindList.isEmpty()) {
+      LOG.debug("未启用网络模块");
+      return;
+    }
+
+    NetServer server = self.getLujnet().createServer();
+    NetAllPlugin allPlugin = self.getAllPlugin();
 
     Actor selfRef = ctx.getActor();
     AtomicInteger nextConnId = new AtomicInteger(1);
 
-    for (BootStartInvoker.Network.Address addr : netCfg.bind()) {
+    for (BootStartInvoker.Network.Address addr : bindList) {
       String host = addr.host();
       int port = addr.port();
       LOG.debug("网络绑定监听 -> {}:{}", host, port);
 
-      JambeanInLujnet param = new JambeanInLujnet(framePlugin, selfRef, nextConnId);
-      server.bind(host, port, param);
+      server.bind(host, port, new JambeanInLujnet(allPlugin.getAcceptInit(),
+          allPlugin.getReceiveFrame(), selfRef, nextConnId));
     }
   }
 
