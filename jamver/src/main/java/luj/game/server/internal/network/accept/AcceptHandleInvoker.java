@@ -1,21 +1,24 @@
 package luj.game.server.internal.network.accept;
 
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.net.NetAcceptHandler;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
-import luj.game.server.internal.luj.lujcluster.actor.network.accept.AcceptConnMsg;
+import luj.net.api.server.ConnectionAcceptInitializer;
 
 public enum AcceptHandleInvoker {
   GET;
 
-  public void invoke(NetRootActor actorState, AcceptConnMsg msg) {
+  public void invoke(NetRootActor actorState, Tellable actorRef, Integer connId,
+      ConnectionAcceptInitializer.Address bindAddr) {
     ContextImpl ctx = new ContextImpl();
     ctx._service = makeService(actorState);
 
     ConnectionImpl conn = new ConnectionImpl();
     ctx._conn = conn;
 
-    conn._id = msg.getConnectionId();
-    conn._bindAddr = msg.getBindAddr();
+    conn._connId = connId;
+    conn._netRef = actorRef;
+    conn._bindAddr = bindAddr;
 
     NetAcceptHandler handler = actorState.getAcceptHandler();
     handler.onHandle(ctx);

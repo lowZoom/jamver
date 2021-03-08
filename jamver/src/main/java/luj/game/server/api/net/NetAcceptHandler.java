@@ -1,5 +1,6 @@
 package luj.game.server.api.net;
 
+import java.util.function.Supplier;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.service.CommandService;
 
@@ -16,7 +17,19 @@ public interface NetAcceptHandler {
 
   interface Connection {
 
+    interface Proto {
+
+      <V> Field<V> set(Supplier<V> field);
+    }
+
+    interface Field<V> {
+
+      Proto $(V value);
+    }
+
     Integer id();
+
+    <P> void send(Object proto);
   }
 
   interface Address {

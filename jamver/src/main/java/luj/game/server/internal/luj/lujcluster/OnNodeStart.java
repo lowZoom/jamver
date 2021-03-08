@@ -2,6 +2,7 @@ package luj.game.server.internal.luj.lujcluster;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,7 @@ final class OnNodeStart implements NodeStartListener {
   private NetRootActor networkActor(JambeanInLujcluster clusterParam,
       Map<Class<?>, GameProtoHandler<?>> handlerMap,
       Map<Class<?>, GameplayDataActor.CommandKit> cmdMap) {
-    return new NetRootActor(clusterParam.getNetAcceptHandler(), handlerMap, cmdMap,
+    return new NetRootActor(new HashMap<>(), clusterParam.getNetAcceptHandler(), handlerMap, cmdMap,
         clusterParam.getLujnet(), clusterParam.getNetReceivePlugin(), clusterParam.getNetParam(),
         clusterParam.getLujbean());
   }

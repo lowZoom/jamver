@@ -21,7 +21,7 @@ final class OnAcceptConn implements ConnectionAcceptInitializer {
     Integer connId = nextId.getAndIncrement();
 
     Tellable netRef = bindParam.getNetRef();
-    netRef.tell(new AcceptConnMsg(connId, ctx.getBindAddress()));
+    netRef.tell(new AcceptConnMsg(connId, ctx.getConnection(), ctx.getBindAddress()));
 
     JamverNetAcceptInit initPlugin = bindParam.getAcceptInitPlugin();
     Object pluginState = initPlugin.onInit(null);

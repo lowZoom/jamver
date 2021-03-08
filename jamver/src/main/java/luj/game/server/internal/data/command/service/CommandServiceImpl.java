@@ -2,15 +2,21 @@ package luj.game.server.internal.data.command.service;
 
 import java.time.Duration;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.service.param.CommandParamMaker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
 
 final class CommandServiceImpl<P> implements CommandService<P> {
 
+  @Override
+  public void execute(BiFunction<Param, P, Param> param) {
+    execute0(param::apply);
+  }
+
   @SuppressWarnings("unchecked")
   @Override
-  public void execute(BiConsumer<Param, P> param) {
+  public void execute0(BiConsumer<Param, P> param) {
     Object paramObj = (_paramType == Void.class) ? null : new CommandParamMaker(
         _paramType, (BiConsumer<CommandService.Param, Object>) param, _factory._lujbean).make();
 
@@ -24,7 +30,7 @@ final class CommandServiceImpl<P> implements CommandService<P> {
   }
 
   @Override
-  public void schedule(Duration delay, BiConsumer<Param, P> param) {
+  public void schedule(Duration delay, BiFunction<Param, P, Param> param) {
     throw new UnsupportedOperationException("schedule尚未实现");
   }
 

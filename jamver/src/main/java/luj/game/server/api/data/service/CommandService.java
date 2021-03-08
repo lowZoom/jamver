@@ -2,6 +2,7 @@ package luj.game.server.api.data.service;
 
 import java.time.Duration;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 public interface CommandService<P> {
@@ -16,11 +17,17 @@ public interface CommandService<P> {
     Param $(V value);
   }
 
-  void execute(BiConsumer<Param, P> param);
+  /**
+   * @see #execute
+   */
+  @Deprecated
+  void execute0(BiConsumer<Param, P> param);
+
+  void execute(BiFunction<Param, P, Param> param);
 
   void schedule(Duration delay);
 
-  void schedule(Duration delay, BiConsumer<Param, P> param);
+  void schedule(Duration delay, BiFunction<Param, P, Param> param);
 
   void cancelSchedule();
 }

@@ -3,6 +3,7 @@ package luj.game.server.internal.luj.lujcluster.actor.network;
 import luj.game.server.api.plugin.JamverNetAcceptInit;
 import luj.game.server.api.plugin.JamverNetReceiveFrame;
 import luj.game.server.api.plugin.JamverNetReceivePacket;
+import luj.game.server.api.plugin.JamverNetSendEncode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -22,6 +23,10 @@ public class NetAllPlugin {
     return _receivePacket;
   }
 
+  public JamverNetSendEncode getSendEncode() {
+    return _sendEncode;
+  }
+
   @Autowired(required = false)
   private JamverNetAcceptInit _acceptInit;
 
@@ -30,4 +35,7 @@ public class NetAllPlugin {
 
   @Autowired(required = false)
   private JamverNetReceivePacket<?> _receivePacket;
+
+  @Autowired(required = false)
+  private JamverNetSendEncode _sendEncode;
 }

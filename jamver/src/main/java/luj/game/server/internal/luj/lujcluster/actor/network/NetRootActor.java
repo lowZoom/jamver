@@ -10,6 +10,7 @@ import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import luj.net.api.NetContext;
+import luj.net.api.server.ConnectionAcceptInitializer;
 
 public class NetRootActor {
 
@@ -21,10 +22,11 @@ public class NetRootActor {
     // NOOP
   }
 
-  public NetRootActor(NetAcceptHandler acceptHandler,
-      Map<Class<?>, GameProtoHandler<?>> protoHandlerMap,
+  public NetRootActor(Map<Integer, ConnectionAcceptInitializer.Connection> connectionMap,
+      NetAcceptHandler acceptHandler, Map<Class<?>, GameProtoHandler<?>> protoHandlerMap,
       Map<Class<?>, GameplayDataActor.CommandKit> commandMap, NetContext lujnet,
       NetAllPlugin allPlugin, BootStartInvoker.Network netParam, BeanContext lujbean) {
+    _connectionMap = connectionMap;
     _acceptHandler = acceptHandler;
     _protoHandlerMap = protoHandlerMap;
     _commandMap = commandMap;
@@ -40,6 +42,10 @@ public class NetRootActor {
 
   public void setSiblingRef(TopLevelRefs siblingRef) {
     _siblingRef = siblingRef;
+  }
+
+  public Map<Integer, ConnectionAcceptInitializer.Connection> getConnectionMap() {
+    return _connectionMap;
   }
 
   public NetAcceptHandler getAcceptHandler() {
@@ -71,6 +77,7 @@ public class NetRootActor {
   }
 
   private TopLevelRefs _siblingRef;
+  private final Map<Integer, ConnectionAcceptInitializer.Connection> _connectionMap;
 
   private final NetAcceptHandler _acceptHandler;
   private final Map<Class<?>, GameProtoHandler<?>> _protoHandlerMap;
