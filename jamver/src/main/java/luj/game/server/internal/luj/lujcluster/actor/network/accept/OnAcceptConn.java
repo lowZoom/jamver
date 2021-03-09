@@ -17,6 +17,6 @@ final class OnAcceptConn implements NetRootActor.Handler<AcceptConnMsg> {
     ConnectionAcceptInitializer.Connection conn = msg.getConnection();
     self.getConnectionMap().put(connId, conn);
 
-    AcceptHandleInvoker.GET.invoke(self, ctx.getActorRef(), connId, msg.getBindAddr());
+    AcceptHandleInvoker.GET.invoke(self, ctx.getActorRef(), connId, conn, msg.getBindAddr());
   }
 }

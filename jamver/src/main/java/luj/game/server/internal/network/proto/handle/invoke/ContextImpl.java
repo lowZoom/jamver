@@ -11,8 +11,8 @@ final class ContextImpl implements GameProtoHandler.Context {
   }
 
   @Override
-  public GameProtoHandler.Connection connection() {
-    return _conn;
+  public Integer connectionId() {
+    return _connId;
   }
 
   @Override
@@ -26,7 +26,7 @@ final class ContextImpl implements GameProtoHandler.Context {
   }
 
   Object _proto;
-  ConnectionImpl _conn;
+  Integer _connId;
 
   HandleServiceImpl _service;
 }

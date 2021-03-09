@@ -9,12 +9,10 @@ public enum ProtoHandleInvoker {
   public void invoke(GameProtoHandler<?> handler, Object proto, Integer connId,
       NetRootActor actorState) throws Exception {
     ContextImpl ctx = new ContextImpl();
-    ctx._proto = proto;
     ctx._service = makeService(actorState);
 
-    ConnectionImpl conn = new ConnectionImpl();
-    ctx._conn = conn;
-    conn._id = connId;
+    ctx._proto = proto;
+    ctx._connId = connId;
 
     handler.onHandle(ctx);
   }

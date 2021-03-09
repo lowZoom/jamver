@@ -18,6 +18,8 @@ public interface GameAcceptHandler {
 
     Integer id();
 
+    Address remoteAddress();
+
     void send(Object proto);
 
     void close();
@@ -30,6 +32,8 @@ public interface GameAcceptHandler {
     int port();
   }
 
+  ////////////////////////////////////////
+
   interface Service {
 
     Data data();
@@ -39,6 +43,8 @@ public interface GameAcceptHandler {
 
     <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
   }
+
+  ////////////////////////////////////////
 
   void onHandle(Context ctx);
 }

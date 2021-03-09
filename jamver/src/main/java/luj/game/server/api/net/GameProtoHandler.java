@@ -23,17 +23,12 @@ public interface GameProtoHandler<P> {
 
     <P> P proto(GameProtoHandler<P> handler);
 
-    Connection connection();
+    Integer connectionId();
 
     //FIXME: 不应该出现在框架层
     Player player();
 
     Service service();
-  }
-
-  interface Connection {
-
-    Integer id();
   }
 
   @Deprecated

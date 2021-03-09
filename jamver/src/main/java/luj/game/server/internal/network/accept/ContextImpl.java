@@ -1,6 +1,7 @@
 package luj.game.server.internal.network.accept;
 
 import luj.game.server.api.net.GameAcceptHandler;
+import luj.net.api.server.ConnectionAcceptInitializer;
 
 final class ContextImpl implements GameAcceptHandler.Context {
 
@@ -11,7 +12,9 @@ final class ContextImpl implements GameAcceptHandler.Context {
 
   @Override
   public GameAcceptHandler.Address getBindAddress() {
-    return _conn;
+    AddressImpl addr = new AddressImpl();
+    addr._addr = _bindAddr;
+    return addr;
   }
 
   @Override
@@ -20,6 +23,7 @@ final class ContextImpl implements GameAcceptHandler.Context {
   }
 
   ConnectionImpl _conn;
+  ConnectionAcceptInitializer.Address _bindAddr;
 
   ServiceImpl _service;
 }

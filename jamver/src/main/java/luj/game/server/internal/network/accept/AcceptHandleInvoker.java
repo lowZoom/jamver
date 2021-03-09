@@ -9,16 +9,17 @@ public enum AcceptHandleInvoker {
   GET;
 
   public void invoke(NetRootActor actorState, Tellable actorRef, Integer connId,
-      ConnectionAcceptInitializer.Address bindAddr) {
+      ConnectionAcceptInitializer.Connection conn, ConnectionAcceptInitializer.Address bindAddr) {
     ContextImpl ctx = new ContextImpl();
+    ctx._bindAddr = bindAddr;
     ctx._service = makeService(actorState);
 
-    ConnectionImpl conn = new ConnectionImpl();
-    ctx._conn = conn;
+    ConnectionImpl ctxConn = new ConnectionImpl();
+    ctx._conn = ctxConn;
 
-    conn._connId = connId;
-    conn._netRef = actorRef;
-    conn._bindAddr = bindAddr;
+    ctxConn._connId = connId;
+    ctxConn._netRef = actorRef;
+    ctxConn._conn = conn;
 
     GameAcceptHandler handler = actorState.getAcceptHandler();
     handler.onHandle(ctx);

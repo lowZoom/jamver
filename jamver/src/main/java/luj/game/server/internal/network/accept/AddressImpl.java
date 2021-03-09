@@ -1,20 +1,19 @@
 package luj.game.server.internal.network.accept;
 
 import luj.game.server.api.net.GameAcceptHandler;
+import luj.net.api.server.ConnectionAcceptInitializer;
 
 final class AddressImpl implements GameAcceptHandler.Address {
 
   @Override
   public String host() {
-    return _host;
+    return _addr.host();
   }
 
   @Override
   public int port() {
-    return _port;
+    return _addr.port();
   }
 
-  String _host;
-
-  int _port;
+  ConnectionAcceptInitializer.Address _addr;
 }

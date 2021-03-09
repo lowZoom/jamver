@@ -6,7 +6,7 @@ import luj.game.server.internal.luj.lujcluster.actor.network.close.CloseConnMsg;
 import luj.game.server.internal.network.send.ConnSendStarter;
 import luj.net.api.server.ConnectionAcceptInitializer;
 
-final class ConnectionImpl implements GameAcceptHandler.Connection, GameAcceptHandler.Address {
+final class ConnectionImpl implements GameAcceptHandler.Connection {
 
   @Override
   public Integer id() {
@@ -23,22 +23,15 @@ final class ConnectionImpl implements GameAcceptHandler.Connection, GameAcceptHa
     _netRef.tell(new CloseConnMsg(_connId));
   }
 
-  ///////////////////////////////////////
-
   @Override
-  public String host() {
-    return _bindAddr.host();
+  public GameAcceptHandler.Address remoteAddress() {
+    AddressImpl addr = new AddressImpl();
+    addr._addr = _conn.getRemoteAddress();
+    return addr;
   }
-
-  @Override
-  public int port() {
-    return _bindAddr.port();
-  }
-
-  ///////////////////////////////////////
 
   Integer _connId;
   Tellable _netRef;
 
-  ConnectionAcceptInitializer.Address _bindAddr;
+  ConnectionAcceptInitializer.Connection _conn;
 }
