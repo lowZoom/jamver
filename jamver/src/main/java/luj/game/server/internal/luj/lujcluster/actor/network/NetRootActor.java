@@ -4,13 +4,17 @@ import java.util.Map;
 import luj.bean.api.BeanContext;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.game.server.api.net.GameAcceptHandler;
+import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
-import luj.game.server.api.net.NetAcceptHandler;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
+import luj.game.server.internal.boot.plugin.BootStartInvoker.Network;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor.CommandKit;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import luj.net.api.NetContext;
 import luj.net.api.server.ConnectionAcceptInitializer;
+import luj.net.api.server.ConnectionAcceptInitializer.Connection;
 
 public class NetRootActor {
 
@@ -22,12 +26,15 @@ public class NetRootActor {
     // NOOP
   }
 
-  public NetRootActor(Map<Integer, ConnectionAcceptInitializer.Connection> connectionMap,
-      NetAcceptHandler acceptHandler, Map<Class<?>, GameProtoHandler<?>> protoHandlerMap,
-      Map<Class<?>, GameplayDataActor.CommandKit> commandMap, NetContext lujnet,
-      NetAllPlugin allPlugin, BootStartInvoker.Network netParam, BeanContext lujbean) {
+  public NetRootActor(Map<Integer, Connection> connectionMap,
+      GameAcceptHandler acceptHandler,
+      GameDisconnectHandler disconnectHandler,
+      Map<Class<?>, GameProtoHandler<?>> protoHandlerMap,
+      Map<Class<?>, CommandKit> commandMap, NetContext lujnet,
+      NetAllPlugin allPlugin, Network netParam, BeanContext lujbean) {
     _connectionMap = connectionMap;
     _acceptHandler = acceptHandler;
+    _disconnectHandler = disconnectHandler;
     _protoHandlerMap = protoHandlerMap;
     _commandMap = commandMap;
     _lujnet = lujnet;
@@ -48,8 +55,12 @@ public class NetRootActor {
     return _connectionMap;
   }
 
-  public NetAcceptHandler getAcceptHandler() {
+  public GameAcceptHandler getAcceptHandler() {
     return _acceptHandler;
+  }
+
+  public GameDisconnectHandler getDisconnectHandler() {
+    return _disconnectHandler;
   }
 
   public Map<Class<?>, GameProtoHandler<?>> getProtoHandlerMap() {
@@ -79,7 +90,9 @@ public class NetRootActor {
   private TopLevelRefs _siblingRef;
   private final Map<Integer, ConnectionAcceptInitializer.Connection> _connectionMap;
 
-  private final NetAcceptHandler _acceptHandler;
+  private final GameAcceptHandler _acceptHandler;
+  private final GameDisconnectHandler _disconnectHandler;
+
   private final Map<Class<?>, GameProtoHandler<?>> _protoHandlerMap;
   private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
 

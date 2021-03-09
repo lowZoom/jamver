@@ -1,11 +1,11 @@
 package luj.game.server.internal.network.accept;
 
-import luj.game.server.api.net.NetAcceptHandler;
+import luj.game.server.api.net.GameAcceptHandler;
 
-final class ServiceImpl implements NetAcceptHandler.Service {
+final class ServiceImpl implements GameAcceptHandler.Service {
 
   @Override
-  public NetAcceptHandler.Data data() {
+  public GameAcceptHandler.Data data() {
     return _dataSvc;
   }
 

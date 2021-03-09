@@ -8,6 +8,9 @@ public enum MapDataRemover {
 
   public <K, V> V remove(MapWithHistory<K, V> map, K key) {
     V old = MapDataGetter.GET.getValue(map, key);
+    if (old == null) {
+      return null;
+    }
 
     getOrNewRemoveHistory(map).add(key);
     //TODO: 要抵消更新历史

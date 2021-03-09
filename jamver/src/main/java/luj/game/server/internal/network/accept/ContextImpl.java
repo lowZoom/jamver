@@ -1,21 +1,21 @@
 package luj.game.server.internal.network.accept;
 
-import luj.game.server.api.net.NetAcceptHandler;
+import luj.game.server.api.net.GameAcceptHandler;
 
-final class ContextImpl implements NetAcceptHandler.Context {
+final class ContextImpl implements GameAcceptHandler.Context {
 
   @Override
-  public NetAcceptHandler.Connection connection() {
+  public GameAcceptHandler.Connection connection() {
     return _conn;
   }
 
   @Override
-  public NetAcceptHandler.Address getBindAddress() {
+  public GameAcceptHandler.Address getBindAddress() {
     return _conn;
   }
 
   @Override
-  public NetAcceptHandler.Service service() {
+  public GameAcceptHandler.Service service() {
     return _service;
   }
 

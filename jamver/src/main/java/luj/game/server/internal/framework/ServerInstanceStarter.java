@@ -52,10 +52,11 @@ public class ServerInstanceStarter {
         beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
         beanRoot.getCommandGroupList(), null, null,
         beanRoot.getClusterMessageList(), beanRoot.getClusterJoinList(),
-        beanRoot.getNetAcceptHandler(), beanRoot.getProtoHandlerList(),
+        beanRoot.getNetAcceptHandler(), beanRoot.getNetDisconnectHandler(),
+        beanRoot.getProtoHandlerList(),
         beanRoot.getDataAllPlugin(),
         beanRoot.getClusterProtoPlugin(),
-        beanRoot.getNetReceivePlugin(),
+        beanRoot.getNetAllPlugin(),
         LujCache.start(internalCtx), LujBean.start(),
         LujNet.create(internalCtx), startCfg.networkConfig(),
         startCfg.startParam()));

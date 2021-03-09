@@ -1,26 +1,21 @@
-package luj.game.server.internal.network.accept;
+package luj.game.server.internal.network.disconnect;
 
 import luj.cluster.api.actor.Tellable;
-import luj.game.server.api.net.GameAcceptHandler;
+import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
-import luj.net.api.server.ConnectionAcceptInitializer;
 
-public enum AcceptHandleInvoker {
+public enum DisconnectHandleInvoker {
   GET;
 
-  public void invoke(NetRootActor actorState, Tellable actorRef, Integer connId,
-      ConnectionAcceptInitializer.Address bindAddr) {
+  public void invoke(NetRootActor actorState, Tellable actorRef, Integer connId) {
     ContextImpl ctx = new ContextImpl();
     ctx._service = makeService(actorState);
 
     ConnectionImpl conn = new ConnectionImpl();
     ctx._conn = conn;
+    conn._id = connId;
 
-    conn._connId = connId;
-    conn._netRef = actorRef;
-    conn._bindAddr = bindAddr;
-
-    GameAcceptHandler handler = actorState.getAcceptHandler();
+    GameDisconnectHandler handler = actorState.getDisconnectHandler();
     handler.onHandle(ctx);
   }
 

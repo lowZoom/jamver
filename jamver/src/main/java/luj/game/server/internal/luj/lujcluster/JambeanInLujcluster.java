@@ -11,8 +11,9 @@ import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
 import luj.game.server.api.event.GameEventListener.Service;
+import luj.game.server.api.net.GameAcceptHandler;
+import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
-import luj.game.server.api.net.NetAcceptHandler;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.boot.plugin.BootStartInvoker.Network;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
@@ -27,7 +28,9 @@ public class JambeanInLujcluster {
       List<GameDataCommandGroup> commandGroupList,
       List<GameEventListener<?>> eventListenerList, Service eventListenService,
       List<ServerMessageHandler<?>> clusterMessageList, List<ServerJoinListener> clusterJoinList,
-      NetAcceptHandler netAcceptHandler, List<GameProtoHandler<?>> protoHandlerList,
+      GameAcceptHandler netAcceptHandler,
+      GameDisconnectHandler netDisconnectHandler,
+      List<GameProtoHandler<?>> protoHandlerList,
       DataAllPlugin dataAllPlugin,
       ClusterProtoPlugin clusterProtoPlugin,
       NetAllPlugin netReceivePlugin,
@@ -43,6 +46,7 @@ public class JambeanInLujcluster {
     _clusterMessageList = clusterMessageList;
     _clusterJoinList = clusterJoinList;
     _netAcceptHandler = netAcceptHandler;
+    _netDisconnectHandler = netDisconnectHandler;
     _protoHandlerList = protoHandlerList;
     _dataAllPlugin = dataAllPlugin;
     _clusterProtoPlugin = clusterProtoPlugin;
@@ -94,8 +98,12 @@ public class JambeanInLujcluster {
     return _clusterProtoPlugin;
   }
 
-  public NetAcceptHandler getNetAcceptHandler() {
+  public GameAcceptHandler getNetAcceptHandler() {
     return _netAcceptHandler;
+  }
+
+  public GameDisconnectHandler getNetDisconnectHandler() {
+    return _netDisconnectHandler;
   }
 
   public List<GameProtoHandler<?>> getProtoHandlerList() {
@@ -138,7 +146,8 @@ public class JambeanInLujcluster {
   private final List<ServerMessageHandler<?>> _clusterMessageList;
   private final List<ServerJoinListener> _clusterJoinList;
 
-  private final NetAcceptHandler _netAcceptHandler;
+  private final GameAcceptHandler _netAcceptHandler;
+  private final GameDisconnectHandler _netDisconnectHandler;
   private final List<GameProtoHandler<?>> _protoHandlerList;
 
   private final DataAllPlugin _dataAllPlugin;
