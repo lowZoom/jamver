@@ -11,7 +11,7 @@ final class CommandServiceImpl<P> implements CommandService<P> {
 
   @Override
   public void execute(BiFunction<Param, P, Param> param) {
-    execute0(param::apply);
+    execute0(param == null ? null : param::apply);
   }
 
   @SuppressWarnings("unchecked")
