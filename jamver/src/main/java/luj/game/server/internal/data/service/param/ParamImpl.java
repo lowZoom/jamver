@@ -15,7 +15,7 @@ final class ParamImpl<T> implements CommandService.Param, CommandService.Field<T
 
   @Override
   public CommandService.Param $(T value) {
-    _paramBean.setField(b -> _field, value);
+    _paramBean.setField(_field, value);
     return this;
   }
 
