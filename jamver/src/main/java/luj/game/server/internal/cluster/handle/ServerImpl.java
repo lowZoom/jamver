@@ -3,6 +3,7 @@ package luj.game.server.internal.cluster.handle;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.plugin.JamverClusterProtoEncode;
+import luj.game.server.internal.cluster.proto.encode.ClusterProtoEncodeAndWrapper;
 import luj.game.server.internal.cluster.proto.encode.ClusterProtoEncoder;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.receive.ClusterReceiveMsg;
 
@@ -15,10 +16,7 @@ final class ServerImpl implements ServerMessageHandler.Server {
 
   @Override
   public void sendMessage(Object msg) {
-    ClusterProtoEncoder.Result encoded = new ClusterProtoEncoder(msg, _encodePlugin).encode();
-    String typeName = encoded.protoType().getName();
-
-    ClusterReceiveMsg gameMsg = new ClusterReceiveMsg(typeName, encoded.protoData());
+    ClusterReceiveMsg gameMsg = ClusterProtoEncodeAndWrapper.GET.encodeAndWrap(msg, _encodePlugin);
     _remoteNode.sendMessage(ClusterReceiveMsg.class.getName(), gameMsg);
   }
 

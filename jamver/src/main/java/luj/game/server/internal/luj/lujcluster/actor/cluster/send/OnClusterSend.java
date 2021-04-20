@@ -4,7 +4,7 @@ import com.google.common.collect.Multimap;
 import java.util.Collection;
 import luj.ava.spring.Internal;
 import luj.cluster.api.actor.ActorMessageHandler;
-import luj.game.server.internal.cluster.proto.encode.ClusterProtoEncoder;
+import luj.game.server.internal.cluster.proto.encode.ClusterProtoEncodeAndWrapper;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.receive.ClusterReceiveMsg;
 import org.slf4j.Logger;
@@ -27,12 +27,11 @@ final class OnClusterSend implements ClusterCommActor.Handler<ClusterSendMsg> {
       return;
     }
 
-    ClusterProtoEncoder.Result encoded = new ClusterProtoEncoder(
-        msg.getMessageObj(), self.getProtoPlugin().getProtoEncode()).encode();
+    ClusterReceiveMsg resultMsg = ClusterProtoEncodeAndWrapper.GET
+        .encodeAndWrap(msg.getMessageObj(), self.getProtoPlugin().getProtoEncode());
 
     for (ActorMessageHandler.Node node : nodeList) {
-      node.sendMessage(ClusterReceiveMsg.class.getName(),
-          new ClusterReceiveMsg(msgType, encoded.protoData()));
+      node.sendMessage(ClusterReceiveMsg.class.getName(), resultMsg);
     }
   }
 

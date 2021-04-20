@@ -3,7 +3,7 @@ package luj.game.server.internal.cluster.join;
 import luj.cluster.api.node.NodeNewMemberListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.plugin.JamverClusterProtoEncode;
-import luj.game.server.internal.cluster.proto.encode.ClusterProtoEncoder;
+import luj.game.server.internal.cluster.proto.encode.ClusterProtoEncodeAndWrapper;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.receive.ClusterReceiveMsg;
 
 final class ServerImpl implements ServerJoinListener.Server {
@@ -15,10 +15,7 @@ final class ServerImpl implements ServerJoinListener.Server {
 
   @Override
   public void sendMessage(Object msg) {
-    ClusterProtoEncoder.Result encoded = new ClusterProtoEncoder(msg, _encodePlugin).encode();
-    String typeName = encoded.protoType().getName();
-
-    ClusterReceiveMsg gameMsg = new ClusterReceiveMsg(typeName, encoded.protoData());
+    ClusterReceiveMsg gameMsg = ClusterProtoEncodeAndWrapper.GET.encodeAndWrap(msg, _encodePlugin);
     _remoteNode.sendMessage(ClusterReceiveMsg.class.getName(), gameMsg);
   }
 
