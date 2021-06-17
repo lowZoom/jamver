@@ -60,10 +60,11 @@ public class DataServiceImpl implements GameDataCommand.Data {
     return new FieldImpl<>(_curData, _curField);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public Comparable<?> id(Object data) {
+  public <T extends Comparable<T>> T id(Object data) {
     DataResultProxy proxy = (DataResultProxy) Proxy.getInvocationHandler(data);
-    return (Comparable<?>) proxy.getData().getDataMap().get(DataTempProxy.ID);
+    return (T) proxy.getData().getDataMap().get(DataTempProxy.ID);
   }
 
   @Override

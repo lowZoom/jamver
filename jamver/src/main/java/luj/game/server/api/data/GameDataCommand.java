@@ -71,7 +71,7 @@ public interface GameDataCommand<P, D> {
 
     <T> Field<T> set(Supplier<T> field);
 
-    Comparable<?> id(Object data);
+    <T extends Comparable<T>> T id(Object data);
 
     boolean exists(Object data);
 
@@ -79,6 +79,10 @@ public interface GameDataCommand<P, D> {
 
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType);
 
+    /**
+     * @see #command
+     */
+    @Deprecated
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
   }
   //----------------------------------------------------
