@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 import java.util.Map;
 import luj.ava.spring.Internal;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.load.cache.CacheLoadFinisher;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ final class OnLoadFinish implements GameplayDataActor.Handler<LoadFinishMsg> {
   @Override
   public void onHandle(Context ctx) {
     LoadFinishMsg msg = ctx.getMessage(this);
-    GameplayDataActor actor = ctx.getActorState(this);
+    GameplayDataActor self = ctx.getActorState(this);
 
     Class<?> dataType = msg.getDataType();
     Comparable<?> dataId = msg.getDataId();
@@ -26,10 +27,10 @@ final class OnLoadFinish implements GameplayDataActor.Handler<LoadFinishMsg> {
     Map<String, Object> valueMap = msg.getDataValue();
     checkState(present == !valueMap.isEmpty());
 
-    Ref selfRef = ctx.getActorRef();
-    new CacheLoadFinisher(dataType, dataId, present, valueMap, actor.getDataCache(),
-        actor.getCommandQueue(), selfRef, actor.getSaveRef(), actor.getLoadRef(),
-        actor.getLujbean()).finish();
+    Tellable selfRef = ctx.getActorRef();
+    new CacheLoadFinisher(dataType, dataId, present, valueMap, self.getDataCache(),
+        self.getCommandQueue(), selfRef, self.getSaveRef(), self.getLoadRef(),
+        self.getLujbean()).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnLoadFinish.class);

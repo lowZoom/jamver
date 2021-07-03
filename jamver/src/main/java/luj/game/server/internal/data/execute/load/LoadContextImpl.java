@@ -25,8 +25,10 @@ final class LoadContextImpl implements GameDataLoad.Context {
 
   @Override
   public <R, F> GameDataLoad.AndLoad<R, F> load(Function<R, F> field, Comparable<?> id) {
-    new ReqRootFieldAppender(_cacheReq, (Function<Object, ?>) field, _fieldHolder, id).append();
-    return null;
+    CacheRequest.Node node = new ReqRootFieldAppender(_cacheReq,
+        (Function<Object, ?>) field, _fieldHolder, id).append();
+
+    return new AndLoadImpl<>(node, _fieldHolder);
   }
 
   @Override

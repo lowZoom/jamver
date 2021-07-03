@@ -6,6 +6,10 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
+/**
+ * @see luj.game.server.internal.data.instancev2.DataEntity
+ * @deprecated 直接用map，没必要中间还加层代理，代理只在Load里加就行
+ */
 @Deprecated
 public class DataTempProxy implements InvocationHandler {
 

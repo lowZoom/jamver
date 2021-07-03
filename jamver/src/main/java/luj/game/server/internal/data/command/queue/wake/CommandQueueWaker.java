@@ -5,8 +5,7 @@ import java.util.Queue;
 import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
-import luj.cluster.api.actor.ActorMessageHandler;
-import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.behaviors.WakeBehaviorFactory;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
@@ -17,8 +16,7 @@ import org.slf4j.LoggerFactory;
 public class CommandQueueWaker {
 
   public CommandQueueWaker(Queue<DataCommandRequest> commandQueue, CacheContainer dataCache,
-      ActorMessageHandler.Ref dataRef, ActorPreStartHandler.Actor saveRef,
-      ActorPreStartHandler.Actor loadRef, BeanContext lujbean) {
+      Tellable dataRef, Tellable saveRef, Tellable loadRef, BeanContext lujbean) {
     _commandQueue = commandQueue;
     _dataCache = dataCache;
     _dataRef = dataRef;
@@ -58,9 +56,9 @@ public class CommandQueueWaker {
   private final Queue<DataCommandRequest> _commandQueue;
   private final CacheContainer _dataCache;
 
-  private final ActorMessageHandler.Ref _dataRef;
-  private final ActorPreStartHandler.Actor _saveRef;
-  private final ActorPreStartHandler.Actor _loadRef;
+  private final Tellable _dataRef;
+  private final Tellable _saveRef;
+  private final Tellable _loadRef;
 
   private final BeanContext _lujbean;
 }

@@ -15,13 +15,13 @@ import luj.game.server.internal.data.types.set.DataSetFactory;
 /**
  * 将数据库读出来的普通数据类型，转成带修改历史的数据类型
  */
-final class DataValueDecoder {
+public class DataValueDecoder {
 
-  DataValueDecoder(Map<String, Object> rawValue) {
+  public DataValueDecoder(Map<String, Object> rawValue) {
     _rawValue = rawValue;
   }
 
-  Map<String, Object> decode() {
+  public Map<String, Object> decode() {
     Map<String, ?> setType = _rawValue.entrySet().stream()
         .filter(e -> e.getValue() instanceof Set)
         .collect(toMap(Map.Entry::getKey, e -> decodeSet((Set<?>) e.getValue())));
