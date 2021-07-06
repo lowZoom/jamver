@@ -12,6 +12,7 @@ import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
 import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public class CommandExecFinisher {
 
   public CommandExecFinisher(Class<?> loadResultType, CacheRequest cacheReq,
-      CacheContainer dataCache, Class<?> cmdType, GameplayDataActor.CommandKit commandKit,
+      CacheContainer dataCache, String cmdType, GameplayDataActor.CommandKit commandKit,
       Object cmdParam, Tellable dataRef, Tellable saveRef, ServerMessageHandler.Server remoteRef,
       BeanContext lujbean) {
     _loadResultType = loadResultType;
@@ -36,7 +37,7 @@ public class CommandExecFinisher {
 
   public void finish() {
 //    ctx.getLogger().debug("执行数据CMD：{}", cmdType.getName());
-    LOG.debug("[game]执行数据CMD：{}", _cmdType.getName());
+    LOG.debug("[game]执行数据CMD：{}", _cmdType);
 
     List<DataTempProxy> createLog = new ArrayList<>();
     List<DataTempProxy> loadLog = new ArrayList<>();
@@ -65,7 +66,7 @@ public class CommandExecFinisher {
   private final CacheRequest _cacheReq;
   private final CacheContainer _dataCache;
 
-  private final Class<?> _cmdType;
+  private final String _cmdType;
   private final GameplayDataActor.CommandKit _commandKit;
   private final Object _cmdParam;
 

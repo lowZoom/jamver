@@ -17,9 +17,10 @@ final class AndLoadImpl<R, F> implements GameDataLoad.AndLoad<R, F> {
   }
 
   @Override
-  public GameDataLoad.AndLoad join(Function<F, ?> from, Function<R, ?> to) {
-    new ReqChildFieldAppender(_node, (Function<Object, ?>) to, _fieldHolder, from).append();
-    return null;
+  public <F2> GameDataLoad.AndLoad<R, F2> join(Function<F, ?> from, Function<R, F2> to) {
+    CacheRequest.Node child = new ReqChildFieldAppender(_node, (Function<Object, ?>) to,
+        _fieldHolder, from).append();
+    return new AndLoadImpl<>(child, _fieldHolder);
   }
 
   //  private static final Logger LOG = LoggerFactory.getLogger(AndLoadImpl.class);

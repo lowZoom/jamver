@@ -44,6 +44,11 @@ public class DataIoInvoker {
     CreatedImpl created = new CreatedImpl();
     created._item = item;
 
+    IdImpl id = new IdImpl();
+    id._dataId = item.getDataId();
+    id._idField = item.getIdField();
+    created._id = id;
+
     Set<Map.Entry<String, Object>> datas = item.getDataValue().entrySet();
     created._primitive = datas.stream()
         .filter(e -> !(e.getValue() instanceof HasOp))
@@ -65,7 +70,8 @@ public class DataIoInvoker {
     changed._item = item;
 
     IdImpl id = new IdImpl();
-    id._item = item;
+    id._dataId = item.getDataId();
+    id._idField = item.getIdField();
     changed._id = id;
 
     changed._set = item.getSetUpdated().entrySet().stream()

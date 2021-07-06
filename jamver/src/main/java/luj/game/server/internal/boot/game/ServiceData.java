@@ -9,14 +9,13 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.command.service.CommandServiceFactory;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
 
 final class ServiceData implements GameStartListener.Data {
 
+  @SuppressWarnings("unchecked")
   @Override
   public void executeCommand(Class<? extends GameDataCommand<?, ?>> commandType) {
-    DatacmdExecMsg msg = new DatacmdExecMsg(commandType, null, null);
-    _dataRef.tell(msg);
+    command((Class<? extends GameDataCommand<Object, ?>>) commandType).execute((b, p) -> b);
   }
 
   @Override
@@ -25,7 +24,7 @@ final class ServiceData implements GameStartListener.Data {
         _dataRef, _remoteRef, commandType, _commandMap).create();
   }
 
-  Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  Map<String, GameplayDataActor.CommandKit> _commandMap;
   BeanContext _lujbean;
 
   Tellable _dataRef;

@@ -7,7 +7,7 @@ import luj.game.server.internal.data.save.wait.BatchUpdateItem;
 final class ChangedImpl implements JamverDataSaveIo.Changed {
 
   @Override
-  public Class<?> dataType() {
+  public String dataType() {
     return _item.getDataType();
   }
 

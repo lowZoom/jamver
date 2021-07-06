@@ -13,6 +13,8 @@ public interface GameDataLoad<P, R> {
 
     <R, F> AndLoad<R, F> load(Function<R, F> field, Comparable<?> id);
 
+    <R, F> AndLoad<R, F> load(GameDataLoad<?, R> load, Class<F> dataType, Comparable<?> id);
+
     <R, F> AndLoad<R, F> loadGlobal(Function<R, F> field);
 
     <R, F> AndLoad<R, F> loadGlobal(GameDataLoad<?, R> load, Class<F> dataType);
@@ -29,7 +31,7 @@ public interface GameDataLoad<P, R> {
     @Deprecated
     AndLoad load(Function<F, ?> from, Function<R, ?> to);
 
-    AndLoad join(Function<F, ?> from, Function<R, ?> to);
+    <F2> AndLoad<R, F2> join(Function<F, ?> from, Function<R, F2> to);
   }
 
   void onLoad(Context ctx);

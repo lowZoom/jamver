@@ -4,16 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import luj.cluster.api.actor.Tellable;
-import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.instance.value.create.CreatedEncodable;
-import luj.game.server.internal.data.save.DataTransientChecker;
+import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.types.HasOp;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.create.DataCreateMsg;
 import scala.Tuple2;
 
-public class DataCreateRequestor {
+public class DataCreateRequestorV2 {
 
-  public DataCreateRequestor(List<DataTempProxy> createList, Tellable saveRef) {
+  public DataCreateRequestorV2(List<DataEntity> createList, Tellable saveRef) {
     _createList = createList;
     _saveRef = saveRef;
   }
@@ -24,12 +23,12 @@ public class DataCreateRequestor {
         .forEach(this::sendCreateMsg);
   }
 
-  private boolean isTransient(DataTempProxy dataObj) {
-    return DataTransientChecker.GET.check(dataObj);
+  private boolean isTransient(DataEntity dataObj) {
+    return dataObj.getDataType().isTransient();
   }
 
-  private void sendCreateMsg(DataTempProxy dataObj) {
-    Map<String, Object> fieldMap = dataObj.getDataMapV2().getData();
+  private void sendCreateMsg(DataEntity dataObj) {
+    Map<String, Object> fieldMap = dataObj.getFieldValueMap().getData();
     Map<String, Object> initMap = new HashMap<>(fieldMap);
 
     // 集合类的要拷贝一份，与缓存数据隔开，避免被修改
@@ -38,13 +37,12 @@ public class DataCreateRequestor {
         .map(e -> new Tuple2<>(e.getKey(), ((HasOp) e.getValue()).<CreatedEncodable>getDataOp()))
         .forEach(t -> initMap.put(t._1, t._2.encodeInit()));
 
-    String idField = DataTempProxy.ID;
-    DataCreateMsg msg = new DataCreateMsg(dataObj.getDataType().getName(),
-        (Comparable<?>) initMap.get(idField), idField, initMap);
+    DataCreateMsg msg = new DataCreateMsg(
+        dataObj.getDataType().getName(), dataObj.getDataId(), "_id", initMap);
     _saveRef.tell(msg);
   }
 
-  private final List<DataTempProxy> _createList;
+  private final List<DataEntity> _createList;
 
   private final Tellable _saveRef;
 }

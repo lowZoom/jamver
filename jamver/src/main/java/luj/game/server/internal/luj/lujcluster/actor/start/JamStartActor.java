@@ -14,7 +14,7 @@ public class JamStartActor {
   }
 
   public JamStartActor(CountDownLatch startLatch, JambeanInLujcluster startParam,
-      TopLevelRefs refCollection, Map<Class<?>, GameplayDataActor.CommandKit> commandMap) {
+      TopLevelRefs refCollection, Map<String, GameplayDataActor.CommandKit> commandMap) {
     _startLatch = startLatch;
     _startParam = startParam;
     _refCollection = refCollection;
@@ -33,7 +33,7 @@ public class JamStartActor {
     return _refCollection;
   }
 
-  public Map<Class<?>, GameplayDataActor.CommandKit> getCommandMap() {
+  public Map<String, GameplayDataActor.CommandKit> getCommandMap() {
     return _commandMap;
   }
 
@@ -42,5 +42,5 @@ public class JamStartActor {
   private final JambeanInLujcluster _startParam;
   private final TopLevelRefs _refCollection;
 
-  private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 }

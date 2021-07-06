@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class DataUpdateMsg {
 
-  public DataUpdateMsg(Class<?> dataType, Comparable<?> dataId, String idField,
+  public DataUpdateMsg(String dataType, Comparable<?> dataId, String idField,
       Map<String, Object> primitiveUpdated, Map<String, DUpdateMsgSet> setUpdated,
       Map<String, DUpdateMsgMap> mapUpdated) {
     _dataType = dataType;
@@ -15,7 +15,7 @@ public class DataUpdateMsg {
     _mapUpdated = mapUpdated;
   }
 
-  public Class<?> getDataType() {
+  public String getDataType() {
     return _dataType;
   }
 
@@ -39,7 +39,7 @@ public class DataUpdateMsg {
     return _mapUpdated;
   }
 
-  private final Class<?> _dataType;
+  private final String _dataType;
 
   private final Comparable<?> _dataId;
   private final String _idField;

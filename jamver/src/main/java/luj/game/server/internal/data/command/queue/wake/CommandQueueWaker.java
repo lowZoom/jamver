@@ -37,7 +37,7 @@ public class CommandQueueWaker {
     DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, _dataCache).check();
 
     if (!readyResult.isReady()) {
-      new MissingLoadRequestor(readyResult.getMissingList(), _dataCache, _loadRef).request();
+      MissingLoadRequestor.create(readyResult.getMissingList(), _dataCache, _loadRef).request();
       return false;
     }
 

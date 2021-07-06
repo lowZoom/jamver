@@ -2,7 +2,7 @@ package luj.game.server.internal.data.execute.load;
 
 import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
-import luj.game.server.internal.data.execute.finish.LoadResultProxy;
+import luj.game.server.internal.data.load.result.LoadResultProxy;
 
 public class ReqRootFieldAppender {
 

@@ -24,10 +24,10 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     GameplayDataActor actor = ctx.getActorState(this);
     DatacmdExecMsg msg = ctx.getMessage(this);
 
-    Class<?> cmdType = msg.getCmdType();
+    String cmdType = msg.getCmdType();
 //    LOG.debug("尝试执行CMD：{}", cmdType.getSimpleName());
 
-    Map<Class<?>, GameplayDataActor.CommandKit> cmdMap = actor.getCommandMap();
+    Map<String, GameplayDataActor.CommandKit> cmdMap = actor.getCommandMap();
     Object param = msg.getParam();
 
     GameplayDataActor.CommandKit cmdKit = cmdMap.get(cmdType);
@@ -53,7 +53,7 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     if (!readyResult.isReady()) {
       // 发起数据读取
-      new MissingLoadRequestor(readyResult.getMissingList(),
+      MissingLoadRequestor.create(readyResult.getMissingList(),
           dataCache, actor.getLoadRef()).request();
 
       // 加入等待队列

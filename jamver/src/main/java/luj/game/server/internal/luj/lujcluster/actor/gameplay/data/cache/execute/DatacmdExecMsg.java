@@ -4,13 +4,13 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 
 public class DatacmdExecMsg {
 
-  public DatacmdExecMsg(Class<?> cmdType, Object param, ServerMessageHandler.Server remoteRef) {
+  public DatacmdExecMsg(String cmdType, Object param, ServerMessageHandler.Server remoteRef) {
     _cmdType = cmdType;
     _param = param;
     _remoteRef = remoteRef;
   }
 
-  public Class<?> getCmdType() {
+  public String getCmdType() {
     return _cmdType;
   }
 
@@ -22,7 +22,7 @@ public class DatacmdExecMsg {
     return _remoteRef;
   }
 
-  private final Class<?> _cmdType;
+  private final String _cmdType;
   private final Object _param;
 
   private final ServerMessageHandler.Server _remoteRef;

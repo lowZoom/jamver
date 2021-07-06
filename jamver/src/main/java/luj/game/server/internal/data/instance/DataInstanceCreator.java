@@ -18,8 +18,8 @@ import luj.game.server.internal.data.types.set.DataSetFactory;
 
 public class DataInstanceCreator {
 
-  public DataInstanceCreator(Class<?> dataType) {
-    this(dataType, ImmutableMap.of());
+  public static DataInstanceCreator create(Class<?> dataType) {
+    return new DataInstanceCreator(dataType, ImmutableMap.of());
   }
 
   public DataInstanceCreator(Class<?> dataType, Map<String, Object> initValue) {

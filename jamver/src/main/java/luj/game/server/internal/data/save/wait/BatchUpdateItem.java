@@ -6,9 +6,8 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.D
 
 public class BatchUpdateItem {
 
-  public BatchUpdateItem(Comparable<?> dataId, Class<?> dataType, String idField,
-      Map<String, Object> primitiveUpdated,
-      Map<String, DUpdateMsgSet> setUpdated,
+  public BatchUpdateItem(Comparable<?> dataId, String dataType, String idField,
+      Map<String, Object> primitiveUpdated, Map<String, DUpdateMsgSet> setUpdated,
       Map<String, DUpdateMsgMap> mapUpdated) {
     _dataId = dataId;
     _dataType = dataType;
@@ -22,7 +21,7 @@ public class BatchUpdateItem {
     return _dataId;
   }
 
-  public Class<?> getDataType() {
+  public String getDataType() {
     return _dataType;
   }
 
@@ -44,7 +43,7 @@ public class BatchUpdateItem {
 
   private final Comparable<?> _dataId;
 
-  private final Class<?> _dataType;
+  private final String _dataType;
   private final String _idField;
 
   private final Map<String, Object> _primitiveUpdated;

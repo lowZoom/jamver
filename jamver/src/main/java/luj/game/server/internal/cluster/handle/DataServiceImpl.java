@@ -26,7 +26,7 @@ final class DataServiceImpl implements ServerMessageHandler.Data {
    */
   @Override
   public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param) {
-    DatacmdExecMsg msg = new DatacmdExecMsg(commandType, param, _remoteRef);
+    DatacmdExecMsg msg = new DatacmdExecMsg(commandType.getName(), param, _remoteRef);
     _dataRef.tell(msg);
   }
 
@@ -36,7 +36,7 @@ final class DataServiceImpl implements ServerMessageHandler.Data {
     new GroupExecuteRequestor(type, group, _remoteRef, _dataRef).request();
   }
 
-  Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  Map<String, GameplayDataActor.CommandKit> _commandMap;
   BeanContext _lujbean;
 
   Tellable _dataRef;

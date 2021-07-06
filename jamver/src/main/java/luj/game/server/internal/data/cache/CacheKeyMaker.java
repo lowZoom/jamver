@@ -2,16 +2,20 @@ package luj.game.server.internal.data.cache;
 
 public class CacheKeyMaker {
 
-  public CacheKeyMaker(Class<?> dataType, Object dataId) {
+  public static CacheKeyMaker create(Class<?> dataType, Object dataId) {
+    return new CacheKeyMaker(dataType.getName(), dataId);
+  }
+
+  public CacheKeyMaker(String dataType, Object dataId) {
     _dataType = dataType;
     _dataId = dataId;
   }
 
   public String make() {
-    return _dataType.getName() + "#" + _dataId;
+    return _dataType + "#" + _dataId;
   }
 
-  private final Class<?> _dataType;
+  private final String _dataType;
 
   private final Object _dataId;
 }

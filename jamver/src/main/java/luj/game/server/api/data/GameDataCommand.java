@@ -77,13 +77,8 @@ public interface GameDataCommand<P, D> {
 
     <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
 
+    //TODO: 准备弃用
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType);
-
-    /**
-     * @see #command
-     */
-    @Deprecated
-    <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
   }
   //----------------------------------------------------
 

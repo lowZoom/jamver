@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.execute.finish;
+package luj.game.server.internal.data.load.result;
 
 import com.google.common.collect.ImmutableList;
 import java.lang.reflect.InvocationHandler;
@@ -8,7 +8,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@Deprecated
+/**
+ * LoadResult根对象代理
+ *
+ * TODO: 后面会预生成代码，没有生成代码的才用这个动态类作为fallback
+ */
 public class LoadResultProxy implements InvocationHandler {
 
   public static LoadResultProxy create(Class<?> resultType) {

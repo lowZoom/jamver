@@ -16,7 +16,7 @@ public class ClusterCommActor {
 
   public ClusterCommActor(Multimap<String, ActorMessageHandler.Node> dispatchMap,
       Map<String, ServerMessageHandler<?>> handlerMap,
-      Map<Class<?>, GameplayDataActor.CommandKit> commandMap, ClusterProtoPlugin protoPlugin,
+      Map<String, GameplayDataActor.CommandKit> commandMap, ClusterProtoPlugin protoPlugin,
       BeanContext lujbean) {
     _dispatchMap = dispatchMap;
     _handlerMap = handlerMap;
@@ -41,7 +41,7 @@ public class ClusterCommActor {
     return _handlerMap;
   }
 
-  public Map<Class<?>, GameplayDataActor.CommandKit> getCommandMap() {
+  public Map<String, GameplayDataActor.CommandKit> getCommandMap() {
     return _commandMap;
   }
 
@@ -59,7 +59,7 @@ public class ClusterCommActor {
   //////////////
 
   private final Map<String, ServerMessageHandler<?>> _handlerMap;
-  private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 
   private final ClusterProtoPlugin _protoPlugin;
   private final BeanContext _lujbean;

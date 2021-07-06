@@ -14,7 +14,7 @@ public class ServmsgHandleInvoker {
 
   public ServmsgHandleInvoker(ActorMessageHandler.Node remoteNode,
       Tellable dataRef, Map<String, ServerMessageHandler<?>> handlerMap,
-      Map<Class<?>, GameplayDataActor.CommandKit> commandMap,
+      Map<String, GameplayDataActor.CommandKit> commandMap,
       JamverClusterProtoEncode encodePlugin, BeanContext lujbean, String messageKey,
       Object message) {
     _remoteNode = remoteNode;
@@ -63,7 +63,7 @@ public class ServmsgHandleInvoker {
   private final Tellable _dataRef;
 
   private final Map<String, ServerMessageHandler<?>> _handlerMap;
-  private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 
   private final JamverClusterProtoEncode _encodePlugin;
   private final BeanContext _lujbean;

@@ -1,5 +1,6 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import luj.bean.api.BeanContext;
@@ -11,6 +12,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
+import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import org.slf4j.Logger;
 
@@ -38,7 +40,10 @@ public class GameplayDataActor {
 
     Logger getLogger();
 
-    Map<Class<?>, CommandKit> getParentMap();
+    /**
+     * @return 该cmd所处的map
+     */
+    Map<String, CommandKit> getParentMap();
   }
 
   public interface GroupKit {
@@ -48,8 +53,15 @@ public class GameplayDataActor {
     Class<?> getGroupType();
   }
 
+  public static GameplayDataActor create(JambeanInLujcluster clusterParam, CacheContainer dataCache,
+      Map<String, CommandKit> commandMap, Map<Class<?>, GroupKit> cmdGroupMap) {
+    return new GameplayDataActor(dataCache, new LinkedList<>(), clusterParam.getLujcache(),
+        commandMap, cmdGroupMap, clusterParam.getLujbean(), clusterParam.getDataAllPlugin(),
+        clusterParam.getAppStartParam());
+  }
+
   public GameplayDataActor(CacheContainer dataCache, Queue<DataCommandRequest> commandQueue,
-      CacheSession lujcache, Map<Class<?>, CommandKit> commandMap,
+      CacheSession lujcache, Map<String, CommandKit> commandMap,
       Map<Class<?>, GroupKit> cmdGroupMap, BeanContext lujbean,
       DataAllPlugin allPlugin, Object startParam) {
     _dataCache = dataCache;
@@ -102,7 +114,7 @@ public class GameplayDataActor {
     return _commandQueue;
   }
 
-  public Map<Class<?>, CommandKit> getCommandMap() {
+  public Map<String, CommandKit> getCommandMap() {
     return _commandMap;
   }
 
@@ -138,7 +150,7 @@ public class GameplayDataActor {
 
   /////////////////////////
 
-  private final Map<Class<?>, CommandKit> _commandMap;
+  private final Map<String, CommandKit> _commandMap;
   private final Map<Class<?>, GroupKit> _cmdGroupMap;
 
   private final CacheSession _lujcache;

@@ -21,7 +21,7 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute
 public class DataServiceImpl implements GameDataCommand.Data {
 
   public DataServiceImpl(Tellable dataRef, List<DataTempProxy> createLog,
-      ServerMessageHandler.Server remoteRef, Map<Class<?>, GameplayDataActor.CommandKit> commandMap,
+      ServerMessageHandler.Server remoteRef, Map<String, GameplayDataActor.CommandKit> commandMap,
       BeanContext lujbean) {
     _dataRef = dataRef;
     _createLog = createLog;
@@ -38,7 +38,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
   @SuppressWarnings("unchecked")
   @Override
   public <T> T create(Class<T> dataType) {
-    DataTempProxy dataObj = new DataInstanceCreator(dataType).create();
+    DataTempProxy dataObj = DataInstanceCreator.create(dataType).create();
     _createLog.add(dataObj);
 
     DataResultProxy result = new DataResultFactory(dataObj, this::specifySetField).create();
@@ -81,13 +81,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
 
   @Override
   public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType) {
-    executeCommand(commandType, null);
-  }
-
-  @Override
-  public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param) {
-    DatacmdExecMsg msg = new DatacmdExecMsg(commandType, param, _remoteRef);
-    _dataRef.tell(msg);
+    command(commandType).execute((b, p) -> b);
   }
 
 //  private static final Logger LOG = LoggerFactory.getLogger(DataServiceImpl.class);
@@ -99,7 +93,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
   private final List<DataTempProxy> _createLog;
 
   private final ServerMessageHandler.Server _remoteRef;
-  private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 
   private final BeanContext _lujbean;
 }

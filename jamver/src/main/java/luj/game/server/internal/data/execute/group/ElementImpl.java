@@ -5,7 +5,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
-import luj.game.server.internal.data.execute.finish.LoadResultProxy;
+import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 

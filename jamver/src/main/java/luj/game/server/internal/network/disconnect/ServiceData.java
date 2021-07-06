@@ -18,7 +18,7 @@ final class ServiceData implements GameDisconnectHandler.Data {
         _remoteRef, commandType, _commandMap).create();
   }
 
-  Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  Map<String, GameplayDataActor.CommandKit> _commandMap;
   BeanContext _lujbean;
 
   Tellable _dataRef;

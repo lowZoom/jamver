@@ -30,7 +30,7 @@ public class NetRootActor {
       GameAcceptHandler acceptHandler,
       GameDisconnectHandler disconnectHandler,
       Map<Class<?>, GameProtoHandler<?>> protoHandlerMap,
-      Map<Class<?>, CommandKit> commandMap, NetContext lujnet,
+      Map<String, CommandKit> commandMap, NetContext lujnet,
       NetAllPlugin allPlugin, Network netParam, BeanContext lujbean) {
     _connectionMap = connectionMap;
     _acceptHandler = acceptHandler;
@@ -67,7 +67,7 @@ public class NetRootActor {
     return _protoHandlerMap;
   }
 
-  public Map<Class<?>, GameplayDataActor.CommandKit> getCommandMap() {
+  public Map<String, GameplayDataActor.CommandKit> getCommandMap() {
     return _commandMap;
   }
 
@@ -94,7 +94,7 @@ public class NetRootActor {
   private final GameDisconnectHandler _disconnectHandler;
 
   private final Map<Class<?>, GameProtoHandler<?>> _protoHandlerMap;
-  private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 
   private final NetAllPlugin _allPlugin;
   private final BootStartInvoker.Network _netParam;

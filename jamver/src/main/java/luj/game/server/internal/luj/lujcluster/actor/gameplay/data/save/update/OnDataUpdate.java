@@ -15,7 +15,7 @@ final class OnDataUpdate implements DataSaveActor.Handler<DataUpdateMsg> {
     DataSaveActor self = ctx.getActorState(this);
     DataUpdateMsg msg = ctx.getMessage(this);
 
-    LOG.debug("请求数据更新落地：{}#{}", msg.getDataType().getSimpleName(), msg.getDataId());
+    LOG.debug("请求数据更新落地：{}#{}", msg.getDataType(), msg.getDataId());
     new IoWaitUpdateAdder(self.getWaitBatch(), msg).add();
 
     if (self.isIoRunning()) {

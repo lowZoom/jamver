@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.Queue;
 import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
-import luj.cluster.api.actor.ActorMessageHandler;
-import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.cache.DataPresence;
@@ -25,8 +24,7 @@ public class CacheLoadFinisher {
 
   public CacheLoadFinisher(Class<?> dataType, Comparable<?> dataId, boolean present,
       Map<String, Object> dataValue, CacheContainer dataCache,
-      Queue<DataCommandRequest> commandQueue, ActorMessageHandler.Ref dataRef,
-      ActorPreStartHandler.Actor saveRef, ActorPreStartHandler.Actor loadRef,
+      Queue<DataCommandRequest> commandQueue, Tellable dataRef, Tellable saveRef, Tellable loadRef,
       BeanContext lujbean) {
     _dataType = dataType;
     _dataId = dataId;
@@ -48,7 +46,7 @@ public class CacheLoadFinisher {
   }
 
   private void updateCache() {
-    String dataKey = new CacheKeyMaker(_dataType, _dataId).make();
+    String dataKey = CacheKeyMaker.create(_dataType, _dataId).make();
 
     CacheItem cacheItem = _dataCache.get(dataKey);
     checkNotNull(cacheItem, dataKey);
@@ -76,7 +74,7 @@ public class CacheLoadFinisher {
     checkState(_dataId.equals(DataTempProxy.GLOBAL));
 
     Class<?> dataType = item.getDataType();
-    DataTempProxy dataObj = new DataInstanceCreator(dataType).create();
+    DataTempProxy dataObj = DataInstanceCreator.create(dataType).create();
     dataObj.getDataMap().put(DataTempProxy.ID, DataTempProxy.GLOBAL);
 
     item.setPresence(DataPresence.PRESENT);
@@ -96,9 +94,9 @@ public class CacheLoadFinisher {
   private final CacheContainer _dataCache;
   private final Queue<DataCommandRequest> _commandQueue;
 
-  private final ActorMessageHandler.Ref _dataRef;
-  private final ActorPreStartHandler.Actor _saveRef;
-  private final ActorPreStartHandler.Actor _loadRef;
+  private final Tellable _dataRef;
+  private final Tellable _saveRef;
+  private final Tellable _loadRef;
 
   private final BeanContext _lujbean;
 }

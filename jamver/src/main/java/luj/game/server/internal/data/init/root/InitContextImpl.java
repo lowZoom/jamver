@@ -1,4 +1,4 @@
-package luj.game.server.internal.data.init;
+package luj.game.server.internal.data.init.root;
 
 import luj.game.server.api.plugin.JamverDataRootInit;
 

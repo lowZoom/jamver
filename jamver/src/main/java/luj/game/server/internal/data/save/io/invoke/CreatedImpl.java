@@ -8,8 +8,13 @@ import luj.game.server.internal.data.save.wait.BatchCreateItem;
 final class CreatedImpl implements JamverDataSaveIo.Created {
 
   @Override
-  public Class<?> dataType() {
+  public String dataType() {
     return _item.getDataType();
+  }
+
+  @Override
+  public JamverDataSaveIo.Id dataId() {
+    return _id;
   }
 
   @Override
@@ -28,6 +33,8 @@ final class CreatedImpl implements JamverDataSaveIo.Created {
   }
 
   BatchCreateItem _item;
+
+  JamverDataSaveIo.Id _id;
   Map<String, Object> _primitive;
 
   Map<String, Set<Object>> _set;

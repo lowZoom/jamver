@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
@@ -16,6 +17,7 @@ import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.load.result.DataResultFactory;
 import luj.game.server.internal.data.load.result.DataResultProxy;
+import luj.game.server.internal.data.load.result.LoadResultProxy;
 
 public class ExecFinishWalker implements RequestWalkListener {
 
@@ -51,10 +53,9 @@ public class ExecFinishWalker implements RequestWalkListener {
     return makeData(dataObj, _fieldHook);
   }
 
-  private Data idToList(DataTempProxy parentData,
-      Function<Object, Collection<Comparable<?>>> idGetter, Class<?> dataType,
-      DataResultProxy.FieldHook fieldHook) {
-    List<Object> dataList = ImmutableList.copyOf(idGetter.apply(parentData.getInstance()).stream()
+  private Data idToList(DataTempProxy parentData, Function<Object, Object> idGetter,
+      Class<?> dataType, DataResultProxy.FieldHook fieldHook) {
+    List<Object> dataList = ImmutableList.copyOf(getJoinIds(parentData, idGetter)
 //        .peek(id -> LOG.debug("数组读取读取读取读取：{}, {}", dataType.getName(), id))
         .map(id -> getDataObj(dataType, id))
         .filter(Objects::nonNull)
@@ -75,8 +76,15 @@ public class ExecFinishWalker implements RequestWalkListener {
     };
   }
 
+  private Stream<Comparable<?>> getJoinIds(DataTempProxy parentData,
+      Function<Object, Object> idGetter) {
+    //TODO: 考虑不同形式的ID返回
+    Object id = idGetter.apply(parentData.getInstance());
+    return ((Collection<Comparable<?>>) id).stream();
+  }
+
   private DataTempProxy getDataObj(Class<?> dataType, Comparable<?> dataId) {
-    String dataKey = new CacheKeyMaker(dataType, dataId).make();
+    String dataKey = CacheKeyMaker.create(dataType, dataId).make();
 //    LOG.debug("读取读取读取读取：{}", dataKey);
 
     CacheItem cacheItem = _dataCache.get(dataKey);

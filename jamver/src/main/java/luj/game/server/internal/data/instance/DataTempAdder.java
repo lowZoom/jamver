@@ -20,13 +20,13 @@ public class DataTempAdder {
     Object dataId = _dataObj.getDataMap().get(DataTempProxy.ID);
     checkNotNull(dataId, _dataType);
 
-    CacheItem cacheItem = new CacheItem(_dataType);
+    CacheItem cacheItem = CacheItem.create(_dataType);
     cacheItem.setPresence(DataPresence.PRESENT);
     cacheItem.setDataObj(_dataObj);
 
     //TODO: setLock(true)
 
-    String dataKey = new CacheKeyMaker(_dataType, dataId).make();
+    String dataKey = CacheKeyMaker.create(_dataType, dataId).make();
     _dataCache.put(dataKey, cacheItem);
   }
 

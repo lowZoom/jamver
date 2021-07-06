@@ -17,7 +17,7 @@ public class GroupExecFinisher {
 
   public GroupExecFinisher(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
       CacheContainer dataCache, Tellable dataRef, Tellable saveRef,
-      ServerMessageHandler.Server remoteRef, Map<Class<?>, GameplayDataActor.CommandKit> commandMap,
+      ServerMessageHandler.Server remoteRef, Map<String, GameplayDataActor.CommandKit> commandMap,
       BeanContext lujbean) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
@@ -48,7 +48,7 @@ public class GroupExecFinisher {
   private final Tellable _saveRef;
 
   private final ServerMessageHandler.Server _remoteRef;
-  private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 
   private final BeanContext _lujbean;
 }

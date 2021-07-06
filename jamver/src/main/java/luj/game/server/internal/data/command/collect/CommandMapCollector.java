@@ -20,10 +20,10 @@ public class CommandMapCollector {
     _loadList = loadList;
   }
 
-  public Map<Class<?>, GameplayDataActor.CommandKit> collect() {
-    Map<Class<?>, GameplayDataActor.CommandKit> cmdMap = StreamX.from(_loadList)
+  public Map<String, GameplayDataActor.CommandKit> collect() {
+    Map<String, GameplayDataActor.CommandKit> cmdMap = StreamX.from(_loadList)
         .map(this::makeKit)
-        .collect(toImmutableMap(KitImpl::getCommandType, Function.identity()));
+        .collect(toImmutableMap(k -> k.getCommandType().getName(), Function.identity()));
 
     for (GameplayDataActor.CommandKit kit : cmdMap.values()) {
       KitImpl impl = (KitImpl) kit;

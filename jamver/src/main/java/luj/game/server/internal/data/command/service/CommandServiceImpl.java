@@ -14,13 +14,16 @@ final class CommandServiceImpl<P> implements CommandService<P> {
     execute0(param == null ? null : param::apply);
   }
 
+  /**
+   * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.OnDataCmdExec#onHandle
+   */
   @SuppressWarnings("unchecked")
   @Override
   public void execute0(BiConsumer<Param, P> param) {
     Object paramObj = (_paramType == Void.class) ? null : new CommandParamMaker(
         _paramType, (BiConsumer<CommandService.Param, Object>) param, _factory._lujbean).make();
 
-    DatacmdExecMsg msg = new DatacmdExecMsg(_commandType, paramObj, _factory._remoteRef);
+    DatacmdExecMsg msg = new DatacmdExecMsg(_commandType.getName(), paramObj, _factory._remoteRef);
     _factory._dataRef.tell(msg);
   }
 

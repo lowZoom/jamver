@@ -13,7 +13,7 @@ public class CommandServiceFactory {
 
   public CommandServiceFactory(BeanContext lujbean, Tellable dataRef,
       ServerMessageHandler.Server remoteRef, Class<?> commandType,
-      Map<Class<?>, GameplayDataActor.CommandKit> commandMap) {
+      Map<String, GameplayDataActor.CommandKit> commandMap) {
     _lujbean = lujbean;
     _dataRef = dataRef;
     _remoteRef = remoteRef;
@@ -25,7 +25,7 @@ public class CommandServiceFactory {
     CommandServiceImpl<P> svc = new CommandServiceImpl<>();
     svc._commandType = _commandType;
 
-    GameplayDataActor.CommandKit cmdKit = _commandMap.get(_commandType);
+    GameplayDataActor.CommandKit cmdKit = _commandMap.get(_commandType.getName());
     checkNotNull(cmdKit, _commandType.getName());
     svc._paramType = cmdKit.getParamType();
 
@@ -39,5 +39,5 @@ public class CommandServiceFactory {
   final ServerMessageHandler.Server _remoteRef;
 
   private final Class<?> _commandType;
-  private final Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 }

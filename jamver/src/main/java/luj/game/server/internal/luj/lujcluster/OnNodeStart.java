@@ -3,7 +3,6 @@ package luj.game.server.internal.luj.lujcluster;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -38,7 +37,7 @@ final class OnNodeStart implements NodeStartListener {
   public void onStart(Context ctx) {
     JambeanInLujcluster param = ctx.getStartParam();
 
-    Map<Class<?>, GameplayDataActor.CommandKit> cmdMap = new CommandMapCollector(
+    Map<String, GameplayDataActor.CommandKit> cmdMap = new CommandMapCollector(
         param.getDataCommandList(), param.getDataLoadList()).collect();
 
     Map<Class<?>, GameProtoHandler<?>> handlerMap = new ProtoHandlerMapCollector(
@@ -66,16 +65,14 @@ final class OnNodeStart implements NodeStartListener {
   }
 
   private GameplayDataActor dataActor(JambeanInLujcluster clusterParam,
-      Map<Class<?>, GameplayDataActor.CommandKit> cmdMap) {
+      Map<String, GameplayDataActor.CommandKit> cmdMap) {
     CacheSession lujcache = clusterParam.getLujcache();
-    CacheContainer dataCache = lujcache.createCache(null);
+    CacheContainer dataCache = lujcache.createCache();
 
     Map<Class<?>, GameplayDataActor.GroupKit> groupMap = new GroupMapCollector(
         clusterParam.getCommandGroupList()).collect();
 
-    return new GameplayDataActor(dataCache, new LinkedList<>(), lujcache, cmdMap,
-        groupMap, clusterParam.getLujbean(), clusterParam.getDataAllPlugin(),
-        clusterParam.getAppStartParam());
+    return GameplayDataActor.create(clusterParam, dataCache, cmdMap, groupMap);
   }
 
   private GameplayEventActor eventActor(JambeanInLujcluster clusterParam) {
@@ -84,7 +81,7 @@ final class OnNodeStart implements NodeStartListener {
   }
 
   private ClusterCommActor clusterActor(JambeanInLujcluster clusterParam,
-      Map<Class<?>, GameplayDataActor.CommandKit> cmdMap) {
+      Map<String, GameplayDataActor.CommandKit> cmdMap) {
     Map<String, ServerMessageHandler<?>> handlerMap =
         new ClusterHandleMapCollector(clusterParam.getClusterMessageList()).collect();
     return new ClusterCommActor(ArrayListMultimap.create(),
@@ -93,7 +90,7 @@ final class OnNodeStart implements NodeStartListener {
 
   private NetRootActor networkActor(JambeanInLujcluster clusterParam,
       Map<Class<?>, GameProtoHandler<?>> handlerMap,
-      Map<Class<?>, GameplayDataActor.CommandKit> cmdMap) {
+      Map<String, GameplayDataActor.CommandKit> cmdMap) {
     return new NetRootActor(new HashMap<>(), clusterParam.getNetAcceptHandler(),
         clusterParam.getNetDisconnectHandler(), handlerMap, cmdMap,
         clusterParam.getLujnet(), clusterParam.getNetReceivePlugin(), clusterParam.getNetParam(),

@@ -1,14 +1,23 @@
 package luj.game.server.internal.data.instance.value.change;
 
 import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.types.HasOp;
 import luj.game.server.internal.data.types.map.history.MapModificationApplier;
 import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
 public class DataModificationApplier {
 
-  public DataModificationApplier(DataTempProxy data) {
-    _data = data;
+  public static DataModificationApplier create(DataTempProxy data) {
+    return new DataModificationApplier(data.getDataMapV2());
+  }
+
+  public static DataModificationApplier createV2(DataEntity data) {
+    return new DataModificationApplier(data.getFieldValueMap());
+  }
+
+  public DataModificationApplier(MapWithHistory<String, Object> dataMap) {
+    _dataMap = dataMap;
   }
 
   public void apply() {
@@ -17,17 +26,16 @@ public class DataModificationApplier {
   }
 
   private void applyPrimitive() {
-    MapWithHistory<String, Object> dataMap = _data.getDataMapV2();
-    MapModificationApplier.GET.apply(dataMap);
+    MapModificationApplier.GET.apply(_dataMap);
   }
 
   private void applyObject() {
-    _data.getDataMapV2().getData().values().stream()
+    _dataMap.getData().values().stream()
         .filter(d -> d instanceof HasOp)
         .map(d -> ((HasOp) d).<ChangedApplicable>getDataOp())
         .filter(ChangedApplicable::isChanged)
         .forEach(ChangedApplicable::applyChanged);
   }
 
-  private final DataTempProxy _data;
+  private final MapWithHistory<String, Object> _dataMap;
 }

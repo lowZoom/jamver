@@ -27,7 +27,7 @@ public class ExecDataFinisher {
 
     // 新创的数据要在写库前应用变更
     for (DataTempProxy data : _createLog) {
-      new DataModificationApplier(data).apply();
+      DataModificationApplier.create(data).apply();
     }
 
     // 变动的数据发起写库
@@ -35,7 +35,7 @@ public class ExecDataFinisher {
 
     // 将已有数据的变更应用到数据上
     for (DataTempProxy data : modifyLog) {
-      new DataModificationApplier(data).apply();
+      DataModificationApplier.create(data).apply();
     }
 
     // 将新创建的数据加入统一缓存管理

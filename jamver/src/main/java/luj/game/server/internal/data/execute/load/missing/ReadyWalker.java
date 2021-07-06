@@ -12,13 +12,6 @@ import luj.game.server.internal.data.cache.DataPresence;
 
 final class ReadyWalker implements RequestWalkListener {
 
-  ReadyWalker(CacheContainer cache, List<CacheItem> lockedOrLoadingOut,
-      List<DataReadyChecker.Missing> missingOut) {
-    _cache = cache;
-    _lockedOrLoadingOut = lockedOrLoadingOut;
-    _missingOut = missingOut;
-  }
-
   /**
    * @see luj.game.server.internal.data.execute.finish.ExecFinishWalker#loadData
    */
@@ -38,13 +31,13 @@ final class ReadyWalker implements RequestWalkListener {
   }
 
   private List<CacheItem> walkList(CacheItem parentItem,
-      Function<Object, Collection<Comparable<?>>> idGetter, Class<?> dataType) {
+      Function<Object, Object> idGetter, Class<?> dataType) {
     if (parentItem == null || parentItem.getPresence() != DataPresence.PRESENT) {
       return ImmutableList.of();
     }
 
     Object dataInstance = parentItem.getDataObj().getInstance();
-    Collection<Comparable<?>> idList = idGetter.apply(dataInstance);
+    Collection<Comparable<?>> idList = (Collection<Comparable<?>>) idGetter.apply(dataInstance);
 
     for (Comparable<?> id : idList) {
       CacheItem elemItem = cacheGet(dataType, id);
@@ -66,12 +59,12 @@ final class ReadyWalker implements RequestWalkListener {
   }
 
   private CacheItem cacheGet(Class<?> dataType, Object dataId) {
-    String dataKey = new CacheKeyMaker(dataType, dataId).make();
+    String dataKey = CacheKeyMaker.create(dataType, dataId).make();
     return _cache.get(dataKey);
   }
 
-  private final CacheContainer _cache;
+  CacheContainer _cache;
 
-  private final List<CacheItem> _lockedOrLoadingOut;
-  private final List<DataReadyChecker.Missing> _missingOut;
+  List<CacheItem> _lockedOrLoadingOut;
+  List<DataReadyChecker.Missing> _missingOut;
 }

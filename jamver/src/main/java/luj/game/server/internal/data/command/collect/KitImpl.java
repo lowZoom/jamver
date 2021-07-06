@@ -39,7 +39,7 @@ final class KitImpl implements GameplayDataActor.CommandKit {
   }
 
   @Override
-  public Map<Class<?>, GameplayDataActor.CommandKit> getParentMap() {
+  public Map<String, GameplayDataActor.CommandKit> getParentMap() {
     return _commandMap;
   }
 
@@ -51,5 +51,5 @@ final class KitImpl implements GameplayDataActor.CommandKit {
   Class<?> _loadResultType;
 
   Logger _logger;
-  Map<Class<?>, GameplayDataActor.CommandKit> _commandMap;
+  Map<String, GameplayDataActor.CommandKit> _commandMap;
 }

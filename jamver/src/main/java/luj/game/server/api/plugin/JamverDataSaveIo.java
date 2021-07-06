@@ -26,7 +26,9 @@ public interface JamverDataSaveIo<S> {
 
   interface Created {
 
-    Class<?> dataType();
+    String dataType();
+
+    Id dataId();
 
     Map<String, Object> primitive();
 
@@ -39,7 +41,7 @@ public interface JamverDataSaveIo<S> {
 
   interface Changed {
 
-    Class<?> dataType();
+    String dataType();
 
     Id dataId();
 

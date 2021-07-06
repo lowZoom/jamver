@@ -28,15 +28,27 @@ public class DataReadyChecker {
   }
 
   public Result check() {
-    List<CacheItem> lockedOrLoading = new ArrayList<>();
-    List<Missing> missing = new ArrayList<>();
+    ReadyWalker walker = new ReadyWalker();
+    walker._cache = _cache;
 
-    ReadyWalker walker = new ReadyWalker(_cache, lockedOrLoading, missing);
+    List<CacheItem> lockedOrLoading = new ArrayList<>();
+    walker._lockedOrLoadingOut = lockedOrLoading;
+
+    List<Missing> missing = new ArrayList<>();
+    walker._missingOut = missing;
+
     for (CacheRequest req : _reqList) {
       req.walk(walker);
     }
 
-    return new ResultImpl(lockedOrLoading, missing);
+    return newResult(lockedOrLoading, missing);
+  }
+
+  public static Result newResult(List<CacheItem> lockedOrLoading, List<Missing> missing) {
+    ResultImpl result = new ResultImpl();
+    result._lockedOrLoading = lockedOrLoading;
+    result._missing = missing;
+    return result;
   }
 
   private final List<CacheRequest> _reqList;

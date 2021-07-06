@@ -51,7 +51,7 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
 
     if (!readyResult.isReady()) {
       // 发起数据读取
-      new MissingLoadRequestor(readyResult.getMissingList(),
+      MissingLoadRequestor.create(readyResult.getMissingList(),
           dataCache, actor.getLoadRef()).request();
 
       // 加入等待队列
@@ -77,9 +77,10 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
   }
 
   private GameplayDataActor.CommandKit getKit(
-      Map<Class<?>, GameplayDataActor.CommandKit> cmdMap, Class<?> cmdType) {
-    GameplayDataActor.CommandKit kit = cmdMap.get(cmdType);
-    return checkNotNull(kit, cmdType.getName());
+      Map<String, GameplayDataActor.CommandKit> cmdMap, Class<?> cmdType) {
+    String typeName = cmdType.getName();
+    GameplayDataActor.CommandKit kit = cmdMap.get(typeName);
+    return checkNotNull(kit, typeName);
   }
 
   static class Elem {

@@ -12,7 +12,9 @@ public class IoWaitCreateAdder {
   }
 
   public void add() {
-    BatchCreateItem item = new BatchCreateItem(_msg.getDataType(), _msg.getDataMap());
+    BatchCreateItem item = new BatchCreateItem(_msg.getDataType(),
+        _msg.getDataId(), _msg.getIdField(), _msg.getDataMap());
+
     _batch.getCreateList().add(item);
   }
 
