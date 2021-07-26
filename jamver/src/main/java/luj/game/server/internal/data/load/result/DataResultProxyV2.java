@@ -3,7 +3,11 @@ package luj.game.server.internal.data.load.result;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.instancev2.EntityFieldGetter;
 
@@ -19,8 +23,10 @@ public class DataResultProxyV2 implements InvocationHandler {
   }
 
   public static DataResultProxyV2 create(DataEntity data, Class<?> dataType, FieldHook fieldHook) {
-    DataResultProxyV2 result = new DataResultProxyV2(data, fieldHook);
+    Map<String, Method> fieldMap = Arrays.stream(dataType.getMethods())
+        .collect(Collectors.toMap(Method::getName, Function.identity()));
 
+    DataResultProxyV2 result = new DataResultProxyV2(data, fieldMap, fieldHook);
     result._instance = Proxy.newProxyInstance(
         dataType.getClassLoader(), new Class[]{dataType}, result);
 
@@ -43,16 +49,19 @@ public class DataResultProxyV2 implements InvocationHandler {
     if ("toString".equals(methodName)) {
       return toString();
     }
-    return EntityFieldGetter.GET.getValue(_data, methodName);
+    return EntityFieldGetter.GET.getOrInitValue(_data, methodName, _fieldMap);
   }
 
-  DataResultProxyV2(DataEntity data, FieldHook fieldHook) {
+  DataResultProxyV2(DataEntity data, Map<String, Method> fieldMap, FieldHook fieldHook) {
     _data = data;
+    _fieldMap = fieldMap;
     _fieldHook = fieldHook;
   }
 
   private Object _instance;
 
   private final DataEntity _data;
+  private final Map<String, Method> _fieldMap;
+
   private final FieldHook _fieldHook;
 }

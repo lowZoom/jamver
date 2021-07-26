@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.function.Function;
 
-final class ResultFieldProxy implements InvocationHandler {
+public class ResultFieldProxy implements InvocationHandler {
 
   interface Field {
 

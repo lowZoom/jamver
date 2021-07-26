@@ -12,6 +12,10 @@ public enum ReqRootTransientAppender {
     return cacheReq.getRoot().addChild(dataType, dataId, this::setResultField);
   }
 
+  public CacheRequest.Node appendV2(CacheRequest cacheReq, Class<?> dataType, Object nodeOp) {
+    return cacheReq.getRoot().addChild(dataType, this::setResultField, nodeOp);
+  }
+
   private void setResultField(LoadResultProxy loadResult, Object value) {
 //    LOG.debug("临时变量：{}", _dataType.getName());
   }

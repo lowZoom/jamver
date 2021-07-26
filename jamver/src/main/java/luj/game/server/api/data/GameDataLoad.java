@@ -11,7 +11,13 @@ public interface GameDataLoad<P, R> {
 
     <P> P param(GameDataLoad<P, ?> load);
 
+    /**
+     * @see #load(Comparable, Function)
+     */
+    @Deprecated
     <R, F> AndLoad<R, F> load(Function<R, F> field, Comparable<?> id);
+
+    <R, F> AndLoad<R, F> load(Comparable<?> id, Function<R, F> field);
 
     <R, F> AndLoad<R, F> load(GameDataLoad<?, R> load, Class<F> dataType, Comparable<?> id);
 
@@ -19,6 +25,9 @@ public interface GameDataLoad<P, R> {
 
     <R, F> AndLoad<R, F> loadGlobal(GameDataLoad<?, R> load, Class<F> dataType);
 
+//    <R, D> void find(Function<R, Collection<D>> field, Consumer<FindCondition<D>> condition);
+
+    @Deprecated
     <D, R> void find(Class<D> dataType, Consumer<FindCondition<D>> condition,
         Function<R, Collection<?>> resultField);
   }
@@ -31,7 +40,12 @@ public interface GameDataLoad<P, R> {
     @Deprecated
     AndLoad load(Function<F, ?> from, Function<R, ?> to);
 
-    <F2> AndLoad<R, F2> join(Function<F, ?> from, Function<R, F2> to);
+    <ID extends Comparable<ID>, F2> AndLoad<R, F2> join(Function<F, ID> from, Function<R, F2> to);
+
+    <ID extends Comparable<ID>, F2> AndLoad<R, F2> joinAll(
+        Function<F, Collection<ID>> from, Function<R, Collection<F2>> to);
+
+    <ID extends Comparable<ID>, F2> AndLoad<R, F2> join(Function<F, ID> from, Class<F2> dataType);
   }
 
   void onLoad(Context ctx);

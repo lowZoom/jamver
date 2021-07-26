@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.execute.load.request;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class MissingLoadRequestor {
     for (DataReadyChecker.Missing miss : _missList) {
       Class<?> dataType = miss.dataType();
       Comparable<?> dataId = miss.dataId();
+
+      checkNotNull(dataId, dataType.getName());
       createLoadingItem(dataType, dataId);
 
       //FIXME: 需要一个单独的机制取数据id

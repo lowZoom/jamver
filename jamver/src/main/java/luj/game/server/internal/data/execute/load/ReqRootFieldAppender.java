@@ -4,34 +4,32 @@ import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.internal.data.load.result.LoadResultProxy;
 
-public class ReqRootFieldAppender {
+public enum ReqRootFieldAppender {
+  GET;
 
-  public ReqRootFieldAppender(CacheRequest cacheReq, Function<Object, ?> fieldSpecifier,
+  public CacheRequest.Node append(CacheRequest cacheReq, Function<Object, ?> fieldSpecifier,
       ResultFieldProxy fieldHolder, Comparable<?> dataId) {
-    _cacheReq = cacheReq;
-    _fieldSpecifier = fieldSpecifier;
-    _fieldHolder = fieldHolder;
-    _dataId = dataId;
-  }
-
-  public CacheRequest.Node append() {
-    ResultFieldProxy.Field loadField = _fieldHolder.getField(_fieldSpecifier);
+    ResultFieldProxy.Field loadField = fieldHolder.getField(fieldSpecifier);
 
     String fieldName = loadField.getName();
     Class<?> dataType = loadField.getDataType();
 
-    return _cacheReq.getRoot().addChild(dataType, _dataId,
+    return cacheReq.getRoot().addChild(dataType, dataId,
         (r, v) -> setResultField((LoadResultProxy) r, fieldName, v));
+  }
+
+  public CacheRequest.Node appendV2(CacheRequest cacheReq, Function<Object, ?> fieldSpecifier,
+      ResultFieldProxy fieldHolder, Object nodeOp) {
+    ResultFieldProxy.Field loadField = fieldHolder.getField(fieldSpecifier);
+
+    String fieldName = loadField.getName();
+    Class<?> dataType = loadField.getDataType();
+
+    return cacheReq.getRoot().addChild(dataType,
+        (r, v) -> setResultField((LoadResultProxy) r, fieldName, v), nodeOp);
   }
 
   private void setResultField(LoadResultProxy loadResult, String fieldName, Object value) {
     loadResult.getResultMap().put(fieldName, value);
   }
-
-  private final CacheRequest _cacheReq;
-
-  private final Function<Object, ?> _fieldSpecifier;
-  private final ResultFieldProxy _fieldHolder;
-
-  private final Comparable<?> _dataId;
 }

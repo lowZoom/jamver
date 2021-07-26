@@ -24,9 +24,13 @@ final class LoadContextImpl implements GameDataLoad.Context {
 
   @Override
   public <R, F> GameDataLoad.AndLoad<R, F> load(Function<R, F> field, Comparable<?> id) {
-    CacheRequest.Node node = new ReqRootFieldAppender(_cacheReq,
-        (Function<Object, ?>) field, _fieldHolder, id).append();
+    return load(id, field);
+  }
 
+  @Override
+  public <R, F> GameDataLoad.AndLoad<R, F> load(Comparable<?> id, Function<R, F> field) {
+    CacheRequest.Node node = ReqRootFieldAppender.GET.append(
+        _cacheReq, (Function<Object, ?>) field, _fieldHolder, id);
     return new AndLoadImpl<>(node, _fieldHolder);
   }
 
@@ -39,8 +43,8 @@ final class LoadContextImpl implements GameDataLoad.Context {
 
   @Override
   public <R, F> GameDataLoad.AndLoad<R, F> loadGlobal(Function<R, F> field) {
-    CacheRequest.Node node = new ReqRootFieldAppender(_cacheReq,
-        (Function<Object, ?>) field, _fieldHolder, DataTempProxy.GLOBAL).append();
+    CacheRequest.Node node = ReqRootFieldAppender.GET.append(_cacheReq,
+        (Function<Object, ?>) field, _fieldHolder, DataTempProxy.GLOBAL);
 
     return new AndLoadImpl<>(node, _fieldHolder);
   }
@@ -56,7 +60,7 @@ final class LoadContextImpl implements GameDataLoad.Context {
   @Override
   public <D, R> void find(Class<D> dataType, Consumer<FindCondition<D>> condition,
       Function<R, Collection<?>> resultField) {
-
+    throw new UnsupportedOperationException("find");
   }
 
   private final Object _param;
