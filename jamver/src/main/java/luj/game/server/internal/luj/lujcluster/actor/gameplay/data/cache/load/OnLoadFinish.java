@@ -15,8 +15,8 @@ final class OnLoadFinish implements GameplayDataActor.Handler<LoadFinishMsg> {
 
   @Override
   public void onHandle(Context ctx) {
-    LoadFinishMsg msg = ctx.getMessage(this);
     GameplayDataActor self = ctx.getActorState(this);
+    LoadFinishMsg msg = ctx.getMessage(this);
 
     Class<?> dataType = msg.getDataType();
     Comparable<?> dataId = msg.getDataId();

@@ -25,7 +25,9 @@ public class ServerBeanCollector {
       ctx.register(ClusterProtoPlugin.class);
       ctx.register(NetAllPlugin.class);
 
+      ctx.register(DataCommandCollect.class);
       ctx.register(ServerBeanRoot.class);
+
       ctx.refresh();
 
       return ctx.getBean(ServerBeanRoot.class);

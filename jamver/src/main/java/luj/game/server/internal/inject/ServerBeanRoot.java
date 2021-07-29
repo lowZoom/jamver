@@ -11,6 +11,7 @@ import luj.game.server.api.net.GameAcceptHandler;
 import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.api.plugin.JamverBootRootInit;
+import luj.game.server.api.plugin.JamverDynamicRootInit;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetAllPlugin;
@@ -26,15 +27,15 @@ public class ServerBeanRoot {
   }
 
   public List<GameDataCommand<?, ?>> getDataCommandList() {
-    return _dataCommandList;
+    return _dataCommandCollect.getDataCommandList();
   }
 
   public List<GameDataLoad<?, ?>> getDataLoadList() {
-    return _dataLoadList;
+    return _dataCommandCollect.getDataLoadList();
   }
 
   public List<GameDataCommandGroup> getCommandGroupList() {
-    return _commandGroupList;
+    return _dataCommandCollect.getCommandGroupList();
   }
 
   public List<ServerMessageHandler<?>> getClusterMessageList() {
@@ -73,17 +74,15 @@ public class ServerBeanRoot {
     return _netAllPlugin;
   }
 
+  public JamverDynamicRootInit getDynamicInitPlugin() {
+    return _dynamicInitPlugin;
+  }
+
   @Autowired(required = false)
   private List<GameStartListener> _startListenerList;
 
-  @Autowired(required = false)
-  private List<GameDataCommand<?, ?>> _dataCommandList;
-
-  @Autowired(required = false)
-  private List<GameDataLoad<?, ?>> _dataLoadList;
-
-  @Autowired(required = false)
-  private List<GameDataCommandGroup> _commandGroupList;
+  @Autowired
+  private DataCommandCollect _dataCommandCollect;
 
   @Autowired(required = false)
   private List<ServerMessageHandler<?>> _clusterMessageList;
@@ -111,4 +110,7 @@ public class ServerBeanRoot {
 
   @Autowired
   private NetAllPlugin _netAllPlugin;
+
+  @Autowired(required = false)
+  private JamverDynamicRootInit _dynamicInitPlugin;
 }

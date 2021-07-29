@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import luj.ava.spring.Internal;
 import luj.cache.api.CacheSession;
@@ -18,6 +19,7 @@ import luj.game.server.internal.data.command.collect.CommandMapCollector;
 import luj.game.server.internal.data.command.collect.group.GroupMapCollector;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
+import luj.game.server.internal.luj.lujcluster.actor.dynamic.DynamicRootActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.GameplayEventActor;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
@@ -37,8 +39,8 @@ final class OnNodeStart implements NodeStartListener {
   public void onStart(Context ctx) {
     JambeanInLujcluster param = ctx.getStartParam();
 
-    Map<String, GameplayDataActor.CommandKit> cmdMap = new CommandMapCollector(
-        param.getDataCommandList(), param.getDataLoadList()).collect();
+    Map<String, GameplayDataActor.CommandKit> cmdMap = new ConcurrentHashMap<>(
+        new CommandMapCollector(param.getDataCommandList(), param.getDataLoadList()).collect());
 
     Map<Class<?>, GameProtoHandler<?>> handlerMap = new ProtoHandlerMapCollector(
         param.getProtoHandlerList()).collect();
@@ -47,11 +49,12 @@ final class OnNodeStart implements NodeStartListener {
         ctx.createApplicationActor(dataActor(param, cmdMap)),
         ctx.createApplicationActor(eventActor(param)),
         ctx.createApplicationActor(clusterActor(param, cmdMap)),
-        ctx.createApplicationActor(networkActor(param, handlerMap, cmdMap))
+        ctx.createApplicationActor(networkActor(param, handlerMap, cmdMap)),
+        ctx.createApplicationActor(dynamicActor(param))
     );
 
-    List<Tellable> refList = ImmutableList.of(allRef.getDataRef(),
-        allRef.getEventRef(), allRef.getClusterRef(), allRef.getNetworkRef());
+    List<Tellable> refList = ImmutableList.of(allRef.getDataRef(), allRef.getEventRef(),
+        allRef.getClusterRef(), allRef.getNetworkRef(), allRef.getDynamicRef());
 
     CountDownLatch startLatch = new CountDownLatch(refList.size());
     StartRefMsg msg = new StartRefMsg(allRef, startLatch);
@@ -95,5 +98,9 @@ final class OnNodeStart implements NodeStartListener {
         clusterParam.getNetDisconnectHandler(), handlerMap, cmdMap,
         clusterParam.getLujnet(), clusterParam.getNetReceivePlugin(), clusterParam.getNetParam(),
         clusterParam.getLujbean());
+  }
+
+  private DynamicRootActor dynamicActor(JambeanInLujcluster clusterParam) {
+    return DynamicRootActor.create(clusterParam);
   }
 }

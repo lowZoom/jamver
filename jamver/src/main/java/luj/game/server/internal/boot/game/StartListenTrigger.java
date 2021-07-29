@@ -18,9 +18,10 @@ public class StartListenTrigger {
     StartContextImpl ctx = new StartContextImpl();
     JambeanInLujcluster startParam = _actorState.getStartParam();
 
+    ctx._startParam = startParam.getAppStartParam();
     ctx._service = makeService(startParam);
-    List<GameStartListener> listnerList = startParam.getStartListenerList();
 
+    List<GameStartListener> listnerList = startParam.getStartListenerList();
     for (GameStartListener listener : nonNull(listnerList)) {
       listener.onStart(ctx);
     }

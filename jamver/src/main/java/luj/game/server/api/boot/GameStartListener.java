@@ -19,6 +19,8 @@ public interface GameStartListener {
 
   interface Context {
 
+    <P> P param();
+
     Service service();
   }
 

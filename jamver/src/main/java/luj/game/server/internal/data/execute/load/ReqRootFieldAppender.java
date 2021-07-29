@@ -1,5 +1,7 @@
 package luj.game.server.internal.data.execute.load;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.internal.data.load.result.LoadResultProxy;
@@ -9,6 +11,7 @@ public enum ReqRootFieldAppender {
 
   public CacheRequest.Node append(CacheRequest cacheReq, Function<Object, ?> fieldSpecifier,
       ResultFieldProxy fieldHolder, Comparable<?> dataId) {
+    checkNotNull(dataId);
     ResultFieldProxy.Field loadField = fieldHolder.getField(fieldSpecifier);
 
     String fieldName = loadField.getName();

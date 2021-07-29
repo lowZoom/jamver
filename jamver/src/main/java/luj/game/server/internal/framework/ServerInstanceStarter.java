@@ -57,6 +57,7 @@ public class ServerInstanceStarter {
         beanRoot.getDataAllPlugin(),
         beanRoot.getClusterProtoPlugin(),
         beanRoot.getNetAllPlugin(),
+        beanRoot.getDynamicInitPlugin(),
         LujCache.start(internalCtx), LujBean.start(),
         LujNet.create(internalCtx), startCfg.networkConfig(),
         startCfg.startParam()));

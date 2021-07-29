@@ -10,12 +10,11 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
-import luj.game.server.api.event.GameEventListener.Service;
 import luj.game.server.api.net.GameAcceptHandler;
 import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
+import luj.game.server.api.plugin.JamverDynamicRootInit;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
-import luj.game.server.internal.boot.plugin.BootStartInvoker.Network;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetAllPlugin;
@@ -26,16 +25,16 @@ public class JambeanInLujcluster {
   public JambeanInLujcluster(List<GameStartListener> startListenerList,
       List<GameDataCommand<?, ?>> dataCommandList, List<GameDataLoad<?, ?>> dataLoadList,
       List<GameDataCommandGroup> commandGroupList,
-      List<GameEventListener<?>> eventListenerList, Service eventListenService,
+      List<GameEventListener<?>> eventListenerList, GameEventListener.Service eventListenService,
       List<ServerMessageHandler<?>> clusterMessageList, List<ServerJoinListener> clusterJoinList,
       GameAcceptHandler netAcceptHandler,
       GameDisconnectHandler netDisconnectHandler,
       List<GameProtoHandler<?>> protoHandlerList,
       DataAllPlugin dataAllPlugin,
       ClusterProtoPlugin clusterProtoPlugin,
-      NetAllPlugin netReceivePlugin,
+      NetAllPlugin netReceivePlugin, JamverDynamicRootInit dynamicInitPlugin,
       CacheSession lujcache, BeanContext lujbean,
-      NetContext lujnet, Network netParam,
+      NetContext lujnet, BootStartInvoker.Network netParam,
       Object appStartParam) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
@@ -51,6 +50,7 @@ public class JambeanInLujcluster {
     _dataAllPlugin = dataAllPlugin;
     _clusterProtoPlugin = clusterProtoPlugin;
     _netReceivePlugin = netReceivePlugin;
+    _dynamicInitPlugin = dynamicInitPlugin;
     _lujcache = lujcache;
     _lujbean = lujbean;
     _lujnet = lujnet;
@@ -114,6 +114,10 @@ public class JambeanInLujcluster {
     return _netReceivePlugin;
   }
 
+  public JamverDynamicRootInit getDynamicInitPlugin() {
+    return _dynamicInitPlugin;
+  }
+
   public CacheSession getLujcache() {
     return _lujcache;
   }
@@ -153,6 +157,7 @@ public class JambeanInLujcluster {
   private final DataAllPlugin _dataAllPlugin;
   private final ClusterProtoPlugin _clusterProtoPlugin;
   private final NetAllPlugin _netReceivePlugin;
+  private final JamverDynamicRootInit _dynamicInitPlugin;
 
   private final CacheSession _lujcache;
   private final BeanContext _lujbean;

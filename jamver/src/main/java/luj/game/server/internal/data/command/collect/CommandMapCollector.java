@@ -2,7 +2,7 @@ package luj.game.server.internal.data.command.collect;
 
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 import luj.ava.reflect.type.TypeX;
@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 public class CommandMapCollector {
 
-  public CommandMapCollector(List<GameDataCommand<?, ?>> commandList,
-      List<GameDataLoad<?, ?>> loadList) {
+  public CommandMapCollector(Collection<GameDataCommand<?, ?>> commandList,
+      Collection<GameDataLoad<?, ?>> loadList) {
     _commandList = commandList;
     _loadList = loadList;
   }
@@ -57,7 +57,7 @@ public class CommandMapCollector {
         .orElseThrow(() -> new UnsupportedOperationException(loadType.getName()));
   }
 
-  private final List<GameDataCommand<?, ?>> _commandList;
+  private final Collection<GameDataCommand<?, ?>> _commandList;
 
-  private final List<GameDataLoad<?, ?>> _loadList;
+  private final Collection<GameDataLoad<?, ?>> _loadList;
 }
