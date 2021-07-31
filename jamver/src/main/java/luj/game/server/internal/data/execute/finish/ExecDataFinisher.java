@@ -10,6 +10,10 @@ import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.instance.value.change.DataDirtyChecker;
 import luj.game.server.internal.data.instance.value.change.DataModificationApplier;
 
+/**
+ * @see ExecDataFinisherV2
+ */
+@Deprecated
 public class ExecDataFinisher {
 
   public ExecDataFinisher(CacheContainer dataCache, Tellable saveRef, List<DataTempProxy> createLog,

@@ -16,6 +16,10 @@ import luj.game.server.internal.data.types.map.DataMapFactory;
 import luj.game.server.internal.data.types.map.history.MapWithHistory;
 import luj.game.server.internal.data.types.set.DataSetFactory;
 
+/**
+ * @see luj.game.server.internal.data.instancev2.DataEntityCreator
+ */
+@Deprecated
 public class DataInstanceCreator {
 
   public static DataInstanceCreator create(Class<?> dataType) {

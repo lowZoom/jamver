@@ -14,11 +14,6 @@ public class CacheItem {
     return new CacheItem(null, dataType);
   }
 
-  public CacheItem(Class<?> dataType, DataType dataTypeV2) {
-    _dataType = dataType;
-    _dataTypeV2 = dataTypeV2;
-  }
-
   public DataPresence getPresence() {
     return _presence;
   }
@@ -45,6 +40,15 @@ public class CacheItem {
 
   public Class<?> getDataType() {
     return _dataType;
+  }
+
+  public DataType getDataTypeV2() {
+    return _dataTypeV2;
+  }
+
+  CacheItem(Class<?> dataType, DataType dataTypeV2) {
+    _dataType = dataType;
+    _dataTypeV2 = dataTypeV2;
   }
 
   private DataPresence _presence;

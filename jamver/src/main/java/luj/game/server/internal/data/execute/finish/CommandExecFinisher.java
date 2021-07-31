@@ -11,7 +11,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
-import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
@@ -39,8 +39,8 @@ public class CommandExecFinisher {
 //    ctx.getLogger().debug("执行数据CMD：{}", cmdType.getName());
     LOG.debug("[game]执行数据CMD：{}", _cmdType);
 
-    List<DataTempProxy> createLog = new ArrayList<>();
-    List<DataTempProxy> loadLog = new ArrayList<>();
+    List<DataEntity> createLog = new ArrayList<>();
+    List<DataEntity> loadLog = new ArrayList<>();
 
     LoadResultProxy resultProxy = LoadResultProxy.create(_loadResultType);
     DataServiceImpl dataSvc = new DataServiceImpl(
@@ -56,7 +56,7 @@ public class CommandExecFinisher {
     //TODO: 出错的时候要清除修改
     new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
 
-    new ExecDataFinisher(_dataCache, _saveRef, createLog, loadLog).finish();
+    ExecDataFinisherV2.create(_dataCache, _saveRef, createLog, loadLog).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(CommandExecFinisher.class);

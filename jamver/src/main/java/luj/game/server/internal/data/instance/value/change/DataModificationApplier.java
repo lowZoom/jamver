@@ -8,6 +8,10 @@ import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
 public class DataModificationApplier {
 
+  /**
+   * @see #createV2
+   */
+  @Deprecated
   public static DataModificationApplier create(DataTempProxy data) {
     return new DataModificationApplier(data.getDataMapV2());
   }

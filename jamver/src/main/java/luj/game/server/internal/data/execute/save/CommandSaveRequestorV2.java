@@ -9,11 +9,8 @@ import java.util.Map;
 import java.util.function.Function;
 import luj.ava.collection.map.MapX;
 import luj.cluster.api.actor.Tellable;
-import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.instance.value.change.ChangedEncodable;
 import luj.game.server.internal.data.instancev2.DataEntity;
-import luj.game.server.internal.data.save.DataTransientChecker;
-import luj.game.server.internal.data.save.create.DataCreateRequestor;
 import luj.game.server.internal.data.save.create.DataCreateRequestorV2;
 import luj.game.server.internal.data.types.HasOp;
 import luj.game.server.internal.data.types.map.history.MapWithHistory;
@@ -24,9 +21,10 @@ import scala.Tuple2;
 
 public class CommandSaveRequestorV2 {
 
-  public CommandSaveRequestorV2(Tellable saveRef, List<DataEntity> createLog,
+  public CommandSaveRequestorV2(Tellable saveRef, String idField, List<DataEntity> createLog,
       List<DataEntity> modifyLog) {
     _saveRef = saveRef;
+    _idField = idField;
     _createLog = createLog;
     _modifyLog = modifyLog;
   }
@@ -34,7 +32,7 @@ public class CommandSaveRequestorV2 {
   public void request() {
     //TODO: 不分开，作为一个事务一起发
 
-    new DataCreateRequestorV2(_createLog, _saveRef).request();
+    new DataCreateRequestorV2(_createLog, _idField, _saveRef).request();
 
     _modifyLog.stream()
         .filter(d -> !isTransient(d))
@@ -89,6 +87,7 @@ public class CommandSaveRequestorV2 {
   }
 
   private final Tellable _saveRef;
+  private final String _idField;
 
   private final List<DataEntity> _createLog;
   private final List<DataEntity> _modifyLog;

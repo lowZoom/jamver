@@ -72,7 +72,9 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
     GameplayDataActor.CommandKit kit = getKit(actor.getCommandMap(), msg.type());
     elem._kit = kit;
 
-    elem._req = DataLoadRequestMaker.create(kit, msg.param(), actor.getLujcache()).make();
+    elem._req = DataLoadRequestMaker.create(kit,
+        msg.param(), actor.getDataCache(), actor.getLujcache()).make();
+
     return elem;
   }
 

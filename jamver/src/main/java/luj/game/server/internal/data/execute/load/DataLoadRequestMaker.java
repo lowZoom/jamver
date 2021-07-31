@@ -1,6 +1,7 @@
 package luj.game.server.internal.data.execute.load;
 
 import luj.cache.api.CacheSession;
+import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -13,8 +14,9 @@ public class DataLoadRequestMaker {
   }
 
   public static DataLoadRequestMaker create(GameplayDataActor.CommandKit cmdKit,
-      Object param, CacheSession lujcache) {
-    return new DataLoadRequestMaker(cmdKit, lujcache, (r, f) -> new LoadContextImpl(param, r, f));
+      Object param, CacheContainer dataCache, CacheSession lujcache) {
+    return new DataLoadRequestMaker(cmdKit, lujcache,
+        (r, f) -> new LoadContextImpl(param, dataCache, r, f));
   }
 
   public DataLoadRequestMaker(GameplayDataActor.CommandKit cmdKit,

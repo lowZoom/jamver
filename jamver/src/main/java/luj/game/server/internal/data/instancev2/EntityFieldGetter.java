@@ -21,23 +21,27 @@ public enum EntityFieldGetter {
     Method fieldMethod = fieldMap.get(field);
     Class<?> fieldType = fieldMethod.getReturnType();
 
-    Object newValue = getInitValue(fieldType);
+    Object newValue = getInitValue(fieldType, entity, field);
     MapDataUpdater.GET.update(valMap, field, newValue);
 
     return newValue;
   }
 
-  private Object getInitValue(Class<?> type) {
+  private Object getInitValue(Class<?> type, DataEntity data, String fieldName) {
     if (type == int.class || type == Integer.class) {
       return INT_ZERO;
     }
     if (type == long.class || type == Long.class) {
       return LONG_ZERO;
     }
+    if (type == String.class) {
+      return "";
+    }
     if (type == Set.class) {
       return DataSetFactory.GET.create();
     }
-    throw new UnsupportedOperationException("未知类型：" + type.getName());
+    throw new UnsupportedOperationException("未知类型：" + type.getName()
+        + "，字段：" + data.getDataType().getName() + "#" + fieldName);
   }
 
   private static final Integer INT_ZERO = 0;

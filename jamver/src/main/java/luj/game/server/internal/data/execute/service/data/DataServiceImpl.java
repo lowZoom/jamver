@@ -1,6 +1,5 @@
 package luj.game.server.internal.data.execute.service.data;
 
-import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -10,17 +9,15 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.command.service.CommandServiceFactory;
-import luj.game.server.internal.data.instance.DataInstanceCreator;
-import luj.game.server.internal.data.instance.DataTempProxy;
-import luj.game.server.internal.data.load.result.DataResultFactory;
+import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.load.result.DataResultProxy;
-import luj.game.server.internal.data.service.set.FieldImpl;
+import luj.game.server.internal.data.load.result.DataResultProxyV2;
+import luj.game.server.internal.data.service.set.FieldImpl2;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
 
 public class DataServiceImpl implements GameDataCommand.Data {
 
-  public DataServiceImpl(Tellable dataRef, List<DataTempProxy> createLog,
+  public DataServiceImpl(Tellable dataRef, List<DataEntity> createLog,
       ServerMessageHandler.Server remoteRef, Map<String, GameplayDataActor.CommandKit> commandMap,
       BeanContext lujbean) {
     _dataRef = dataRef;
@@ -30,7 +27,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
     _lujbean = lujbean;
   }
 
-  public void specifySetField(DataResultProxy data, String fieldName) {
+  public void specifySetField(DataResultProxyV2 data, String fieldName) {
     _curData = data;
     _curField = fieldName;
   }
@@ -38,11 +35,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
   @SuppressWarnings("unchecked")
   @Override
   public <T> T create(Class<T> dataType) {
-    DataTempProxy dataObj = DataInstanceCreator.create(dataType).create();
-    _createLog.add(dataObj);
-
-    DataResultProxy result = new DataResultFactory(dataObj, this::specifySetField).create();
-    return (T) result.getInstance();
+    return (T) DataCreateRunner.GET.run(dataType, _createLog, this::specifySetField);
   }
 
   /**
@@ -57,14 +50,13 @@ public class DataServiceImpl implements GameDataCommand.Data {
   @Override
   public <T> Field<T> set(Supplier<T> field) {
     field.get();
-    return new FieldImpl<>(_curData, _curField);
+    return new FieldImpl2<>(_curData, _curField);
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public <T extends Comparable<T>> T id(Object data) {
-    DataResultProxy proxy = (DataResultProxy) Proxy.getInvocationHandler(data);
-    return (T) proxy.getData().getDataMap().get(DataTempProxy.ID);
+    return (T) DataIdRunner.GET.run(data);
   }
 
   @Override
@@ -86,11 +78,11 @@ public class DataServiceImpl implements GameDataCommand.Data {
 
 //  private static final Logger LOG = LoggerFactory.getLogger(DataServiceImpl.class);
 
-  private DataResultProxy _curData;
+  private DataResultProxyV2 _curData;
   private String _curField;
 
   private final Tellable _dataRef;
-  private final List<DataTempProxy> _createLog;
+  private final List<DataEntity> _createLog;
 
   private final ServerMessageHandler.Server _remoteRef;
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;

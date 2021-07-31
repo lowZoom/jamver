@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 import com.google.common.collect.ImmutableList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
@@ -14,9 +15,11 @@ import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.CommandQueueWaker;
-import luj.game.server.internal.data.instance.DataInstanceCreator;
 import luj.game.server.internal.data.instance.DataTempProxy;
-import luj.game.server.internal.data.save.create.DataCreateRequestor;
+import luj.game.server.internal.data.instancev2.DataEntity;
+import luj.game.server.internal.data.instancev2.DataEntityCreator;
+import luj.game.server.internal.data.instancev2.DataType;
+import luj.game.server.internal.data.save.create.DataCreateRequestorV2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,18 +50,20 @@ public class CacheLoadFinisher {
 
   private void updateCache() {
     String dataKey = CacheKeyMaker.create(_dataType, _dataId).make();
-
     CacheItem cacheItem = _dataCache.get(dataKey);
     checkNotNull(cacheItem, dataKey);
     checkState(cacheItem.getPresence() == DataPresence.LOADING, dataKey);
+
+    DataType typeV2 = cacheItem.getDataTypeV2();
+    checkState(Objects.equals(typeV2.getName(), _dataType.getName()));
 
     LOG.debug("[game]缓存项读取完成：{}", dataKey);
     cacheItem.setPresence(_present ? DataPresence.PRESENT : DataPresence.ABSENT);
 
     if (_present) {
       Map<String, Object> valueMap = new DataValueDecoder(_dataValue).decode();
-      DataTempProxy dataObj = new DataInstanceCreator(_dataType, valueMap).create();
-      cacheItem.setDataObj(dataObj);
+      DataEntity dataObj = new DataEntityCreator(typeV2, _dataId, valueMap).create();
+      cacheItem.setDataObjV2(dataObj);
     }
 
     handleGlobalAbsent(cacheItem, dataKey);
@@ -73,14 +78,14 @@ public class CacheLoadFinisher {
     checkState(dataPresence == DataPresence.ABSENT, dataKey);
     checkState(_dataId.equals(DataTempProxy.GLOBAL));
 
-    Class<?> dataType = item.getDataType();
-    DataTempProxy dataObj = DataInstanceCreator.create(dataType).create();
-    dataObj.getDataMap().put(DataTempProxy.ID, DataTempProxy.GLOBAL);
+    DataType dataType = item.getDataTypeV2();
+    DataEntity dataObj = DataEntityCreator.create(dataType, DataTempProxy.GLOBAL).create();
+//    dataObj.getDataMap().put(DataTempProxy.ID, DataTempProxy.GLOBAL);
 
     item.setPresence(DataPresence.PRESENT);
-    item.setDataObj(dataObj);
+    item.setDataObjV2(dataObj);
 
-    new DataCreateRequestor(ImmutableList.of(dataObj), _saveRef).request();
+    DataCreateRequestorV2.create(ImmutableList.of(dataObj), _saveRef).request();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(CacheLoadFinisher.class);

@@ -12,10 +12,16 @@ import luj.game.server.internal.data.instancev2.DataEntity;
 
 public class ExecDataFinisherV2 {
 
-  public ExecDataFinisherV2(CacheContainer dataCache, Tellable saveRef, List<DataEntity> createLog,
-      List<DataEntity> loadLog) {
+  public static ExecDataFinisherV2 create(CacheContainer dataCache, Tellable saveRef,
+      List<DataEntity> createLog, List<DataEntity> loadLog) {
+    return new ExecDataFinisherV2(dataCache, saveRef, "_luj$id", createLog, loadLog);
+  }
+
+  public ExecDataFinisherV2(CacheContainer dataCache, Tellable saveRef, String idField,
+      List<DataEntity> createLog, List<DataEntity> loadLog) {
     _dataCache = dataCache;
     _saveRef = saveRef;
+    _idField = idField;
     _createLog = createLog;
     _loadLog = loadLog;
   }
@@ -31,7 +37,7 @@ public class ExecDataFinisherV2 {
     }
 
     // 变动的数据发起写库
-    new CommandSaveRequestorV2(_saveRef, _createLog, modifyLog).request();
+    new CommandSaveRequestorV2(_saveRef, _idField, _createLog, modifyLog).request();
 
     // 将已有数据的变更应用到数据上
     for (DataEntity data : modifyLog) {
@@ -45,7 +51,9 @@ public class ExecDataFinisherV2 {
   }
 
   private final CacheContainer _dataCache;
+
   private final Tellable _saveRef;
+  private final String _idField;
 
   private final List<DataEntity> _createLog;
   private final List<DataEntity> _loadLog;

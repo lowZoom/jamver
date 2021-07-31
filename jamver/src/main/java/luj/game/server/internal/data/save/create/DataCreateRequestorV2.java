@@ -12,8 +12,13 @@ import scala.Tuple2;
 
 public class DataCreateRequestorV2 {
 
-  public DataCreateRequestorV2(List<DataEntity> createList, Tellable saveRef) {
+  public static DataCreateRequestorV2 create(List<DataEntity> createList, Tellable saveRef) {
+    return new DataCreateRequestorV2(createList, "_luj$id", saveRef);
+  }
+
+  public DataCreateRequestorV2(List<DataEntity> createList, String idField, Tellable saveRef) {
     _createList = createList;
+    _idField = idField;
     _saveRef = saveRef;
   }
 
@@ -38,11 +43,12 @@ public class DataCreateRequestorV2 {
         .forEach(t -> initMap.put(t._1, t._2.encodeInit()));
 
     DataCreateMsg msg = new DataCreateMsg(
-        dataObj.getDataType().getName(), dataObj.getDataId(), "_id", initMap);
+        dataObj.getDataType().getName(), dataObj.getDataId(), _idField, initMap);
     _saveRef.tell(msg);
   }
 
   private final List<DataEntity> _createList;
 
+  private final String _idField;
   private final Tellable _saveRef;
 }

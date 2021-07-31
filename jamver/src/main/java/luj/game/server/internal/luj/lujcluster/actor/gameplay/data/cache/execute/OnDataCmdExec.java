@@ -41,10 +41,10 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     //TODO: 如果没有，进行数据借出锁定，创建结果对象，以供CMD使用
 
-    CacheSession lujcache = actor.getLujcache();
-    CacheRequest cacheReq = DataLoadRequestMaker.create(cmdKit, param, lujcache).make();
-
     CacheContainer dataCache = actor.getDataCache();
+    CacheSession lujcache = actor.getLujcache();
+    CacheRequest cacheReq = DataLoadRequestMaker.create(cmdKit, param, dataCache, lujcache).make();
+
     DataReadyChecker.Result readyResult = new DataReadyChecker(
         ImmutableList.of(cacheReq), dataCache).check();
 

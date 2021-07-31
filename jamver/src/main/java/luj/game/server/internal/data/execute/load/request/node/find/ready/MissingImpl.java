@@ -1,4 +1,6 @@
-package luj.game.server.internal.data.execute.load.missing;
+package luj.game.server.internal.data.execute.load.request.node.find.ready;
+
+import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 
 final class MissingImpl implements DataReadyChecker.Missing {
 

@@ -10,15 +10,15 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
 import luj.game.server.internal.data.execute.finish.ExecFinishWalker;
-import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
-import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.instancev2.DataEntity;
+import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 public class CmdGroupExecutor {
 
   public CmdGroupExecutor(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
-      List<DataTempProxy> createLog, List<DataTempProxy> loadLog, CacheContainer dataCache,
+      List<DataEntity> createLog, List<DataEntity> loadLog, CacheContainer dataCache,
       Tellable dataRef, ServerMessageHandler.Server remoteRef,
       Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
     _cmdGroup = cmdGroup;
@@ -74,8 +74,8 @@ public class CmdGroupExecutor {
   private final GameDataCommandGroup _cmdGroup;
   private final List<GroupReqElement> _elemList;
 
-  private final List<DataTempProxy> _createLog;
-  private final List<DataTempProxy> _loadLog;
+  private final List<DataEntity> _createLog;
+  private final List<DataEntity> _loadLog;
 
   private final CacheContainer _dataCache;
   private final Tellable _dataRef;

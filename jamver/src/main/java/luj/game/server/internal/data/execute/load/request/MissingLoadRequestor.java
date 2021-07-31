@@ -11,6 +11,7 @@ import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.instance.DataTempProxy;
+import luj.game.server.internal.data.instancev2.DataType;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.load.DataLoadMsg;
 
 public class MissingLoadRequestor {
@@ -46,9 +47,12 @@ public class MissingLoadRequestor {
     }
   }
 
-  private void createLoadingItem(Class<?> dataType, Comparable<?> dataId) {
-    String key = CacheKeyMaker.create(dataType, dataId).make();
+  private void createLoadingItem(Class<?> dataClass, Comparable<?> dataId) {
+    String key = CacheKeyMaker.create(dataClass, dataId).make();
     checkState(_dataCache.get(key) == null, key);
+
+    //TODO: 从一个总缓存里拿
+    DataType dataType = DataType.create(dataClass);
 
     CacheItem cacheItem = CacheItem.create(dataType);
     cacheItem.setPresence(DataPresence.LOADING);

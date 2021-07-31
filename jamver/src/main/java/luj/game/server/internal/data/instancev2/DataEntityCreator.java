@@ -9,27 +9,26 @@ import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
 public class DataEntityCreator {
 
-  public static DataEntityCreator create(Class<?> dataType, Comparable<?> dataId) {
+  public static DataEntityCreator create(DataType dataType, Comparable<?> dataId) {
     return new DataEntityCreator(dataType, dataId, ImmutableMap.of());
   }
 
-  public DataEntityCreator(Class<?> dataType, Comparable<?> dataId, Map<String, Object> initValue) {
+  public DataEntityCreator(DataType dataType, Comparable<?> dataId, Map<String, Object> initValue) {
     _dataType = dataType;
     _dataId = dataId;
     _initValue = initValue;
   }
 
   public DataEntity create() {
-    checkState(_dataType.isInterface(), _dataType);
+    Class<?> dataClass = _dataType.getClassCache();
+
+    checkState(dataClass.isInterface(), _dataType);
     HashMap<String, Object> dataMap = new HashMap<>(_initValue);
 
-    //FIXME: TEMP
-    DataType type = new DataType(_dataType.getName(), false);
-
-    return new DataEntity(type, _dataId, new MapWithHistory<>(dataMap));
+    return new DataEntity(_dataType, _dataId, new MapWithHistory<>(dataMap));
   }
 
-  private final Class<?> _dataType;
+  private final DataType _dataType;
 
   private final Comparable<?> _dataId;
   private final Map<String, Object> _initValue;
