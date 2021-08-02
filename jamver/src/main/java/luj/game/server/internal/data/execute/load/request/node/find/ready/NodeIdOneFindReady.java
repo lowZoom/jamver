@@ -11,7 +11,7 @@ import luj.game.server.internal.data.instancev2.DataType;
 public enum NodeIdOneFindReady {
   GET;
 
-  public Object find(CacheContainer cache, Class<?> dataType, Long dataId,
+  public Object find(CacheContainer cache, Class<?> dataType, Comparable<?> dataId,
       List<DataReadyChecker.Missing> missingOut, List<CacheItem> lockedOrLoadingOut) {
     CacheItem dataItem = cacheGet(cache, dataType, dataId);
     logUnusable(dataItem, dataType, dataId, missingOut, lockedOrLoadingOut);

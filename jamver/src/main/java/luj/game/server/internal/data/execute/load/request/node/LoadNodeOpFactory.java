@@ -12,7 +12,7 @@ public class LoadNodeOpFactory {
     _dataCache = dataCache;
   }
 
-  public LoadNodeOp createIdOne(Long id) {
+  public LoadNodeOp createIdOne(Comparable<?> id) {
     NodeIdOneImpl op = new NodeIdOneImpl();
     op._dataId = checkNotNull(id);
     op._dataCache = _dataCache;

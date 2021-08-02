@@ -27,5 +27,5 @@ final class NodeIdOneImpl implements LoadNodeOp {
 
   CacheContainer _dataCache;
 
-  Long _dataId;
+  Comparable<?> _dataId;
 }
