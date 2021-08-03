@@ -1,10 +1,10 @@
 package luj.game.server.internal.data.load.io;
 
-import luj.game.server.api.plugin.JamverDataLoadLoad;
+import luj.game.server.api.plugin.JamverDataLoadIo;
 
-final class LoadContextImpl implements JamverDataLoadLoad.Context {
+final class LoadContextImpl implements JamverDataLoadIo.Context {
 
-  LoadContextImpl(Object loadState, JamverDataLoadLoad.Data dataReq) {
+  LoadContextImpl(Object loadState, JamverDataLoadIo.Data dataReq) {
     _loadState = loadState;
     _dataReq = dataReq;
   }
@@ -16,11 +16,11 @@ final class LoadContextImpl implements JamverDataLoadLoad.Context {
   }
 
   @Override
-  public JamverDataLoadLoad.Data getDataRequest() {
+  public JamverDataLoadIo.Data getDataRequest() {
     return _dataReq;
   }
 
   private final Object _loadState;
 
-  private final JamverDataLoadLoad.Data _dataReq;
+  private final JamverDataLoadIo.Data _dataReq;
 }

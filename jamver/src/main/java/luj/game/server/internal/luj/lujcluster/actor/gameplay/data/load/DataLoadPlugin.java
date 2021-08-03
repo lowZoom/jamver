@@ -1,7 +1,7 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load;
 
 import luj.game.server.api.plugin.JamverDataLoadInit;
-import luj.game.server.api.plugin.JamverDataLoadLoad;
+import luj.game.server.api.plugin.JamverDataLoadIo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -13,7 +13,7 @@ public class DataLoadPlugin {
     return _loadInit;
   }
 
-  public JamverDataLoadLoad getDataLoader() {
+  public JamverDataLoadIo getDataLoader() {
     return _dataLoader;
   }
 
@@ -21,5 +21,5 @@ public class DataLoadPlugin {
   private JamverDataLoadInit _loadInit;
 
   @Autowired(required = false)
-  private JamverDataLoadLoad _dataLoader;
+  private JamverDataLoadIo _dataLoader;
 }

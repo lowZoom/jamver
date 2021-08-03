@@ -14,6 +14,7 @@ import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
 import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 @Internal
@@ -21,13 +22,13 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
   @Override
   public void onHandle(Context ctx) {
-    GameplayDataActor actor = ctx.getActorState(this);
+    GameplayDataActor self = ctx.getActorState(this);
     DatacmdExecMsg msg = ctx.getMessage(this);
 
     String cmdType = msg.getCmdType();
 //    LOG.debug("尝试执行CMD：{}", cmdType.getSimpleName());
 
-    Map<String, GameplayDataActor.CommandKit> cmdMap = actor.getCommandMap();
+    Map<String, GameplayDataActor.CommandKit> cmdMap = self.getCommandMap();
     Object param = msg.getParam();
 
     GameplayDataActor.CommandKit cmdKit = cmdMap.get(cmdType);
@@ -41,8 +42,8 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     //TODO: 如果没有，进行数据借出锁定，创建结果对象，以供CMD使用
 
-    CacheContainer dataCache = actor.getDataCache();
-    CacheSession lujcache = actor.getLujcache();
+    CacheContainer dataCache = self.getDataCache();
+    CacheSession lujcache = self.getLujcache();
     CacheRequest cacheReq = DataLoadRequestMaker.create(cmdKit, param, dataCache, lujcache).make();
 
     DataReadyChecker.Result readyResult = new DataReadyChecker(
@@ -51,19 +52,21 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     //TODO: 还有客户端网络连接
     ServerMessageHandler.Server remoteRef = msg.getRemoteRef();
 
+    DataIdGenState idState = self.getIdGenState();
     if (!readyResult.isReady()) {
       // 发起数据读取
-      MissingLoadRequestor.create(readyResult.getMissingList(),
-          dataCache, actor.getLoadRef()).request();
+      new MissingLoadRequestor(readyResult.getMissingList(),
+          idState.getIdField(), dataCache, self.getLoadRef()).request();
 
       // 加入等待队列
-      new WaitQueueAdder(actor.getCommandQueue(), cmdKit, param, cacheReq, remoteRef).add();
+      new WaitQueueAdder(self.getCommandQueue(), cmdKit, param, cacheReq, remoteRef).add();
 
       return;
     }
 
-    new CommandExecFinisher(cmdKit.getLoadResultType(), cacheReq, dataCache, cmdType, cmdKit,
-        param, ctx.getActorRef(), actor.getSaveRef(), remoteRef, actor.getLujbean()).finish();
+    Ref selfRef = ctx.getActorRef();
+    new CommandExecFinisher(cmdKit.getLoadResultType(), cacheReq, dataCache, idState,
+        cmdType, cmdKit, param, selfRef, self.getSaveRef(), remoteRef, self.getLujbean()).finish();
   }
 
 //  private static final Logger LOG = LoggerFactory.getLogger(OnDatacmdExec.class);

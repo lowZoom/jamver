@@ -15,6 +15,7 @@ import luj.game.server.internal.data.execute.group.GroupExecFinisher;
 import luj.game.server.internal.data.execute.load.DataLoadRequestMaker;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 @Internal
@@ -22,18 +23,18 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
 
   @Override
   public void onHandle(Context ctx) {
-    GameplayDataActor actor = ctx.getActorState(this);
+    GameplayDataActor self = ctx.getActorState(this);
     CmdGroupExecMsg msg = ctx.getMessage(this);
 
     List<Elem> cmdList = msg.commands().stream()
-        .map(m -> makeElem(m, actor))
+        .map(m -> makeElem(m, self))
         .collect(Collectors.toList());
 
     List<CacheRequest> reqList = cmdList.stream()
         .map(c -> c._req)
         .collect(Collectors.toList());
 
-    Map<Class<?>, GameplayDataActor.GroupKit> groupMap = actor.getCmdGroupMap();
+    Map<Class<?>, GameplayDataActor.GroupKit> groupMap = self.getCmdGroupMap();
     Class<?> groupType = msg.groupType();
 
     GameplayDataActor.GroupKit groupKit = groupMap.get(groupType);
@@ -43,26 +44,28 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
         .map(c -> new GroupReqElement(c._kit, c._msg.param(), c._req))
         .collect(Collectors.toList());
 
-    CacheContainer dataCache = actor.getDataCache();
+    CacheContainer dataCache = self.getDataCache();
     DataReadyChecker.Result readyResult = new DataReadyChecker(reqList, dataCache).check();
 
     //TODO: 还有网络连接
     ServerMessageHandler.Server remoteRef = msg.remoteRef();
 
+    DataIdGenState idState = self.getIdGenState();
     if (!readyResult.isReady()) {
       // 发起数据读取
-      MissingLoadRequestor.create(readyResult.getMissingList(),
-          dataCache, actor.getLoadRef()).request();
+      new MissingLoadRequestor(readyResult.getMissingList(),
+          idState.getIdField(), dataCache, self.getLoadRef()).request();
 
       // 加入等待队列
-      new WaitQueueGroupAdder(actor.getCommandQueue(),
+      new WaitQueueGroupAdder(self.getCommandQueue(),
           groupKit.getGroup(), elemList, remoteRef).addGroup();
 
       return;
     }
 
-    new GroupExecFinisher(groupKit.getGroup(), elemList, dataCache, ctx.getActorRef(),
-        actor.getSaveRef(), remoteRef, actor.getCommandMap(), actor.getLujbean()).finish();
+    Ref selfRef = ctx.getActorRef();
+    new GroupExecFinisher(groupKit.getGroup(), elemList, dataCache, idState, selfRef,
+        self.getSaveRef(), remoteRef, self.getCommandMap(), self.getLujbean()).finish();
   }
 
   private Elem makeElem(CmdGroupExecMsg.Command msg, GameplayDataActor actor) {

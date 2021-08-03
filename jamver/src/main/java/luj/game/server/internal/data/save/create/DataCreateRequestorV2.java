@@ -12,10 +12,6 @@ import scala.Tuple2;
 
 public class DataCreateRequestorV2 {
 
-  public static DataCreateRequestorV2 create(List<DataEntity> createList, Tellable saveRef) {
-    return new DataCreateRequestorV2(createList, "_luj$id", saveRef);
-  }
-
   public DataCreateRequestorV2(List<DataEntity> createList, String idField, Tellable saveRef) {
     _createList = createList;
     _idField = idField;

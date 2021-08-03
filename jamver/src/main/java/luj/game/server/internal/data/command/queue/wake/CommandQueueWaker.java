@@ -10,15 +10,18 @@ import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.behaviors.WakeBehaviorFactory;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CommandQueueWaker {
 
   public CommandQueueWaker(Queue<DataCommandRequest> commandQueue, CacheContainer dataCache,
-      Tellable dataRef, Tellable saveRef, Tellable loadRef, BeanContext lujbean) {
+      DataIdGenState idGenState, Tellable dataRef, Tellable saveRef, Tellable loadRef,
+      BeanContext lujbean) {
     _commandQueue = commandQueue;
     _dataCache = dataCache;
+    _idGenState = idGenState;
     _dataRef = dataRef;
     _saveRef = saveRef;
     _loadRef = loadRef;
@@ -31,13 +34,14 @@ public class CommandQueueWaker {
 
   private boolean tryExecute(DataCommandRequest commandReq) {
     QueueWakeBehavior behavior = new WakeBehaviorFactory(
-        commandReq, _dataCache, _dataRef, _saveRef, _lujbean).create();
+        commandReq, _dataCache, _idGenState, _dataRef, _saveRef, _lujbean).create();
 
     List<CacheRequest> cacheReq = behavior.getCacheReq();
     DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, _dataCache).check();
 
     if (!readyResult.isReady()) {
-      MissingLoadRequestor.create(readyResult.getMissingList(), _dataCache, _loadRef).request();
+      new MissingLoadRequestor(readyResult.getMissingList(),
+          _idGenState.getIdField(), _dataCache, _loadRef).request();
       return false;
     }
 
@@ -55,6 +59,7 @@ public class CommandQueueWaker {
 
   private final Queue<DataCommandRequest> _commandQueue;
   private final CacheContainer _dataCache;
+  private final DataIdGenState _idGenState;
 
   private final Tellable _dataRef;
   private final Tellable _saveRef;

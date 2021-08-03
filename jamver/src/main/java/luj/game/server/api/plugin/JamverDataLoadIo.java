@@ -2,7 +2,7 @@ package luj.game.server.api.plugin;
 
 import java.util.Map;
 
-public interface JamverDataLoadLoad {
+public interface JamverDataLoadIo {
 
   interface Context {
 

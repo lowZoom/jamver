@@ -1,8 +1,10 @@
 package luj.game.server.internal.data.load.io;
 
-import luj.game.server.api.plugin.JamverDataLoadLoad;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-final class DataRequestImpl implements JamverDataLoadLoad.Data {
+import luj.game.server.api.plugin.JamverDataLoadIo;
+
+final class DataRequestImpl implements JamverDataLoadIo.Data {
 
   DataRequestImpl(Class<?> type, Comparable<?> id, String idField) {
     _type = type;
@@ -22,7 +24,7 @@ final class DataRequestImpl implements JamverDataLoadLoad.Data {
 
   @Override
   public String getIdField() {
-    return _idField;
+    return checkNotNull(_idField, "idField");
   }
 
   private final Class<?> _type;

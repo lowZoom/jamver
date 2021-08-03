@@ -9,6 +9,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.command.service.CommandServiceFactory;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.data.load.result.DataResultProxyV2;
@@ -17,9 +18,10 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.Gamepla
 
 public class DataServiceImpl implements GameDataCommand.Data {
 
-  public DataServiceImpl(Tellable dataRef, List<DataEntity> createLog,
+  public DataServiceImpl(DataIdGenState idGenState, Tellable dataRef, List<DataEntity> createLog,
       ServerMessageHandler.Server remoteRef, Map<String, GameplayDataActor.CommandKit> commandMap,
       BeanContext lujbean) {
+    _idGenState = idGenState;
     _dataRef = dataRef;
     _createLog = createLog;
     _remoteRef = remoteRef;
@@ -35,7 +37,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
   @SuppressWarnings("unchecked")
   @Override
   public <T> T create(Class<T> dataType) {
-    return (T) DataCreateRunner.GET.run(dataType, _createLog, this::specifySetField);
+    return (T) DataCreateRunner.GET.run(dataType, _idGenState, _createLog, this::specifySetField);
   }
 
   /**
@@ -81,9 +83,10 @@ public class DataServiceImpl implements GameDataCommand.Data {
   private DataResultProxyV2 _curData;
   private String _curField;
 
-  private final Tellable _dataRef;
+  private final DataIdGenState _idGenState;
   private final List<DataEntity> _createLog;
 
+  private final Tellable _dataRef;
   private final ServerMessageHandler.Server _remoteRef;
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 

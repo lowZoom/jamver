@@ -11,6 +11,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -20,12 +21,13 @@ import org.slf4j.LoggerFactory;
 public class CommandExecFinisher {
 
   public CommandExecFinisher(Class<?> loadResultType, CacheRequest cacheReq,
-      CacheContainer dataCache, String cmdType, GameplayDataActor.CommandKit commandKit,
-      Object cmdParam, Tellable dataRef, Tellable saveRef, ServerMessageHandler.Server remoteRef,
-      BeanContext lujbean) {
+      CacheContainer dataCache, DataIdGenState idGenState, String cmdType,
+      GameplayDataActor.CommandKit commandKit, Object cmdParam, Tellable dataRef, Tellable saveRef,
+      ServerMessageHandler.Server remoteRef, BeanContext lujbean) {
     _loadResultType = loadResultType;
     _cacheReq = cacheReq;
     _dataCache = dataCache;
+    _idGenState = idGenState;
     _cmdType = cmdType;
     _commandKit = commandKit;
     _cmdParam = cmdParam;
@@ -44,7 +46,7 @@ public class CommandExecFinisher {
 
     LoadResultProxy resultProxy = LoadResultProxy.create(_loadResultType);
     DataServiceImpl dataSvc = new DataServiceImpl(
-        _dataRef, createLog, _remoteRef, _commandKit.getParentMap(), _lujbean);
+        _idGenState, _dataRef, createLog, _remoteRef, _commandKit.getParentMap(), _lujbean);
 
     _cacheReq.walk(new ExecFinishWalker(
         _dataCache, resultProxy, loadLog, dataSvc::specifySetField));
@@ -62,9 +64,10 @@ public class CommandExecFinisher {
   private static final Logger LOG = LoggerFactory.getLogger(CommandExecFinisher.class);
 
   private final Class<?> _loadResultType;
-
   private final CacheRequest _cacheReq;
+
   private final CacheContainer _dataCache;
+  private final DataIdGenState _idGenState;
 
   private final String _cmdType;
   private final GameplayDataActor.CommandKit _commandKit;

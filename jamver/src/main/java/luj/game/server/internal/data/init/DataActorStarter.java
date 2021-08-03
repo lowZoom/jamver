@@ -9,6 +9,7 @@ import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.plugin.JamverDataLoadInit;
 import luj.game.server.api.plugin.JamverDataRootInit;
 import luj.game.server.api.plugin.JamverDataSaveInit;
+import luj.game.server.internal.data.id.init.DataIdInitializer;
 import luj.game.server.internal.data.init.root.DataRootInitializer;
 import luj.game.server.internal.data.load.io.init.DataLoadInitializer;
 import luj.game.server.internal.data.save.init.DataSaveInitializer;
@@ -38,6 +39,7 @@ public class DataActorStarter {
 
     Object rootState = initRoot(_self, skipInit);
     _self.setPluginState(rootState);
+    new DataIdInitializer(_self).init();
 
     ActorPreStartHandler.Actor selfRef = _context.getActor();
     _self.setLoadRef(_context.createActor(loadActor(

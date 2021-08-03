@@ -5,13 +5,15 @@ import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.QueueWakeBehavior;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 
 public class WakeBehaviorFactory {
 
   public WakeBehaviorFactory(DataCommandRequest commandReq, CacheContainer dataCache,
-      Tellable dataRef, Tellable saveRef, BeanContext lujbean) {
+      DataIdGenState idGenState, Tellable dataRef, Tellable saveRef, BeanContext lujbean) {
     _commandReq = commandReq;
     _dataCache = dataCache;
+    _idGenState = idGenState;
     _dataRef = dataRef;
     _saveRef = saveRef;
     _lujbean = lujbean;
@@ -28,7 +30,9 @@ public class WakeBehaviorFactory {
   }
 
   final DataCommandRequest _commandReq;
+
   final CacheContainer _dataCache;
+  final DataIdGenState _idGenState;
 
   final Tellable _dataRef;
   final Tellable _saveRef;

@@ -10,16 +10,10 @@ import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
-import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.instancev2.DataType;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.load.DataLoadMsg;
 
 public class MissingLoadRequestor {
-
-  public static MissingLoadRequestor create(List<DataReadyChecker.Missing> missList,
-      CacheContainer dataCache, Tellable loadRef) {
-    return new MissingLoadRequestor(missList, DataTempProxy.ID, dataCache, loadRef);
-  }
 
   public MissingLoadRequestor(List<DataReadyChecker.Missing> missList,
       String idField, CacheContainer dataCache, Tellable loadRef) {
@@ -40,9 +34,7 @@ public class MissingLoadRequestor {
       checkNotNull(dataId, dataType.getName());
       createLoadingItem(dataType, dataId);
 
-      //FIXME: 需要一个单独的机制取数据id
       DataLoadMsg msg = new DataLoadMsg(dataType, dataId, _idField);
-
       _loadRef.tell(msg);
     }
   }

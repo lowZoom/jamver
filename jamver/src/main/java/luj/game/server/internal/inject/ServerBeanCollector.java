@@ -1,5 +1,6 @@
 package luj.game.server.internal.inject;
 
+import luj.game.server.internal.data.id.state.DataIdPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.DataLoadPlugin;
@@ -21,6 +22,7 @@ public class ServerBeanCollector {
       ctx.register(DataAllPlugin.class);
       ctx.register(DataLoadPlugin.class);
       ctx.register(DataSavePlugin.class);
+      ctx.register(DataIdPlugin.class);
 
       ctx.register(ClusterProtoPlugin.class);
       ctx.register(NetAllPlugin.class);

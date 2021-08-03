@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkState;
 
 import java.util.Map;
 import luj.ava.spring.Internal;
-import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.load.cache.CacheLoadFinisher;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
@@ -27,10 +26,8 @@ final class OnLoadFinish implements GameplayDataActor.Handler<LoadFinishMsg> {
     Map<String, Object> valueMap = msg.getDataValue();
     checkState(present == !valueMap.isEmpty());
 
-    Tellable selfRef = ctx.getActorRef();
-    new CacheLoadFinisher(dataType, dataId, present, valueMap, self.getDataCache(),
-        self.getCommandQueue(), selfRef, self.getSaveRef(), self.getLoadRef(),
-        self.getLujbean()).finish();
+    new CacheLoadFinisher(dataType, dataId, present, valueMap,
+        self, self.getIdGenState(), ctx.getActorRef(), self.getSaveRef()).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnLoadFinish.class);

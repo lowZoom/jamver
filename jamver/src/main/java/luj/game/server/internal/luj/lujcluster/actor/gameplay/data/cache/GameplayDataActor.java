@@ -1,6 +1,5 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache;
 
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import luj.bean.api.BeanContext;
@@ -12,7 +11,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
-import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import org.slf4j.Logger;
 
@@ -53,22 +52,16 @@ public class GameplayDataActor {
     Class<?> getGroupType();
   }
 
-  public static GameplayDataActor create(JambeanInLujcluster clusterParam, CacheContainer dataCache,
-      Map<String, CommandKit> commandMap, Map<Class<?>, GroupKit> cmdGroupMap) {
-    return new GameplayDataActor(dataCache, new LinkedList<>(), clusterParam.getLujcache(),
-        commandMap, cmdGroupMap, clusterParam.getLujbean(), clusterParam.getDataAllPlugin(),
-        clusterParam.getAppStartParam());
-  }
-
-  public GameplayDataActor(CacheContainer dataCache, Queue<DataCommandRequest> commandQueue,
-      CacheSession lujcache, Map<String, CommandKit> commandMap,
-      Map<Class<?>, GroupKit> cmdGroupMap, BeanContext lujbean,
+  public GameplayDataActor(CacheContainer dataCache, DataIdGenState idGenState,
+      Queue<DataCommandRequest> commandQueue, Map<String, CommandKit> commandMap,
+      Map<Class<?>, GroupKit> cmdGroupMap, CacheSession lujcache, BeanContext lujbean,
       DataAllPlugin allPlugin, Object startParam) {
     _dataCache = dataCache;
+    _idGenState = idGenState;
     _commandQueue = commandQueue;
-    _lujcache = lujcache;
     _commandMap = commandMap;
     _cmdGroupMap = cmdGroupMap;
+    _lujcache = lujcache;
     _lujbean = lujbean;
     _allPlugin = allPlugin;
     _startParam = startParam;
@@ -80,6 +73,10 @@ public class GameplayDataActor {
 
   public void setPluginState(Object pluginState) {
     _pluginState = pluginState;
+  }
+
+  public DataIdGenState getIdGenState() {
+    return _idGenState;
   }
 
   public ActorPreStartHandler.Actor getLoadRef() {
@@ -146,6 +143,7 @@ public class GameplayDataActor {
   private TopLevelRefs _siblingRef;
 
   private final CacheContainer _dataCache;
+  private final DataIdGenState _idGenState;
   private final Queue<DataCommandRequest> _commandQueue;
 
   /////////////////////////

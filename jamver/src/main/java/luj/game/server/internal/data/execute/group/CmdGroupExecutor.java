@@ -11,6 +11,7 @@ import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
 import luj.game.server.internal.data.execute.finish.ExecFinishWalker;
 import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -19,13 +20,14 @@ public class CmdGroupExecutor {
 
   public CmdGroupExecutor(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
       List<DataEntity> createLog, List<DataEntity> loadLog, CacheContainer dataCache,
-      Tellable dataRef, ServerMessageHandler.Server remoteRef,
+      DataIdGenState idGenState, Tellable dataRef, ServerMessageHandler.Server remoteRef,
       Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
     _createLog = createLog;
     _loadLog = loadLog;
     _dataCache = dataCache;
+    _idGenState = idGenState;
     _dataRef = dataRef;
     _remoteRef = remoteRef;
     _commandMap = commandMap;
@@ -60,7 +62,7 @@ public class CmdGroupExecutor {
 
     LoadResultProxy resultProxy = LoadResultProxy.create(cmdKit.getLoadResultType());
     DataServiceImpl dataSvc = new DataServiceImpl(
-        _dataRef, _createLog, _remoteRef, _commandMap, _lujbean);
+        _idGenState, _dataRef, _createLog, _remoteRef, _commandMap, _lujbean);
 
     e.getCacheReq().walk(new ExecFinishWalker(
         _dataCache, resultProxy, _loadLog, dataSvc::specifySetField));
@@ -78,6 +80,7 @@ public class CmdGroupExecutor {
   private final List<DataEntity> _loadLog;
 
   private final CacheContainer _dataCache;
+  private final DataIdGenState _idGenState;
   private final Tellable _dataRef;
 
   private final ServerMessageHandler.Server _remoteRef;

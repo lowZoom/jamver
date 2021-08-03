@@ -10,18 +10,20 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
 import luj.game.server.internal.data.execute.finish.ExecDataFinisherV2;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 public class GroupExecFinisher {
 
   public GroupExecFinisher(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
-      CacheContainer dataCache, Tellable dataRef, Tellable saveRef,
+      CacheContainer dataCache, DataIdGenState idGenState, Tellable dataRef, Tellable saveRef,
       ServerMessageHandler.Server remoteRef, Map<String, GameplayDataActor.CommandKit> commandMap,
       BeanContext lujbean) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
     _dataCache = dataCache;
+    _idGenState = idGenState;
     _dataRef = dataRef;
     _saveRef = saveRef;
     _remoteRef = remoteRef;
@@ -35,7 +37,7 @@ public class GroupExecFinisher {
 
     // 真正执行cmd逻辑
     new CmdGroupExecutor(_cmdGroup, _elemList, createLog,
-        loadLog, _dataCache, _dataRef, _remoteRef, _commandMap, _lujbean).execute();
+        loadLog, _dataCache, _idGenState, _dataRef, _remoteRef, _commandMap, _lujbean).execute();
 
     ExecDataFinisherV2.create(_dataCache, _saveRef, createLog, loadLog).finish();
   }
@@ -44,6 +46,7 @@ public class GroupExecFinisher {
   private final List<GroupReqElement> _elemList;
 
   private final CacheContainer _dataCache;
+  private final DataIdGenState _idGenState;
   private final Tellable _dataRef;
   private final Tellable _saveRef;
 

@@ -20,6 +20,7 @@ import luj.game.server.internal.data.command.collect.group.GroupMapCollector;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 import luj.game.server.internal.luj.lujcluster.actor.dynamic.DynamicRootActor;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataActorFactory;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.GameplayEventActor;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
@@ -75,7 +76,7 @@ final class OnNodeStart implements NodeStartListener {
     Map<Class<?>, GameplayDataActor.GroupKit> groupMap = new GroupMapCollector(
         clusterParam.getCommandGroupList()).collect();
 
-    return GameplayDataActor.create(clusterParam, dataCache, cmdMap, groupMap);
+    return new DataActorFactory(clusterParam, dataCache, cmdMap, groupMap).create();
   }
 
   private GameplayEventActor eventActor(JambeanInLujcluster clusterParam) {

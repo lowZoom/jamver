@@ -4,18 +4,18 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.data.annotation.Transient;
-import luj.game.server.api.plugin.JamverDataLoadLoad;
+import luj.game.server.api.plugin.JamverDataLoadIo;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.load.LoadFinishMsg;
 
 public class DataIoLoader {
 
-  public DataIoLoader(JamverDataLoadLoad loadPlugin, Object loadState, Class<?> dataType,
-      Comparable<?> dataId, String dataIdField, ActorPreStartHandler.Actor dataRef) {
+  public DataIoLoader(JamverDataLoadIo loadPlugin, Object loadState, Class<?> dataType,
+      Comparable<?> dataId, String idField, ActorPreStartHandler.Actor dataRef) {
     _loadPlugin = loadPlugin;
     _loadState = loadState;
     _dataType = dataType;
     _dataId = dataId;
-    _dataIdField = dataIdField;
+    _idField = idField;
     _dataRef = dataRef;
   }
 
@@ -40,7 +40,7 @@ public class DataIoLoader {
   }
 
   private Map<String, Object> ioLoad() {
-    DataRequestImpl dataReq = new DataRequestImpl(_dataType, _dataId, _dataIdField);
+    DataRequestImpl dataReq = new DataRequestImpl(_dataType, _dataId, _idField);
     LoadContextImpl ctx = new LoadContextImpl(_loadState, dataReq);
 
     Map<String, Object> result = _loadPlugin.onLoad(ctx);
@@ -50,12 +50,12 @@ public class DataIoLoader {
     return ImmutableMap.copyOf(result);
   }
 
-  private final JamverDataLoadLoad _loadPlugin;
+  private final JamverDataLoadIo _loadPlugin;
   private final Object _loadState;
 
   private final Class<?> _dataType;
   private final Comparable<?> _dataId;
-  private final String _dataIdField;
+  private final String _idField;
 
   private final ActorPreStartHandler.Actor _dataRef;
 }

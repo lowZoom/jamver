@@ -6,51 +6,49 @@ import static com.google.common.base.Preconditions.checkState;
 import com.google.common.collect.ImmutableList;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Queue;
-import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.cache.DataPresence;
-import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.CommandQueueWaker;
+import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instance.DataTempProxy;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.instancev2.DataEntityCreator;
 import luj.game.server.internal.data.instancev2.DataType;
 import luj.game.server.internal.data.save.create.DataCreateRequestorV2;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CacheLoadFinisher {
 
   public CacheLoadFinisher(Class<?> dataType, Comparable<?> dataId, boolean present,
-      Map<String, Object> dataValue, CacheContainer dataCache,
-      Queue<DataCommandRequest> commandQueue, Tellable dataRef, Tellable saveRef, Tellable loadRef,
-      BeanContext lujbean) {
+      Map<String, Object> dataValue, GameplayDataActor dataState, DataIdGenState idState,
+      Tellable dataRef, Tellable saveRef) {
     _dataType = dataType;
     _dataId = dataId;
     _present = present;
     _dataValue = dataValue;
-    _dataCache = dataCache;
-    _commandQueue = commandQueue;
+    _dataState = dataState;
+    _idState = idState;
     _dataRef = dataRef;
     _saveRef = saveRef;
-    _loadRef = loadRef;
-    _lujbean = lujbean;
   }
 
   public void finish() {
-    updateCache();
+    CacheContainer cache = _dataState.getDataCache();
+    updateCache(cache);
 
     // 有新数据可用后，唤醒之前等待的CMD
-    new CommandQueueWaker(_commandQueue, _dataCache, _dataRef, _saveRef, _loadRef, _lujbean).wake();
+    new CommandQueueWaker(_dataState.getCommandQueue(), cache, _idState,
+        _dataRef, _saveRef, _dataState.getLoadRef(), _dataState.getLujbean()).wake();
   }
 
-  private void updateCache() {
+  private void updateCache(CacheContainer cache) {
     String dataKey = CacheKeyMaker.create(_dataType, _dataId).make();
-    CacheItem cacheItem = _dataCache.get(dataKey);
+    CacheItem cacheItem = cache.get(dataKey);
     checkNotNull(cacheItem, dataKey);
     checkState(cacheItem.getPresence() == DataPresence.LOADING, dataKey);
 
@@ -85,7 +83,7 @@ public class CacheLoadFinisher {
     item.setPresence(DataPresence.PRESENT);
     item.setDataObjV2(dataObj);
 
-    DataCreateRequestorV2.create(ImmutableList.of(dataObj), _saveRef).request();
+    new DataCreateRequestorV2(ImmutableList.of(dataObj), _idState.getIdField(), _saveRef).request();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(CacheLoadFinisher.class);
@@ -96,12 +94,9 @@ public class CacheLoadFinisher {
   private final boolean _present;
   private final Map<String, Object> _dataValue;
 
-  private final CacheContainer _dataCache;
-  private final Queue<DataCommandRequest> _commandQueue;
+  private final GameplayDataActor _dataState;
+  private final DataIdGenState _idState;
 
   private final Tellable _dataRef;
   private final Tellable _saveRef;
-  private final Tellable _loadRef;
-
-  private final BeanContext _lujbean;
 }
