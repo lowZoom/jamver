@@ -17,7 +17,7 @@ public interface JamverDataSaveIo<S> {
 
   interface Id {
 
-    Object value();
+    Comparable<?> value();
 
     String fieldName();
   }

@@ -3,6 +3,7 @@ package luj.game.server.internal.data.instancev2;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
+import luj.game.server.internal.data.types.map.DataMapFactory;
 import luj.game.server.internal.data.types.map.history.MapDataGetter;
 import luj.game.server.internal.data.types.map.history.MapDataUpdater;
 import luj.game.server.internal.data.types.map.history.MapWithHistory;
@@ -39,6 +40,9 @@ public enum EntityFieldGetter {
     }
     if (type == Set.class) {
       return DataSetFactory.GET.create();
+    }
+    if (type == Map.class) {
+      return DataMapFactory.GET.create();
     }
     throw new UnsupportedOperationException("未知类型：" + type.getName()
         + "，字段：" + data.getDataType().getName() + "#" + fieldName);

@@ -11,7 +11,6 @@ import java.util.Set;
 import luj.game.server.api.plugin.JamverDataSaveIo;
 import luj.game.server.internal.data.save.wait.BatchCreateItem;
 import luj.game.server.internal.data.save.wait.BatchUpdateItem;
-import luj.game.server.internal.data.types.HasOp;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DUpdateMsgMap;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DUpdateMsgSet;
 
@@ -50,10 +49,6 @@ public class DataIoInvoker {
     created._id = id;
 
     Set<Map.Entry<String, Object>> datas = item.getDataValue().entrySet();
-    created._primitive = datas.stream()
-        .filter(e -> !(e.getValue() instanceof HasOp))
-        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
-
     created._set = datas.stream()
         .filter(e -> e.getValue() instanceof Set)
         .collect(toMap(Map.Entry::getKey, e -> ImmutableSet.copyOf((Set<?>) e.getValue())));
@@ -61,6 +56,11 @@ public class DataIoInvoker {
     created._map = datas.stream()
         .filter(e -> e.getValue() instanceof Map)
         .collect(toMap(Map.Entry::getKey, e -> ImmutableMap.copyOf((Map<?, ?>) e.getValue())));
+
+    created._primitive = datas.stream()
+        .filter(e -> !created._set.containsKey(e.getKey()))
+        .filter(e -> !created._map.containsKey(e.getKey()))
+        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     return created;
   }

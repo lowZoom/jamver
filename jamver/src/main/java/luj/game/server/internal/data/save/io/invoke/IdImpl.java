@@ -5,7 +5,7 @@ import luj.game.server.api.plugin.JamverDataSaveIo;
 final class IdImpl implements JamverDataSaveIo.Id {
 
   @Override
-  public Object value() {
+  public Comparable<?> value() {
     return _dataId;
   }
 

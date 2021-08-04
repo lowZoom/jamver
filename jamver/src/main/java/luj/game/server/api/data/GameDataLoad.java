@@ -1,9 +1,7 @@
 package luj.game.server.api.data;
 
 import java.util.Collection;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import luj.game.server.api.data.find.FindCondition;
 
 public interface GameDataLoad<P, R> {
 
@@ -17,7 +15,9 @@ public interface GameDataLoad<P, R> {
     @Deprecated
     <R, F> AndLoad<R, F> load(Function<R, F> field, Comparable<?> id);
 
-    <R, F> AndLoad<R, F> load(Comparable<?> id, Function<R, F> field);
+    <R, F> AndLoad<R, F> load(Comparable<?> id, Function<R, F> result);
+
+//    <D, DF, R, RF> AndLoad<R, RF> load(Function<D, DF> field, DF value, Function<R, RF> result);
 
     <R, F> AndLoad<R, F> load(GameDataLoad<?, R> load, Class<F> dataType, Comparable<?> id);
 
@@ -25,11 +25,8 @@ public interface GameDataLoad<P, R> {
 
     <R, F> AndLoad<R, F> loadGlobal(GameDataLoad<?, R> load, Class<F> dataType);
 
-//    <R, D> void find(Function<R, Collection<D>> field, Consumer<FindCondition<D>> condition);
-
-    @Deprecated
-    <D, R> void find(Class<D> dataType, Consumer<FindCondition<D>> condition,
-        Function<R, Collection<?>> resultField);
+    //    Class<D> dataType,
+//    <D, R> void findAll(Consumer<FindCondition<D>> condition, Function<R, Collection<D>> field);
   }
 
   interface AndLoad<R, F> {
