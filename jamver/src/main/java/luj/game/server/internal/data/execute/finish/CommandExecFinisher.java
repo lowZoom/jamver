@@ -38,7 +38,7 @@ public class CommandExecFinisher {
   }
 
   public void finish() {
-//    ctx.getLogger().debug("执行数据CMD：{}", cmdType.getName());
+//    LOG.debug("[game]执行数据CMD：{} {}", _cmdType, _cmdParam);
     LOG.debug("[game]执行数据CMD：{}", _cmdType);
 
     List<DataEntity> createLog = new ArrayList<>();

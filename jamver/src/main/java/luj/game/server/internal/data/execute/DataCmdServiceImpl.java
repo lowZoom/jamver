@@ -3,6 +3,7 @@ package luj.game.server.internal.data.execute;
 import luj.bean.api.BeanContext;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.service.proto.ProtoServiceFactory;
+import luj.game.server.internal.data.execute.service.time.TimeServiceFactory;
 
 final class DataCmdServiceImpl implements GameDataCommand.Service {
 
@@ -38,7 +39,7 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public GameDataCommand.Time time() {
-    return null;
+    return TimeServiceFactory.GET.create();
   }
 
   GameDataCommand.Data _dataSvc;

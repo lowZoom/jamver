@@ -20,6 +20,8 @@ final class CommandServiceImpl<P> implements CommandService<P> {
   @SuppressWarnings("unchecked")
   @Override
   public void execute0(BiConsumer<Param, P> param) {
+    //TODO: 校验param里不能包含数据对象
+
     Object paramObj = (_paramType == Void.class) ? null : new CommandParamMaker(
         _paramType, (BiConsumer<CommandService.Param, Object>) param, _factory._lujbean).make();
 

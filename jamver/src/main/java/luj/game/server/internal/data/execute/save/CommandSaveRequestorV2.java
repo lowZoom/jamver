@@ -60,7 +60,7 @@ public class CommandSaveRequestorV2 {
         .collect(toMap(t -> t._1, t -> t._2.encodeChanged())));
 
     String dataType = dataObj.getDataType().getName();
-    DataUpdateMsg msg = new DataUpdateMsg(dataType, dataId, "_id", primitiveUpdated,
+    DataUpdateMsg msg = new DataUpdateMsg(dataType, dataId, _idField, primitiveUpdated,
         getTypeMap(changedMap, DUpdateMsgSet.class), getTypeMap(changedMap, DUpdateMsgMap.class));
 
     _saveRef.tell(msg);

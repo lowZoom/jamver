@@ -35,6 +35,9 @@ public enum EntityFieldGetter {
     if (type == long.class || type == Long.class) {
       return LONG_ZERO;
     }
+    if (type == double.class || type == Double.class) {
+      return DOUBLE_ZERO;
+    }
     if (type == String.class) {
       return "";
     }
@@ -50,4 +53,6 @@ public enum EntityFieldGetter {
 
   private static final Integer INT_ZERO = 0;
   private static final Long LONG_ZERO = 0L;
+
+  private static final Double DOUBLE_ZERO = 0.0;
 }
