@@ -21,6 +21,8 @@ public interface GameDataLoad<P, R> {
 
     <R, F> AndLoad<R, F> load(GameDataLoad<?, R> load, Class<F> dataType, Comparable<?> id);
 
+    <R, F> AndLoad<R, F> loadAll(Collection<? extends Comparable<?>> id, Function<R, Collection<F>> result);
+
     <R, F> AndLoad<R, F> loadGlobal(Function<R, F> field);
 
     <R, F> AndLoad<R, F> loadGlobal(GameDataLoad<?, R> load, Class<F> dataType);

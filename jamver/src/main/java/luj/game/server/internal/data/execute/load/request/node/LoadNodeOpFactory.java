@@ -19,6 +19,15 @@ public class LoadNodeOpFactory {
     return op;
   }
 
+  @SuppressWarnings("unchecked")
+  public LoadNodeOp createIdMulti(Collection<?> id) {
+    NodeIdMultiImpl op = new NodeIdMultiImpl();
+    op._idList = (Collection<Comparable<?>>) id;
+    op._dataCache = _dataCache;
+    return op;
+  }
+
+  @SuppressWarnings("unchecked")
   public LoadNodeOp createGetMulti(Function<?, ?> idGetter) {
     NodeGetMultiImpl op = new NodeGetMultiImpl();
     op._idGetter = (Function<Object, Collection<Comparable<?>>>) idGetter;

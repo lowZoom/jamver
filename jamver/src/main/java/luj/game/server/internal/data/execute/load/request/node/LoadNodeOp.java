@@ -11,9 +11,9 @@ public interface LoadNodeOp {
 
   interface Data {
 
-    Object getResult();
+    Object getResultToSet();
 
-    Object getReturn();
+    Object getReturnAsNextParent();
   }
 
   Object findWhenReady(RequestWalkListener.Context ctx,

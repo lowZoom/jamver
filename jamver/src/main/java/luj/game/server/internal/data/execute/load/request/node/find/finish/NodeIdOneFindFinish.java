@@ -52,17 +52,11 @@ public enum NodeIdOneFindFinish {
 
   private LoadNodeOp.Data makeData(DataEntity dataObj, Class<?> dataType,
       DataResultProxyV2.FieldHook fieldHook, List<DataEntity> loadLog) {
-    return new LoadNodeOp.Data() {
-      @Override
-      public Object getResult() {
-        return (dataObj == null) ? null :
-            createResultAndLog(dataObj, dataType, fieldHook, loadLog).getInstance();
-      }
+    if (dataObj == null) {
+      return DataImpl.NULL;
+    }
 
-      @Override
-      public Object getReturn() {
-        return dataObj;
-      }
-    };
+    Object result = createResultAndLog(dataObj, dataType, fieldHook, loadLog).getInstance();
+    return new DataImpl(result, dataObj);
   }
 }

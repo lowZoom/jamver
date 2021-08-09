@@ -33,12 +33,12 @@ public enum NodeGetMultiFindFinish {
 
     return new LoadNodeOp.Data() {
       @Override
-      public Object getResult() {
+      public Object getResultToSet() {
         return dataList;
       }
 
       @Override
-      public Object getReturn() {
+      public Object getReturnAsNextParent() {
         return dataList;
       }
     };

@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.execute.load;
 
+import java.util.Collection;
 import java.util.function.Function;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
@@ -42,6 +43,15 @@ final class LoadContextImpl implements GameDataLoad.Context {
       Comparable<?> id) {
     LoadNodeOp op = opFactory().createIdOne(id);
     CacheRequest.Node child = ReqRootTransientAppender.GET.appendV2(_cacheReq, dataType, op);
+    return andLoad(child);
+  }
+
+  @Override
+  public <R, F> GameDataLoad.AndLoad<R, F> loadAll(Collection<? extends Comparable<?>> id,
+      Function<R, Collection<F>> result) {
+    LoadNodeOp op = opFactory().createIdMulti(id);
+    CacheRequest.Node child = ReqRootFieldAppender.GET
+        .appendV2(_cacheReq, (Function<Object, ?>) result, _fieldHolder, op);
     return andLoad(child);
   }
 

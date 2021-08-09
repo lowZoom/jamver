@@ -29,9 +29,9 @@ public class ExecFinishWalker implements RequestWalkListener {
     LoadNodeOp.Data data = nodeOp.findWhenFinish(ctx, _loadLog, _fieldHook);
 
     checkNotNull(data, nodeOp);
-    ctx.getFieldSetter().accept(_loadResult, data.getResult());
+    ctx.getFieldSetter().accept(_loadResult, data.getResultToSet());
 
-    return data.getReturn();
+    return data.getReturnAsNextParent();
   }
 
 //  private static final Logger LOG = LoggerFactory.getLogger(FinishWalker.class);
