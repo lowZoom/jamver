@@ -36,7 +36,8 @@ public class DataSet<E> implements Set<E>, HasOp {
   @Override
   public boolean contains(Object o) {
     //TODO: 要考虑修改历史
-    throw new UnsupportedOperationException("");
+    checkState(!SetChangedChecker.GET.isChanged(_value));
+    return _value.getData().contains(o);
   }
 
   @Override
@@ -60,6 +61,11 @@ public class DataSet<E> implements Set<E>, HasOp {
   }
 
   @Override
+  public void clear() {
+    SetDataRemover.GET.clear(_value);
+  }
+
+  @Override
   public String toString() {
     return _value.toString();
   }
@@ -72,12 +78,14 @@ public class DataSet<E> implements Set<E>, HasOp {
 
   @Override
   public Object[] toArray() {
+    //TODO: TEMP
     checkState(!SetChangedChecker.GET.isChanged(_value));
     return _value.getData().toArray();
   }
 
   @Override
   public <T> T[] toArray(T[] a) {
+    //TODO: TEMP
     checkState(!SetChangedChecker.GET.isChanged(_value));
     return _value.getData().toArray(a);
   }
@@ -89,11 +97,6 @@ public class DataSet<E> implements Set<E>, HasOp {
 
   @Override
   public boolean retainAll(Collection<?> c) {
-    throw new UnsupportedOperationException("");
-  }
-
-  @Override
-  public void clear() {
     throw new UnsupportedOperationException("");
   }
 

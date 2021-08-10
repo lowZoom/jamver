@@ -34,6 +34,12 @@ public enum SetDataRemover {
     return getOrNewRemoveHistory(set).addAll(removeSet);
   }
 
+  public <E> void clear(SetWithHistory<E> set) {
+    //TODO: 清理添加历史
+
+    getOrNewRemoveHistory(set).addAll(set.getData());
+  }
+
   private <E> Set<E> getOrNewRemoveHistory(SetWithHistory<E> set) {
     Set<E> old = set.getRemoveHistory();
     if (old != null) {

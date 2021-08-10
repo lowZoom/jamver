@@ -48,8 +48,10 @@ public class CommandSaveRequestorV2 {
     Comparable<?> dataId = dataObj.getDataId();
 
     // 获取数值变动
-    Map<String, Object> primitiveUpdated = ImmutableMap.copyOf(
-        MapX.nonNull(dataMap.getUpdateHistory()));
+    Map<String, Object> primitiveUpdated = MapX.nonNull(dataMap.getUpdateHistory())
+        .entrySet().stream()
+        .filter(e -> !(e.getValue() instanceof HasOp))
+        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     // 获取集合变动
     Map<Class<?>, Map<String, Object>> changedMap = getChangedByType(dataMap.getData()
