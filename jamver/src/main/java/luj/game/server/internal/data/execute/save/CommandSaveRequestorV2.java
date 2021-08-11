@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -48,14 +49,16 @@ public class CommandSaveRequestorV2 {
     Comparable<?> dataId = dataObj.getDataId();
 
     // 获取数值变动
-    Map<String, Object> primitiveUpdated = MapX.nonNull(dataMap.getUpdateHistory())
-        .entrySet().stream()
+    Map<String, Object> updateHistory = MapX.nonNull(dataMap.getUpdateHistory());
+    Map<String, Object> primitiveUpdated = updateHistory.entrySet().stream()
         .filter(e -> !(e.getValue() instanceof HasOp))
         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+    Map<String, Object> allValue = new HashMap<>(dataMap.getData());
+    allValue.putAll(updateHistory);
+
     // 获取集合变动
-    Map<Class<?>, Map<String, Object>> changedMap = getChangedByType(dataMap.getData()
-        .entrySet().stream()
+    Map<Class<?>, Map<String, Object>> changedMap = getChangedByType(allValue.entrySet().stream()
         .filter(e -> e.getValue() instanceof HasOp)
         .map(e -> new Tuple2<>(e.getKey(), ((HasOp) e.getValue()).<ChangedEncodable>getDataOp()))
         .filter(t -> t._2.isChanged())
