@@ -1,9 +1,12 @@
 package luj.game.server.internal.data.instancev2;
 
+import luj.game.server.api.data.annotation.Transient;
+
 public class DataType {
 
   public static DataType create(Class<?> dataClass) {
-    DataType type = new DataType(dataClass.getName(), false);
+    boolean transi = dataClass.isAnnotationPresent(Transient.class);
+    DataType type = new DataType(dataClass.getName(), transi);
     type._classCache = dataClass;
     return type;
   }
