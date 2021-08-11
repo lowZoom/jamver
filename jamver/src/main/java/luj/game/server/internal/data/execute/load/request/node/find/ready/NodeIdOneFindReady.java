@@ -15,6 +15,7 @@ public enum NodeIdOneFindReady {
       List<DataReadyChecker.Missing> missingOut, List<CacheItem> lockedOrLoadingOut) {
     CacheItem dataItem = cacheGet(cache, dataType, dataId);
     logUnusable(dataItem, dataType, dataId, missingOut, lockedOrLoadingOut);
+
     updateClassCache(dataItem, dataType);
     return dataItem;
   }

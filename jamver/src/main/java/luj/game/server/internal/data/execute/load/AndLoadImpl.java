@@ -17,6 +17,7 @@ final class AndLoadImpl<R, F> implements GameDataLoad.AndLoad<R, F> {
     _fieldHolder = fieldHolder;
   }
 
+  @Deprecated
   @Override
   public GameDataLoad.AndLoad load(Function<F, ?> from, Function<R, ?> to) {
     return join((Function) from, to);
@@ -25,8 +26,9 @@ final class AndLoadImpl<R, F> implements GameDataLoad.AndLoad<R, F> {
   @Override
   public <ID extends Comparable<ID>, F2> GameDataLoad.AndLoad<R, F2> join(Function<F, ID> from,
       Function<R, F2> to) {
+    LoadNodeOp op = opFactory().createGetOne(from);
     CacheRequest.Node child = ReqChildFieldAppender.GET
-        .append(_node, (Function<Object, ?>) to, _fieldHolder, from);
+        .appendV2(_node, (Function<Object, ?>) to, _fieldHolder, op);
     return andLoad(child);
   }
 
@@ -42,7 +44,8 @@ final class AndLoadImpl<R, F> implements GameDataLoad.AndLoad<R, F> {
   @Override
   public <ID extends Comparable<ID>, F2> GameDataLoad.AndLoad<R, F2> join(Function<F, ID> from,
       Class<F2> dataType) {
-    CacheRequest.Node child = ReqChildTransientAppender.GET.append(_node, dataType, from);
+    LoadNodeOp op = opFactory().createGetOne(from);
+    CacheRequest.Node child = ReqChildTransientAppender.GET.appendV2(_node, dataType, op);
     return andLoad(child);
   }
 

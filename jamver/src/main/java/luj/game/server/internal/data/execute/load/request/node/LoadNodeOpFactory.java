@@ -28,6 +28,14 @@ public class LoadNodeOpFactory {
   }
 
   @SuppressWarnings("unchecked")
+  public LoadNodeOp createGetOne(Function<?, ?> idGetter) {
+    NodeGetOneImpl op = new NodeGetOneImpl();
+    op._idGetter = (Function<Object, Comparable<?>>) idGetter;
+    op._dataCache = _dataCache;
+    return op;
+  }
+
+  @SuppressWarnings("unchecked")
   public LoadNodeOp createGetMulti(Function<?, ?> idGetter) {
     NodeGetMultiImpl op = new NodeGetMultiImpl();
     op._idGetter = (Function<Object, Collection<Comparable<?>>>) idGetter;
