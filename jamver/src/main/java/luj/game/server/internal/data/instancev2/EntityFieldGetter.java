@@ -47,6 +47,9 @@ public enum EntityFieldGetter {
     if (type == Map.class) {
       return DataMapFactory.GET.create();
     }
+    if (data.getDataType().isTransient()) {
+      return null;
+    }
     throw new UnsupportedOperationException("未知类型：" + type.getName()
         + "，字段：" + data.getDataType().getName() + "#" + fieldName);
   }

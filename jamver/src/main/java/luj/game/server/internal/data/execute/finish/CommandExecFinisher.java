@@ -58,7 +58,8 @@ public class CommandExecFinisher {
     //TODO: 出错的时候要清除修改
     new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
 
-    ExecDataFinisherV2.create(_dataCache, _saveRef, createLog, loadLog).finish();
+    String idField = _idGenState.getIdField();
+    new ExecDataFinisherV2(_dataCache, _saveRef, idField, createLog, loadLog).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(CommandExecFinisher.class);

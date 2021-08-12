@@ -46,7 +46,6 @@ public class CommandSaveRequestorV2 {
 
   private void sendUpdateMsg(DataEntity dataObj) {
     MapWithHistory<String, Object> dataMap = dataObj.getFieldValueMap();
-    Comparable<?> dataId = dataObj.getDataId();
 
     // 获取数值变动
     Map<String, Object> updateHistory = MapX.nonNull(dataMap.getUpdateHistory());
@@ -64,7 +63,14 @@ public class CommandSaveRequestorV2 {
         .filter(t -> t._2.isChanged())
         .collect(toMap(t -> t._1, t -> t._2.encodeChanged())));
 
+    if (primitiveUpdated.isEmpty() && changedMap.isEmpty()) {
+      // 只有集合字段初始化，忽略
+      return;
+    }
+
     String dataType = dataObj.getDataType().getName();
+    Comparable<?> dataId = dataObj.getDataId();
+
     DataUpdateMsg msg = new DataUpdateMsg(dataType, dataId, _idField, primitiveUpdated,
         getTypeMap(changedMap, DUpdateMsgSet.class), getTypeMap(changedMap, DUpdateMsgMap.class));
 

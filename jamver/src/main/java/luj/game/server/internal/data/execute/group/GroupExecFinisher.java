@@ -39,7 +39,8 @@ public class GroupExecFinisher {
     new CmdGroupExecutor(_cmdGroup, _elemList, createLog,
         loadLog, _dataCache, _idGenState, _dataRef, _remoteRef, _commandMap, _lujbean).execute();
 
-    ExecDataFinisherV2.create(_dataCache, _saveRef, createLog, loadLog).finish();
+    String idField = _idGenState.getIdField();
+    new ExecDataFinisherV2(_dataCache, _saveRef, idField, createLog, loadLog).finish();
   }
 
   private final GameDataCommandGroup _cmdGroup;

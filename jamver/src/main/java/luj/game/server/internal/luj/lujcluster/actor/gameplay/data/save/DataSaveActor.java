@@ -18,6 +18,14 @@ public class DataSaveActor {
     _waitBatch = waitBatch;
   }
 
+  public long getIoSeq() {
+    return _ioSeq;
+  }
+
+  public void setIoSeq(long ioSeq) {
+    _ioSeq = ioSeq;
+  }
+
   public boolean isIoRunning() {
     return _ioRunning;
   }
@@ -42,6 +50,7 @@ public class DataSaveActor {
     return _waitBatch;
   }
 
+  private long _ioSeq;
   private boolean _ioRunning;
 
   private final Object _saveState;

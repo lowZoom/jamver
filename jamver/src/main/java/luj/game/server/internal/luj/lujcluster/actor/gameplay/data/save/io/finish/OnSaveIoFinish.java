@@ -19,7 +19,7 @@ final class OnSaveIoFinish implements DataSaveActor.Handler<SaveIoFinishMsg> {
     DataSaveActor self = ctx.getActorState(this);
     checkState(self.isIoRunning());
 
-    LOG.debug("落地结束");
+    LOG.debug("落地结束：#{}", self.getIoSeq());
     self.setIoRunning(false);
 
     Ref selfRef = ctx.getActorRef();

@@ -21,7 +21,8 @@ final class OnDataCreate implements DataSaveActor.Handler<DataCreateMsg> {
     new IoWaitCreateAdder(waitBatch, msg).add();
 
     if (self.isIoRunning()) {
-      LOG.debug("已有数据正在保存，进入等待批，数量：{}", waitBatch.getCreateList().size());
+      int waitCount = waitBatch.getCreateList().size();
+      LOG.debug("已有数据正在保存：#{}，进入等待批，数量：{}", self.getIoSeq(), waitCount);
       return;
     }
 

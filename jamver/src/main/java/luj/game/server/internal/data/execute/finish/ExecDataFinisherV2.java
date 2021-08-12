@@ -1,5 +1,7 @@
 package luj.game.server.internal.data.execute.finish;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import luj.cache.api.container.CacheContainer;
@@ -9,13 +11,10 @@ import luj.game.server.internal.data.instance.value.change.DataDirtyChecker;
 import luj.game.server.internal.data.instance.value.change.DataModificationApplier;
 import luj.game.server.internal.data.instancev2.CacheEntityAdder;
 import luj.game.server.internal.data.instancev2.DataEntity;
+import luj.game.server.internal.data.types.map.history.MapDataGetter;
+import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
 public class ExecDataFinisherV2 {
-
-  public static ExecDataFinisherV2 create(CacheContainer dataCache, Tellable saveRef,
-      List<DataEntity> createLog, List<DataEntity> loadLog) {
-    return new ExecDataFinisherV2(dataCache, saveRef, "_luj$id", createLog, loadLog);
-  }
 
   public ExecDataFinisherV2(CacheContainer dataCache, Tellable saveRef, String idField,
       List<DataEntity> createLog, List<DataEntity> loadLog) {
@@ -34,6 +33,7 @@ public class ExecDataFinisherV2 {
     // 新创的数据要在写库前应用变更
     for (DataEntity data : _createLog) {
       DataModificationApplier.createV2(data).apply();
+      guessIdIfNull(data);
     }
 
     // 变动的数据发起写库
@@ -48,6 +48,18 @@ public class ExecDataFinisherV2 {
     for (DataEntity data : _createLog) {
       new CacheEntityAdder(_dataCache, data).add();
     }
+  }
+
+  private void guessIdIfNull(DataEntity data) {
+    if (data.getDataId() != null) {
+      return;
+    }
+
+    MapWithHistory<String, Object> value = data.getFieldValueMap();
+    Object newId = MapDataGetter.GET.getValue(value, _idField);
+
+    checkNotNull(newId, data.getDataType().getName());
+    data.setDataId((Comparable<?>) newId);
   }
 
   private final CacheContainer _dataCache;

@@ -25,7 +25,10 @@ public class DataEntityCreator {
     checkState(dataClass.isInterface(), _dataType);
     HashMap<String, Object> dataMap = new HashMap<>(_initValue);
 
-    return new DataEntity(_dataType, _dataId, new MapWithHistory<>(dataMap));
+    DataEntity result = new DataEntity(_dataType, new MapWithHistory<>(dataMap));
+    result.setDataId(_dataId);
+
+    return result;
   }
 
   private final DataType _dataType;

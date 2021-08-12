@@ -17,9 +17,12 @@ public class SaveIoStartRequestor {
    * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.io.start.OnSaveIoStart#onHandle
    */
   public void request() {
-    LOG.debug("启动新一轮数据落地");
+    long newRound = _saveActor.getIoSeq() + 1;
+    LOG.debug("启动新一轮数据落地：#{}", newRound);
 
+    _saveActor.setIoSeq(newRound);
     _saveActor.setIoRunning(true);
+
     _saveRef.tell(SaveIoStartMsg.SINGLETON);
   }
 
