@@ -19,6 +19,7 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.D
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DataUpdateMsg;
 import scala.Tuple2;
 
+@Deprecated
 public class CommandSaveRequestor {
 
   public CommandSaveRequestor(Tellable saveRef, List<DataTempProxy> createLog,

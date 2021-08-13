@@ -3,8 +3,8 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.io.fini
 import static com.google.common.base.Preconditions.checkState;
 
 import luj.ava.spring.Internal;
+import luj.game.server.internal.data.save.io.NextSaveWaker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSaveActor;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.wait.SaveWakeMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ final class OnSaveIoFinish implements DataSaveActor.Handler<SaveIoFinishMsg> {
     self.setIoRunning(false);
 
     Ref selfRef = ctx.getActorRef();
-    selfRef.tell(SaveWakeMsg.SINGLETON);
+    new NextSaveWaker(self, selfRef).wake();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnSaveIoFinish.class);

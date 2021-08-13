@@ -1,32 +1,36 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.wait;
+package luj.game.server.internal.data.save.io;
 
 import static com.google.common.base.Preconditions.checkState;
 
-import luj.ava.spring.Internal;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.data.save.io.start.SaveIoStartRequestor;
 import luj.game.server.internal.data.save.wait.IoWaitBatch;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSaveActor;
 
-@Internal
-final class OnSaveWake implements DataSaveActor.Handler<SaveWakeMsg> {
+public class NextSaveWaker {
 
-  @Override
-  public void onHandle(Context ctx) {
-    DataSaveActor self = ctx.getActorState(this);
-    checkState(!self.isIoRunning());
+  public NextSaveWaker(DataSaveActor saveActor, Tellable saveRef) {
+    _saveActor = saveActor;
+    _saveRef = saveRef;
+  }
+
+  public void wake() {
+    DataSaveActor self = _saveActor;
+    checkState(!self.isIoRunning(), "#%s", self.getIoSeq());
 
     IoWaitBatch batch = self.getWaitBatch();
     if (!isWaiting(batch)) {
       return;
     }
 
-    Ref selfRef = ctx.getActorRef();
-    new SaveIoStartRequestor(self, selfRef).request();
+    new SaveIoStartRequestor(self, _saveRef).request();
   }
 
   private boolean isWaiting(IoWaitBatch batch) {
     return !batch.getCreateList().isEmpty() || !batch.getUpdateMap().isEmpty();
   }
 
-//  private static final Logger LOG = LoggerFactory.getLogger(OnSaveWake.class);
+  private final DataSaveActor _saveActor;
+
+  private final Tellable _saveRef;
 }

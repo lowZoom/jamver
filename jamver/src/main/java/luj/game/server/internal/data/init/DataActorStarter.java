@@ -65,7 +65,11 @@ public class DataActorStarter {
     JamverDataLoadInit initPlugin = loadPlugin.getLoadInit();
     Object loadState = skipInit ? null : new DataLoadInitializer(initPlugin, pluginState).init();
 
-    return new DataLoadActor(loadState, loadPlugin, dataRef);
+    ExecutorService ioRunner = Executors.newCachedThreadPool(new ThreadFactoryBuilder()
+        .setNameFormat("data-load-io-%d")
+        .build());
+
+    return new DataLoadActor(loadState, loadPlugin, ioRunner, dataRef);
   }
 
   private DataSaveActor saveActor(DataSavePlugin savePlugin, Object pluginState, boolean skipInit) {

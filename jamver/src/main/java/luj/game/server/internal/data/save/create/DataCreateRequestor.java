@@ -11,6 +11,7 @@ import luj.game.server.internal.data.types.HasOp;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.create.DataCreateMsg;
 import scala.Tuple2;
 
+@Deprecated
 public class DataCreateRequestor {
 
   public DataCreateRequestor(List<DataTempProxy> createList, Tellable saveRef) {

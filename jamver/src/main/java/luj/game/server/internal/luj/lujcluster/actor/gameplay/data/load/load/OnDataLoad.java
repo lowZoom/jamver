@@ -23,7 +23,7 @@ final class OnDataLoad implements DataLoadActor.Handler<DataLoadMsg> {
     checkNotNull(dataId, dataType.getName());
 
     DataLoadPlugin plugin = self.getLoadPlugin();
-    new DataIoLoader(plugin.getDataLoader(), self.getLoadState(),
-        dataType, dataId, msg.getIdField(), self.getDataRef()).load();
+    new DataIoLoader(dataType, dataId, msg.getIdField(), self.getIoRunner(),
+        plugin.getDataLoader(), self.getLoadState(), self.getDataRef()).load();
   }
 }

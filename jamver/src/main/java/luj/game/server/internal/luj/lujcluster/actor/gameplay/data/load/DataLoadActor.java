@@ -1,5 +1,6 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load;
 
+import java.util.concurrent.ExecutorService;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
 
@@ -10,9 +11,10 @@ public class DataLoadActor {
   }
 
   public DataLoadActor(Object loadState, DataLoadPlugin loadPlugin,
-      ActorPreStartHandler.Actor dataRef) {
+      ExecutorService ioRunner, ActorPreStartHandler.Actor dataRef) {
     _loadState = loadState;
     _loadPlugin = loadPlugin;
+    _ioRunner = ioRunner;
     _dataRef = dataRef;
   }
 
@@ -24,6 +26,10 @@ public class DataLoadActor {
     return _loadPlugin;
   }
 
+  public ExecutorService getIoRunner() {
+    return _ioRunner;
+  }
+
   public ActorPreStartHandler.Actor getDataRef() {
     return _dataRef;
   }
@@ -31,5 +37,6 @@ public class DataLoadActor {
   private final Object _loadState;
   private final DataLoadPlugin _loadPlugin;
 
+  private final ExecutorService _ioRunner;
   private final ActorPreStartHandler.Actor _dataRef;
 }
