@@ -19,7 +19,7 @@ final class OnPrestart implements NetRootActor.PreStart {
 
     List<BootStartInvoker.Network.Address> bindList = netCfg.bind();
     if (bindList.isEmpty()) {
-      LOG.debug("未启用网络模块");
+      LOG.debug("[game]未启用网络模块");
       return;
     }
 

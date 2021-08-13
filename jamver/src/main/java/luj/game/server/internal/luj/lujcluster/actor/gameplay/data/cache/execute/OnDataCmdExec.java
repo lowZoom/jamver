@@ -26,7 +26,7 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     DatacmdExecMsg msg = ctx.getMessage(this);
 
     String cmdType = msg.getCmdType();
-//    LOG.debug("尝试执行CMD：{}", cmdType.getSimpleName());
+//    LOG.debug("尝试执行CMD：{}", cmdType);
 
     Map<String, GameplayDataActor.CommandKit> cmdMap = self.getCommandMap();
     Object param = msg.getParam();

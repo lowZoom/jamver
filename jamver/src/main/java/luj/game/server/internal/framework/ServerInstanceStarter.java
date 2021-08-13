@@ -44,7 +44,7 @@ public class ServerInstanceStarter {
     int port = clusterCfg.selfPort();
 
     if (host == null) {
-      LOG.debug("未启用集群模块");
+      LOG.debug("[game]未启用集群模块");
     }
 
     lujcluster.startNode(host, port, clusterCfg.seedList(), new JambeanInLujcluster(
