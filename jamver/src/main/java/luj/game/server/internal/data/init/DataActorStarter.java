@@ -10,7 +10,7 @@ import luj.game.server.api.plugin.JamverDataLoadInit;
 import luj.game.server.api.plugin.JamverDataRootInit;
 import luj.game.server.api.plugin.JamverDataSaveInit;
 import luj.game.server.internal.data.id.init.DataIdInitializer;
-import luj.game.server.internal.data.init.root.DataRootInitializer;
+import luj.game.server.internal.data.init.root.DataRootInitInvoker;
 import luj.game.server.internal.data.load.io.init.DataLoadInitializer;
 import luj.game.server.internal.data.save.init.DataSaveInitializer;
 import luj.game.server.internal.data.save.wait.IoWaitBatch;
@@ -39,7 +39,6 @@ public class DataActorStarter {
 
     Object rootState = initRoot(_self, skipInit);
     _self.setPluginState(rootState);
-    new DataIdInitializer(_self).init();
 
     ActorPreStartHandler.Actor selfRef = _context.getActor();
     _self.setLoadRef(_context.createActor(loadActor(
@@ -56,8 +55,10 @@ public class DataActorStarter {
       return null;
     }
 
-    return new DataRootInitializer(self.getAllPlugin()
-        .getRootInitPlugin(), self.getStartParam()).init();
+    new DataIdInitializer(_self).init();
+
+    return new DataRootInitInvoker(self.getAllPlugin()
+        .getRootInitPlugin(), self.getStartParam()).invoke();
   }
 
   private DataLoadActor loadActor(DataLoadPlugin loadPlugin,

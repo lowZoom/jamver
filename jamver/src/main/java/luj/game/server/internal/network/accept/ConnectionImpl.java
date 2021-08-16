@@ -30,6 +30,11 @@ final class ConnectionImpl implements GameAcceptHandler.Connection {
     return addr;
   }
 
+  @Override
+  public String toString() {
+    return _conn.toString();
+  }
+
   Integer _connId;
   Tellable _netRef;
 
