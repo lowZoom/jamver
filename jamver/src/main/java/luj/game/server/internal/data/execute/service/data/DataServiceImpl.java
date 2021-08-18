@@ -1,5 +1,8 @@
 package luj.game.server.internal.data.execute.service.data;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.base.Preconditions;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -58,6 +61,7 @@ public class DataServiceImpl implements GameDataCommand.Data {
   @SuppressWarnings("unchecked")
   @Override
   public <T extends Comparable<T>> T id(Object data) {
+    checkNotNull(data, "data");
     return (T) DataIdRunner.GET.run(data);
   }
 

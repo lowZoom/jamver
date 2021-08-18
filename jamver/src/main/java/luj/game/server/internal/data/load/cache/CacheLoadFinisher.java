@@ -55,7 +55,7 @@ public class CacheLoadFinisher {
     DataType typeV2 = cacheItem.getDataTypeV2();
     checkState(Objects.equals(typeV2.getName(), _dataType.getName()));
 
-    LOG.debug("[game]缓存项读取完成：{}", dataKey);
+//    LOG.debug("[game]缓存项读取完成：{}", dataKey);
     cacheItem.setPresence(_present ? DataPresence.PRESENT : DataPresence.ABSENT);
 
     if (_present) {
@@ -86,7 +86,7 @@ public class CacheLoadFinisher {
     new DataCreateRequestorV2(ImmutableList.of(dataObj), _idState.getIdField(), _saveRef).request();
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(CacheLoadFinisher.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(CacheLoadFinisher.class);
 
   private final Class<?> _dataType;
   private final Comparable<?> _dataId;
