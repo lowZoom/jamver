@@ -21,9 +21,12 @@ public class DataEntityCreator {
 
   public DataEntity create() {
     Class<?> dataClass = _dataType.getClassCache();
-
     checkState(dataClass.isInterface(), _dataType);
-    HashMap<String, Object> dataMap = new HashMap<>(_initValue);
+
+    HashMap<String, Object> dataMap = new HashMap<>();
+    for (Map.Entry<String, Object> e : _initValue.entrySet()) {
+      dataMap.put(e.getKey().intern(), e.getValue());
+    }
 
     DataEntity result = new DataEntity(_dataType, new MapWithHistory<>(dataMap));
     result.setDataId(_dataId);
