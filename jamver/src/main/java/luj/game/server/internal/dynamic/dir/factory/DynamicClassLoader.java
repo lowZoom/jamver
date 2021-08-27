@@ -7,8 +7,6 @@ import java.nio.file.Path;
 public class DynamicClassLoader extends ClassLoader {
 
   DynamicClassLoader(ClassLoader defaultLoader, Path classDir) {
-    super(defaultLoader.getParent());
-
     _classDir = classDir;
     _defaultLoader = defaultLoader;
   }

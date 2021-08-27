@@ -20,7 +20,7 @@ final class OnReceivePacket implements NetRootActor.Handler<ReceivePacketMsg> {
     JamPacketReceiveInvoker.Result result =
         JamPacketReceiveInvoker.GET.invoke(packetPlugin, msg.getPacket());
 
-    Map<Class<?>, GameProtoHandler<?>> handlerMap = self.getProtoHandlerMap();
+    Map<String, GameProtoHandler<?>> handlerMap = self.getProtoHandlerMap();
     GameProtoHandler<?> handler = handlerMap.get(result.protoType());
 
     ProtoHandleInvoker.GET.invoke(handler, result.protoInstance(), msg.getConnectionId(), self);

@@ -43,7 +43,7 @@ final class OnNodeStart implements NodeStartListener {
     Map<String, GameplayDataActor.CommandKit> cmdMap = new ConcurrentHashMap<>(
         new CommandMapCollector(param.getDataCommandList(), param.getDataLoadList()).collect());
 
-    Map<Class<?>, GameProtoHandler<?>> handlerMap = new ProtoHandlerMapCollector(
+    Map<String, GameProtoHandler<?>> handlerMap = new ProtoHandlerMapCollector(
         param.getProtoHandlerList()).collect();
 
     TopLevelRefs allRef = new TopLevelRefs(
@@ -93,7 +93,7 @@ final class OnNodeStart implements NodeStartListener {
   }
 
   private NetRootActor networkActor(JambeanInLujcluster clusterParam,
-      Map<Class<?>, GameProtoHandler<?>> handlerMap,
+      Map<String, GameProtoHandler<?>> handlerMap,
       Map<String, GameplayDataActor.CommandKit> cmdMap) {
     return new NetRootActor(new HashMap<>(), clusterParam.getNetAcceptHandler(),
         clusterParam.getNetDisconnectHandler(), handlerMap, cmdMap,

@@ -6,6 +6,7 @@ import luj.game.server.internal.inject.DataCommandCollect;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -19,6 +20,9 @@ public class DynamicClassCollector {
 
   public <T> T collect(Class<T> injectRoot) {
     try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext()) {
+      // 避免OrderUtils缓存
+      ctx.getDefaultListableBeanFactory().setDependencyComparator(null);
+
       _classList.stream()
           .map(AnnotatedGenericBeanDefinition::new)
           .filter(this::isCandidateComponent)

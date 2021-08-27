@@ -19,8 +19,8 @@ final class ResultImpl implements JamverNetReceivePacket.Result, JamPacketReceiv
   //////////////////////////////////////
 
   @Override
-  public Class<?> protoType() {
-    return _protoType;
+  public String protoType() {
+    return _protoType.getName();
   }
 
   @Override

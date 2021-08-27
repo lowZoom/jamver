@@ -12,7 +12,7 @@ final class ClassImpl implements ClassDir.Class {
   @Override
   public Class<?> load() {
     try {
-      return Class.forName(_name, true, _classLoader);
+      return _classLoader.loadClass(_name);
 
     } catch (ClassNotFoundException e) {
       throw new UnsupportedOperationException(e);

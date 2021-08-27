@@ -7,7 +7,7 @@ public enum JamPacketReceiveInvoker {
 
   public interface Result {
 
-    Class<?> protoType();
+    String protoType();
 
     Object protoInstance();
   }
