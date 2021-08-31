@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import luj.game.server.api.data.service.CommandService;
 import luj.game.server.api.net.GameHttpHandler;
 import org.slf4j.Logger;
@@ -92,7 +93,15 @@ public interface GameDataCommand<P, D> {
 
     C find(Comparable<?> id);
 
+    /**
+     * @see #all
+     */
+    @Deprecated
     Collection<C> list();
+
+    Iterable<C> all();
+
+    Stream<C> allStream();
   }
   //----------------------------------------------------
 
