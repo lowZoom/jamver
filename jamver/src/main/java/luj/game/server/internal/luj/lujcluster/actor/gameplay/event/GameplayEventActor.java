@@ -17,7 +17,7 @@ public class GameplayEventActor {
     // NOOP
   }
 
-  public GameplayEventActor(Map<Class<?>, List<GameEventListener<?>>> listenerMap,
+  public GameplayEventActor(Map<String, List<GameEventListener<?>>> listenerMap,
       GameEventListener.Service listenService) {
     _listenerMap = listenerMap;
     _listenService = listenService;
@@ -31,7 +31,7 @@ public class GameplayEventActor {
     _siblingRef = siblingRef;
   }
 
-  public Map<Class<?>, List<GameEventListener<?>>> getListenerMap() {
+  public Map<String, List<GameEventListener<?>>> getListenerMap() {
     return _listenerMap;
   }
 
@@ -41,6 +41,6 @@ public class GameplayEventActor {
 
   private TopLevelRefs _siblingRef;
 
-  private final Map<Class<?>, List<GameEventListener<?>>> _listenerMap;
+  private final Map<String, List<GameEventListener<?>>> _listenerMap;
   private final GameEventListener.Service _listenService;
 }

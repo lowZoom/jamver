@@ -23,7 +23,7 @@ final class OnClusterSend implements ClusterCommActor.Handler<ClusterSendMsg> {
 
     Collection<ActorMessageHandler.Node> nodeList = dispatchMap.get(msgType);
     if (nodeList.isEmpty()) {
-      LOG.warn("消息没有对应的处理节点，将被抛弃：{}", msgType);
+      LOG.warn("消息没有对应的处理节点，将被丢弃：{}", msgType);
       return;
     }
 

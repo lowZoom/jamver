@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import luj.game.server.api.data.service.CommandService;
@@ -44,7 +45,13 @@ public interface GameDataCommand<P, D> {
 
     <C> Config<C> config(Class<C> configType);
 
-    Event event();
+    /**
+     * @see #event(Class)
+     */
+    @Deprecated
+    EventOld event();
+
+    <E> Event<E> event(Class<E> eventType);
 
     Network network();
 
@@ -76,10 +83,14 @@ public interface GameDataCommand<P, D> {
 
     boolean exists(Object data);
 
-    <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
-
-    //TODO: 准备弃用
+    /**
+     * TODO: 准备弃用
+     *
+     * @see #command
+     */
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType);
+
+    <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
   }
   //----------------------------------------------------
 
@@ -93,6 +104,8 @@ public interface GameDataCommand<P, D> {
 
     C find(Comparable<?> id);
 
+    C findGlobal();
+
     /**
      * @see #all
      */
@@ -105,14 +118,31 @@ public interface GameDataCommand<P, D> {
   }
   //----------------------------------------------------
 
-  interface Event {
+  interface Event<E> {
 
-    interface Field {
+    interface Instance {
 
-      <T> Field set(Supplier<T> field, T value);
+      <V> Field<V> set(Supplier<V> field);
     }
 
-    <T> void fire(Class<T> eventType, BiConsumer<Field, T> builder);
+    interface Field<V> {
+
+      Instance $(V value);
+    }
+
+    void fire(BiFunction<Instance, E, Instance> e);
+  }
+
+  @Deprecated
+  interface EventOld {
+
+    @Deprecated
+    interface FieldOld {
+
+      <T> FieldOld set(Supplier<T> field, T value);
+    }
+
+    <T> void fire(Class<T> eventType, BiConsumer<FieldOld, T> builder);
   }
   //----------------------------------------------------
 

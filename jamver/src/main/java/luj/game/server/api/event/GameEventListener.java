@@ -34,7 +34,14 @@ public interface GameEventListener<E> {
 
   interface Data {
 
+    /**
+     * TODO: 准备弃用
+     *
+     * @see #command
+     */
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
+
+    <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
   }
 
   interface Network {

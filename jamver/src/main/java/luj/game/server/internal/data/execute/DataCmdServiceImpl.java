@@ -23,8 +23,14 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
   }
 
   @Override
-  public GameDataCommand.Event event() {
+  public GameDataCommand.EventOld event() {
     return _eventSvc;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <E> GameDataCommand.Event<E> event(Class<E> eventType) {
+    return (GameDataCommand.Event<E>) _eventSvc2;
   }
 
   @Override
@@ -34,7 +40,7 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public GameDataCommand.Random random() {
-    return null;
+    throw new UnsupportedOperationException("random尚未实现");
   }
 
   @Override
@@ -43,9 +49,10 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
   }
 
   GameDataCommand.Data _dataSvc;
-
-  GameDataCommand.Event _eventSvc;
   GameDataCommand.Network _networkSvc;
+
+  GameDataCommand.EventOld _eventSvc;
+  GameDataCommand.Event<?> _eventSvc2;
 
   BeanContext _lujbean;
 }
