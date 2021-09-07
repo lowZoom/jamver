@@ -21,16 +21,6 @@ public class EventListenerMapCollector {
         .collect(groupingBy(l -> getEventType(l).getName()));
   }
 
-  public Map<String, List<GameEventListener<?>>> toImmutable(
-      Map<String, List<GameEventListener<?>>> mutable) {
-    ImmutableMap.Builder<String, List<GameEventListener<?>>> result = ImmutableMap.builder();
-    for (Map.Entry<String, List<GameEventListener<?>>> e : mutable.entrySet()) {
-      String key = e.getKey();
-      result.put(key, ImmutableList.copyOf(mutable.get(key)));
-    }
-    return result.build();
-  }
-
   private Class<?> getEventType(GameEventListener<?> listener) {
     return TypeX.ofInstance(listener)
         .getSupertype(GameEventListener.class)
