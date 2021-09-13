@@ -43,6 +43,9 @@ public enum EntityFieldGetter {
     if (type == String.class) {
       return "";
     }
+    if (type == boolean.class){
+      return Boolean.FALSE;
+    }
     if (type == Set.class) {
       return DataSetFactory.GET.create();
     }
@@ -58,6 +61,5 @@ public enum EntityFieldGetter {
 
   private static final Integer INT_ZERO = 0;
   private static final Long LONG_ZERO = 0L;
-
   private static final Double DOUBLE_ZERO = 0.0;
 }
