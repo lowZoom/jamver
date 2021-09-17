@@ -7,6 +7,7 @@ import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.execute.load.request.node.LoadNodeOp;
 import luj.game.server.internal.data.execute.load.request.node.LoadNodeOpFactory;
+import luj.game.server.internal.data.execute.load.result.ResultFieldProxy;
 import luj.game.server.internal.data.instance.DataTempProxy;
 
 final class LoadContextImpl implements GameDataLoad.Context {

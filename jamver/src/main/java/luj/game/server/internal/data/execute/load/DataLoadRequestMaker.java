@@ -4,6 +4,7 @@ import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.data.GameDataLoad;
+import luj.game.server.internal.data.execute.load.result.ResultFieldProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 public class DataLoadRequestMaker {
@@ -33,7 +34,7 @@ public class DataLoadRequestMaker {
     }
 
     CacheRequest req = _lujcache.createRequest(null);
-    ResultFieldProxy fieldHolder = new ResultFieldProxy(loadResultType).init();
+    ResultFieldProxy fieldHolder = ResultFieldProxy.create(loadResultType);
 
     GameDataLoad<?, ?> loader = _cmdKit.getLoader();
     loader.onLoad(_contextFactory.create(req, fieldHolder));

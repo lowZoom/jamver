@@ -8,6 +8,7 @@ import luj.cache.api.request.CacheRequest.Node;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.execute.load.request.node.LoadNodeOp;
 import luj.game.server.internal.data.execute.load.request.node.LoadNodeOpFactory;
+import luj.game.server.internal.data.execute.load.result.ResultFieldProxy;
 
 final class AndLoadImpl<R, F> implements GameDataLoad.AndLoad<R, F> {
 

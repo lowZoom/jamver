@@ -2,6 +2,7 @@ package luj.game.server.internal.data.execute.load;
 
 import java.util.function.Function;
 import luj.cache.api.request.CacheRequest;
+import luj.game.server.internal.data.execute.load.result.ResultFieldProxy;
 import luj.game.server.internal.data.load.result.LoadResultProxy;
 
 public enum ReqChildFieldAppender {
