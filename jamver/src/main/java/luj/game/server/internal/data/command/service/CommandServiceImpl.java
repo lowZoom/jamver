@@ -6,6 +6,8 @@ import java.util.function.BiFunction;
 import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.service.param.CommandParamMaker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
+import luj.game.server.internal.schedule.quartz.QuartzScheduleStarter;
+import org.quartz.Scheduler;
 
 final class CommandServiceImpl<P> implements CommandService<P> {
 
@@ -40,6 +42,12 @@ final class CommandServiceImpl<P> implements CommandService<P> {
   }
 
   @Override
+  public void schedule(Comparable<?> id, BiFunction<Param, P, Param> param, Duration delay) {
+    throw new UnsupportedOperationException("schedule尚未实现");
+//    QuartzScheduleStarter.GET.start(_quartz, _commandType.getName(), param, id, delay);
+  }
+
+  @Override
   public void cancelSchedule() {
     throw new UnsupportedOperationException("cancelSchedule尚未实现");
   }
@@ -48,4 +56,5 @@ final class CommandServiceImpl<P> implements CommandService<P> {
   Class<?> _paramType;
 
   CommandServiceFactory _factory;
+//  Scheduler _quartz;
 }

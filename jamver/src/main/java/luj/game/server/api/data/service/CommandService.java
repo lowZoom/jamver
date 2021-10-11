@@ -29,5 +29,9 @@ public interface CommandService<P> {
 
   void schedule(Duration delay, BiFunction<Param, P, Param> param);
 
+  void schedule(Comparable<?> id, BiFunction<Param, P, Param> param, Duration delay);
+
+//  void unschedule(Comparable<?> id);
+
   void cancelSchedule();
 }
