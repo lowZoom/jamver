@@ -51,7 +51,7 @@ public class DataActorStarter {
 
   private Object initRoot(GameplayDataActor self, boolean skipInit) {
     if (skipInit) {
-      _log.debug("未发现数据模块初始化，跳过");
+      _log.debug("[game]未发现数据模块初始化，跳过");
       return null;
     }
 

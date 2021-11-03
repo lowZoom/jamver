@@ -26,7 +26,7 @@ final class OnStartRef implements DynamicRootActor.Handler<StartRefMsg> {
   private void startActor(DynamicRootActor self) {
     JamverDynamicRootInit initPlugin = self.getInitPlugin();
     if (initPlugin == null) {
-      LOG.debug("未启用热更模块");
+      LOG.debug("[game]未启用热更模块");
       return;
     }
 

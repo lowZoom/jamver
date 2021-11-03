@@ -16,7 +16,7 @@ final class OnRegisterHandle implements ClusterCommActor.Handler<JamRegisterHand
     JamRegisterHandleMsg msg = ctx.getMessage(this);
 
     Set<String> canHandleSet = msg.getMessageCanHandle();
-    LOG.debug("远程节点注册消息处理，数量：{}", canHandleSet.size());
+    LOG.debug("[game]远程节点注册消息处理，数量：{}", canHandleSet.size());
 
     ActorMessageHandler.Node remoteNode = ctx.getRemoteNode();
     for (String msgType : canHandleSet) {

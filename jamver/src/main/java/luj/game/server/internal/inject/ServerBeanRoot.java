@@ -1,5 +1,7 @@
 package luj.game.server.internal.inject;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerJoinListener;
@@ -39,11 +41,11 @@ public class ServerBeanRoot {
   }
 
   public List<ServerMessageHandler<?>> getClusterMessageList() {
-    return _clusterMessageList;
+    return nonNull(_clusterMessageList);
   }
 
   public List<ServerJoinListener> getClusterJoinList() {
-    return _clusterJoinList;
+    return nonNull(_clusterJoinList);
   }
 
   public GameAcceptHandler getNetAcceptHandler() {
@@ -76,6 +78,10 @@ public class ServerBeanRoot {
 
   public JamverDynamicRootInit getDynamicInitPlugin() {
     return _dynamicInitPlugin;
+  }
+
+  private <T> List<T> nonNull(List<T> list) {
+    return MoreObjects.firstNonNull(list, ImmutableList.of());
   }
 
   @Autowired(required = false)
