@@ -54,11 +54,10 @@ public interface GameProtoHandler<P> {
   interface Data {
 
     /**
-     * TODO: 观望一段时间后废弃
-     *
      * @see #command
      * @see CommandService#execute
      */
+    @Deprecated
     <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param);
 
     <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
