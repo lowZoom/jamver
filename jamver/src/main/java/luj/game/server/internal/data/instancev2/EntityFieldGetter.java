@@ -1,6 +1,8 @@
 package luj.game.server.internal.data.instancev2;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import luj.game.server.internal.data.types.map.DataMapFactory;
@@ -53,10 +55,17 @@ public enum EntityFieldGetter {
       return DataMapFactory.GET.create();
     }
     if (data.getDataType().isTransient()) {
-      return null;
+      return initTransientFields(type);
     }
     throw new UnsupportedOperationException("未知类型：" + type.getName()
         + "，字段：" + data.getDataType().getName() + "#" + fieldName);
+  }
+
+  private Object initTransientFields(Class<?> type) {
+    if (type == List.class) {
+      return new ArrayList<>();
+    }
+    return null;
   }
 
   private static final Integer INT_ZERO = 0;

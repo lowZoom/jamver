@@ -1,5 +1,6 @@
 package luj.game.server.internal.schedule.quartz;
 
+import com.google.common.collect.ImmutableSet;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
@@ -38,7 +39,7 @@ public enum QuartzScheduleStarter {
 //        .build();
 
     try {
-      quartz.scheduleJob(job, trigger);
+      quartz.scheduleJob(job, ImmutableSet.of(trigger), true);
     } catch (SchedulerException e) {
       throw new UnsupportedOperationException(e);
     }
