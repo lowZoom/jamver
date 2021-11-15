@@ -96,7 +96,8 @@ public interface GameDataCommand<P, D> {
 
   interface Proto {
 
-    <T> T create(Class<T> protoType, BiConsumer<CommandService.Param, T> protoValue);
+    <T> T create(Class<T> protoType,
+        BiFunction<CommandService.Param, T, CommandService.Param> protoValue);
   }
   //----------------------------------------------------
 

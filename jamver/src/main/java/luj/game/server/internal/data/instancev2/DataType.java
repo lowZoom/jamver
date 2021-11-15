@@ -32,6 +32,11 @@ public class DataType {
     return _transient;
   }
 
+  @Override
+  public String toString() {
+    return _name;
+  }
+
   private Class<?> _classCache;
 
   private final String _name;
