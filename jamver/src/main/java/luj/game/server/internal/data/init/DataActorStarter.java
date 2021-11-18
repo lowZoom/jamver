@@ -66,7 +66,8 @@ public class DataActorStarter {
     JamverDataLoadInit initPlugin = loadPlugin.getLoadInit();
     Object loadState = skipInit ? null : new DataLoadInitializer(initPlugin, pluginState).init();
 
-    ExecutorService ioRunner = Executors.newCachedThreadPool(new ThreadFactoryBuilder()
+    int cores = Math.min(Runtime.getRuntime().availableProcessors(), 10);
+    ExecutorService ioRunner = Executors.newFixedThreadPool(cores, new ThreadFactoryBuilder()
         .setNameFormat("data-load-io-%d")
         .build());
 

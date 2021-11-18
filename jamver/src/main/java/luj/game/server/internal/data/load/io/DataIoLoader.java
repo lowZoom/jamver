@@ -33,6 +33,8 @@ public class DataIoLoader {
       return;
     }
 
+    //TODO: 考虑用io队列把读取合批，类似写入
+
     _ioRunner.submit(this::runIo);
   }
 
