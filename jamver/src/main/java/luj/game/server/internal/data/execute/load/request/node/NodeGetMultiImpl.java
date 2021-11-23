@@ -7,6 +7,7 @@ import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
+import luj.game.server.internal.data.execute.load.missing.log.MissingLog;
 import luj.game.server.internal.data.execute.load.request.node.find.finish.NodeGetMultiFindFinish;
 import luj.game.server.internal.data.execute.load.request.node.find.ready.NodeGetMultiFindReady;
 import luj.game.server.internal.data.instancev2.DataEntity;
@@ -16,7 +17,7 @@ final class NodeGetMultiImpl implements LoadNodeOp {
 
   @Override
   public Object findWhenReady(RequestWalkListener.Context ctx,
-      List<DataReadyChecker.Missing> missingOut, List<CacheItem> lockedOrLoadingOut) {
+      MissingLog missingOut, List<CacheItem> lockedOrLoadingOut) {
     return NodeGetMultiFindReady.GET.find(
         ctx, _dataCache, _idGetter, missingOut, lockedOrLoadingOut);
   }

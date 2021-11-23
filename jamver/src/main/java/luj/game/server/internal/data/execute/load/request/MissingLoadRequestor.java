@@ -3,6 +3,7 @@ package luj.game.server.internal.data.execute.load.request;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
+import java.util.Collection;
 import java.util.List;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
@@ -15,7 +16,7 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.load.Dat
 
 public class MissingLoadRequestor {
 
-  public MissingLoadRequestor(List<DataReadyChecker.Missing> missList,
+  public MissingLoadRequestor(Collection<DataReadyChecker.Missing> missList,
       String idField, CacheContainer dataCache, Tellable loadRef) {
     _missList = missList;
     _idField = idField;
@@ -52,7 +53,7 @@ public class MissingLoadRequestor {
     _dataCache.put(key, cacheItem);
   }
 
-  private final List<DataReadyChecker.Missing> _missList;
+  private final Collection<DataReadyChecker.Missing> _missList;
   private final String _idField;
 
   private final CacheContainer _dataCache;

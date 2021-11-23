@@ -8,7 +8,7 @@ import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.DataPresence;
-import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
+import luj.game.server.internal.data.execute.load.missing.log.MissingLog;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.load.result.DataResultProxyV2;
 
@@ -16,8 +16,8 @@ public enum NodeGetMultiFindReady {
   GET;
 
   public Object find(RequestWalkListener.Context ctx, CacheContainer cache,
-      Function<Object, Collection<Comparable<?>>> idGetter,
-      List<DataReadyChecker.Missing> missingOut, List<CacheItem> lockedOrLoadingOut) {
+      Function<Object, Collection<Comparable<?>>> idGetter, MissingLog missingOut,
+      List<CacheItem> lockedOrLoadingOut) {
     CacheItem parentItem = ctx.getParentReturn();
     if (parentItem == null || parentItem.getPresence() != DataPresence.PRESENT) {
       return ImmutableList.of();
@@ -25,6 +25,8 @@ public enum NodeGetMultiFindReady {
 
     DataEntity parentData = parentItem.getDataObjV2();
     DataResultProxyV2 parentResult = getProxy(parentData);
+
+    //FIXME: load跟exec会在不同线程执行，可能会ConcurrentModificationException
     Collection<Comparable<?>> idList = idGetter.apply(parentResult.getInstance());
 
     Class<?> dataType = ctx.getDataType();

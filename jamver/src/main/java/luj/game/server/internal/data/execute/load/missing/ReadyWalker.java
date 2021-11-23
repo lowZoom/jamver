@@ -4,6 +4,7 @@ import java.util.List;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
+import luj.game.server.internal.data.execute.load.missing.log.MissingLog;
 import luj.game.server.internal.data.execute.load.request.node.LoadNodeOp;
 
 final class ReadyWalker implements RequestWalkListener {
@@ -20,5 +21,5 @@ final class ReadyWalker implements RequestWalkListener {
   CacheContainer _cache;
 
   List<CacheItem> _lockedOrLoadingOut;
-  List<DataReadyChecker.Missing> _missingOut;
+  MissingLog _missingOut;
 }

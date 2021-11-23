@@ -22,8 +22,11 @@ public enum NodeGetMultiFindFinish {
     NodeIdOneFindFinish util = NodeIdOneFindFinish.GET;
     Object parentInstance = parentData.getResultCache().getInstance();
 
+    //FIXME: load跟exec会在不同线程执行，可能会ConcurrentModificationException
+    Collection<Comparable<?>> idList = idGetter.apply(parentInstance);
+
     Class<?> dataType = ctx.getDataType();
-    List<Object> dataList = ImmutableList.copyOf(idGetter.apply(parentInstance).stream()
+    List<Object> dataList = ImmutableList.copyOf(idList.stream()
 //        .peek(id -> LOG.debug("数组读取读取读取读取：{}, {}", dataType.getName(), id))
         .map(id -> util.getDataObj(dataCache, dataType, id))
         .filter(Objects::nonNull)

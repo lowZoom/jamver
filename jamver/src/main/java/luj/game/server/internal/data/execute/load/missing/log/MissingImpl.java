@@ -1,13 +1,8 @@
-package luj.game.server.internal.data.execute.load.request.node.find.ready;
+package luj.game.server.internal.data.execute.load.missing.log;
 
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 
 final class MissingImpl implements DataReadyChecker.Missing {
-
-  MissingImpl(Class<?> dataType, Comparable<?> dataId) {
-    _dataType = dataType;
-    _dataId = dataId;
-  }
 
   @Override
   public Class<?> dataType() {
@@ -19,7 +14,7 @@ final class MissingImpl implements DataReadyChecker.Missing {
     return _dataId;
   }
 
-  private final Class<?> _dataType;
+  Class<?> _dataType;
 
-  private final Comparable<?> _dataId;
+  Comparable<?> _dataId;
 }

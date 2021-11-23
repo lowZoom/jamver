@@ -9,7 +9,7 @@ import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.DataPresence;
-import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
+import luj.game.server.internal.data.execute.load.missing.log.MissingLog;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.instancev2.DataType;
 import luj.game.server.internal.data.load.result.DataResultProxyV2;
@@ -18,7 +18,7 @@ public enum NodeGetOneFindReady {
   GET;
 
   public Object find(RequestWalkListener.Context ctx, CacheContainer cache,
-      Function<Object, Comparable<?>> idGetter, List<DataReadyChecker.Missing> missingOut,
+      Function<Object, Comparable<?>> idGetter, MissingLog missingOut,
       List<CacheItem> lockedOrLoadingOut) {
     CacheItem parentItem = ctx.getParentReturn();
     if (parentItem == null || parentItem.getPresence() != DataPresence.PRESENT) {
