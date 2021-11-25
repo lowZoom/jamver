@@ -16,7 +16,7 @@ final class OnDataCreate implements DataSaveActor.Handler<DataCreateMsg> {
     DataSaveActor self = ctx.getActorState(this);
     DataCreateMsg msg = ctx.getMessage(this);
 
-    LOG.debug("请求数据新建落地：{}", msg.getDataType());
+    LOG.debug("请求数据新建落地：{}#{}", msg.getDataType(), msg.getDataId());
     IoWaitBatch waitBatch = self.getWaitBatch();
     new IoWaitCreateAdder(waitBatch, msg).add();
 

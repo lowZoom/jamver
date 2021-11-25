@@ -44,7 +44,7 @@ public class MissingLoadRequestor {
     String key = CacheKeyMaker.create(dataClass, dataId).make();
     checkState(_dataCache.get(key) == null, key);
 
-    //TODO: 从一个总缓存里拿
+    //TODO: 从一个总缓存里拿，不用每次创建
     DataType dataType = DataType.create(dataClass);
 
     CacheItem cacheItem = CacheItem.create(dataType);
