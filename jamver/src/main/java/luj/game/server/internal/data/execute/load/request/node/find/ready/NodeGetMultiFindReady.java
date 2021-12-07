@@ -7,7 +7,6 @@ import java.util.function.Function;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
 import luj.game.server.internal.data.cache.CacheItem;
-import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.execute.load.missing.log.MissingLog;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.load.result.DataResultProxyV2;
@@ -19,7 +18,7 @@ public enum NodeGetMultiFindReady {
       Function<Object, Collection<Comparable<?>>> idGetter, MissingLog missingOut,
       List<CacheItem> lockedOrLoadingOut) {
     CacheItem parentItem = ctx.getParentReturn();
-    if (parentItem == null || parentItem.getPresence() != DataPresence.PRESENT) {
+    if (NodeGetOneFindReady.GET.cannotFollow(parentItem)) {
       return ImmutableList.of();
     }
 

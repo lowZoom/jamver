@@ -38,9 +38,6 @@ public class CommandExecFinisher {
   }
 
   public void finish() {
-//    LOG.debug("[game]执行数据CMD：{} {}", _cmdType, _cmdParam);
-    LOG.debug("[game]执行数据CMD：{}", _cmdType);
-
     List<DataEntity> createLog = new ArrayList<>();
     List<DataEntity> loadLog = new ArrayList<>();
 
@@ -48,14 +45,19 @@ public class CommandExecFinisher {
     DataServiceImpl dataSvc = new DataServiceImpl(
         _idGenState, _dataRef, createLog, _remoteRef, _commandKit.getParentMap(), _lujbean);
 
+    // 收集并锁定要用的数据
     _cacheReq.walk(new ExecFinishWalker(
         _dataCache, resultProxy, loadLog, dataSvc::specifySetField));
 
     Object loadResult = resultProxy.getInstance();
     GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 
+//    LOG.debug("[game]执行数据CMD：{} {}", _cmdType, _cmdParam);
+    LOG.debug("[game]执行数据CMD：{}", _cmdType);
+
     // 真正调用外部cmd逻辑
     //TODO: 出错的时候要清除修改
+    //TODO: 并发到另外的线程去执行
     new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
 
     String idField = _idGenState.getIdField();

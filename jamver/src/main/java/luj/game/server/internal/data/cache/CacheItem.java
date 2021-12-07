@@ -19,7 +19,25 @@ public class CacheItem {
   }
 
   public void setPresence(DataPresence presence) {
+//    StackTraceElement[] chain = Thread.currentThread().getStackTrace();
+//    LOG.debug("presence#{}：{} -> {}，{}", _dataTypeV2, _presence, presence, Arrays.stream(chain)
+//        .map(e -> e.getClassName() + "#" + e.getMethodName())
+//        .skip(1)
+//        .filter(s -> !s.startsWith("java."))
+//        .filter(s -> !s.startsWith("scala."))
+//        .filter(s -> !s.startsWith("akka."))
+//        .filter(s -> !s.startsWith("io.netty."))
+//        .filter(s -> !s.startsWith("org.springframework."))
+//        .collect(Collectors.joining(",")));
     _presence = presence;
+  }
+
+  public String getLocker() {
+    return _locker;
+  }
+
+  public void setLocker(String locker) {
+    _locker = locker;
   }
 
   public DataTempProxy getDataObj() {
@@ -51,7 +69,10 @@ public class CacheItem {
     _dataTypeV2 = dataTypeV2;
   }
 
+//  private static final Logger LOG = LoggerFactory.getLogger(CacheItem.class);
+
   private DataPresence _presence;
+  private String _locker;
 
   private DataTempProxy _dataObj;
   private DataEntity _dataObjV2;

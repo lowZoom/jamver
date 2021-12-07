@@ -28,7 +28,7 @@ public enum NodeGetMultiFindFinish {
     Class<?> dataType = ctx.getDataType();
     List<Object> dataList = ImmutableList.copyOf(idList.stream()
 //        .peek(id -> LOG.debug("数组读取读取读取读取：{}, {}", dataType.getName(), id))
-        .map(id -> util.getDataObj(dataCache, dataType, id))
+        .map(id -> util.getDataObjAndLock(dataCache, dataType, id))
         .filter(Objects::nonNull)
         .map(d -> util.createResultAndLog(d, dataType, fieldHook, loadLog))
         .map(DataResultProxyV2::getInstance)

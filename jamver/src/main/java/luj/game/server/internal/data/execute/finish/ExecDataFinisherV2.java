@@ -11,6 +11,7 @@ import luj.game.server.internal.data.instance.value.change.DataDirtyChecker;
 import luj.game.server.internal.data.instance.value.change.DataModificationApplier;
 import luj.game.server.internal.data.instancev2.CacheEntityAdder;
 import luj.game.server.internal.data.instancev2.DataEntity;
+import luj.game.server.internal.data.lock.CacheItemUnlocker;
 import luj.game.server.internal.data.types.map.history.MapDataGetter;
 import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
@@ -36,7 +37,7 @@ public class ExecDataFinisherV2 {
       guessIdIfNull(data);
     }
 
-    // 变动的数据发起写库
+    // 数据变更部分发起写库
     new CommandSaveRequestorV2(_saveRef, _idField, _createLog, modifyLog).request();
 
     // 将已有数据的变更应用到数据上
@@ -47,6 +48,11 @@ public class ExecDataFinisherV2 {
     // 将新创建的数据加入统一缓存管理
     for (DataEntity data : _createLog) {
       new CacheEntityAdder(_dataCache, data).add();
+    }
+
+    // 归还（解锁）借出的数据
+    for (DataEntity data : _loadLog) {
+      CacheItemUnlocker.GET.unlock(_dataCache, data);
     }
   }
 

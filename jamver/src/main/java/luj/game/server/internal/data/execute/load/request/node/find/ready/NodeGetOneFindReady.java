@@ -21,7 +21,7 @@ public enum NodeGetOneFindReady {
       Function<Object, Comparable<?>> idGetter, MissingLog missingOut,
       List<CacheItem> lockedOrLoadingOut) {
     CacheItem parentItem = ctx.getParentReturn();
-    if (parentItem == null || parentItem.getPresence() != DataPresence.PRESENT) {
+    if (cannotFollow(parentItem)) {
       return ImmutableList.of();
     }
 
@@ -42,5 +42,11 @@ public enum NodeGetOneFindReady {
     checkNotNull(dataClass, type.getName());
     return DataResultProxyV2.create(entity, dataClass, (p, s) -> {
     });
+  }
+
+  boolean cannotFollow(CacheItem parentItem) {
+    return parentItem == null ||
+        parentItem.getPresence() != DataPresence.PRESENT ||
+        parentItem.getLocker() != null;
   }
 }

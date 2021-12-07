@@ -4,9 +4,8 @@ import java.util.List;
 import luj.cache.api.container.CacheContainer;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
-import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.execute.load.missing.log.MissingLog;
-import luj.game.server.internal.data.execute.load.missing.log.MissingLogAdder;
+import luj.game.server.internal.data.execute.load.missing.log.UnusableLogAdder;
 import luj.game.server.internal.data.instancev2.DataType;
 
 public enum NodeIdOneFindReady {
@@ -15,7 +14,7 @@ public enum NodeIdOneFindReady {
   public Object find(CacheContainer cache, Class<?> dataType, Comparable<?> dataId,
       MissingLog missingOut, List<CacheItem> lockedOrLoadingOut) {
     CacheItem dataItem = cacheGet(cache, dataType, dataId);
-    logUnusable(dataItem, dataType, dataId, missingOut, lockedOrLoadingOut);
+    UnusableLogAdder.GET.add(dataItem, dataType, dataId, missingOut, lockedOrLoadingOut);
 
     updateClassCache(dataItem, dataType);
     return dataItem;
@@ -28,14 +27,7 @@ public enum NodeIdOneFindReady {
 
   void logUnusable(CacheItem item, Class<?> dataType, Comparable<?> dataId,
       MissingLog missingOut, List<CacheItem> lockedOrLoadingOut) {
-    if (item == null) {
-      MissingLogAdder.GET.add(missingOut, dataType, dataId);
-      return;
-    }
-
-    if (item.getPresence() == DataPresence.LOADING) {
-      lockedOrLoadingOut.add(item);
-    }
+    UnusableLogAdder.GET.add(item, dataType, dataId, missingOut, lockedOrLoadingOut);
   }
 
   private void updateClassCache(CacheItem item, Class<?> dataType) {

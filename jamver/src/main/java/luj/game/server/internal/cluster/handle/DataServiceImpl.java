@@ -11,7 +11,7 @@ import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.command.service.CommandServiceFactory;
 import luj.game.server.internal.data.service.execute.GroupExecuteRequestor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.DatacmdExecMsg;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.prepare.DatacmdExecMsg;
 
 final class DataServiceImpl implements ServerMessageHandler.Data {
 

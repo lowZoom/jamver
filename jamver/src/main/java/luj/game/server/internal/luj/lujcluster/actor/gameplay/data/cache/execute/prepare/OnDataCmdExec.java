@@ -1,4 +1,4 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute;
+package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.prepare;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -13,6 +13,8 @@ import luj.game.server.internal.data.cache.DataPresence;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.instancev2.DataType;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.load.load.DataLoadMsg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MissingLoadRequestor {
 
@@ -43,6 +45,7 @@ public class MissingLoadRequestor {
   private void createLoadingItem(Class<?> dataClass, Comparable<?> dataId) {
     String key = CacheKeyMaker.create(dataClass, dataId).make();
     checkState(_dataCache.get(key) == null, key);
+//    LOG.debug("准备读取数据项：{}", key);
 
     //TODO: 从一个总缓存里拿，不用每次创建
     DataType dataType = DataType.create(dataClass);
@@ -52,6 +55,8 @@ public class MissingLoadRequestor {
 
     _dataCache.put(key, cacheItem);
   }
+
+//  private static final Logger LOG = LoggerFactory.getLogger(MissingLoadRequestor.class);
 
   private final Collection<DataReadyChecker.Missing> _missList;
   private final String _idField;

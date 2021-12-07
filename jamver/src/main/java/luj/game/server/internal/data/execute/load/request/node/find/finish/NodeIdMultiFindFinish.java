@@ -20,7 +20,7 @@ public enum NodeIdMultiFindFinish {
     NodeIdOneFindFinish util = NodeIdOneFindFinish.GET;
 
     List<Object> result = idList.stream()
-        .map(id -> util.getDataObj(dataCache, dataType, id))
+        .map(id -> util.getDataObjAndLock(dataCache, dataType, id))
         .filter(Objects::nonNull)
         .map(e -> util.createResultAndLog(e, dataType, fieldHook, loadLog))
         .map(DataResultProxyV2::getInstance)

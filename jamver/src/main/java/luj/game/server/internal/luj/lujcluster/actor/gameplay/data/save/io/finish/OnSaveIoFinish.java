@@ -11,9 +11,6 @@ import org.slf4j.LoggerFactory;
 @Internal
 final class OnSaveIoFinish implements DataSaveActor.Handler<SaveIoFinishMsg> {
 
-  /**
-   * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.wait.OnSaveWake#onHandle
-   */
   @Override
   public void onHandle(Context ctx) {
     DataSaveActor self = ctx.getActorState(this);
