@@ -23,6 +23,7 @@ public class StartListenTrigger {
 
     List<GameStartListener> listnerList = startParam.getStartListenerList();
     for (GameStartListener listener : nonNull(listnerList)) {
+      //TODO: 出错应该打断启动退出
       listener.onStart(ctx);
     }
   }

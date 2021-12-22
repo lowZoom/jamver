@@ -24,7 +24,7 @@ final class ElementImpl<C> implements GameDataCommandGroup.Element<C> {
   }
 
   @Override
-  public void execute() {
+  public void execute() throws Exception {
     Object loadResult = _resultProxy.getInstance();
     GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 

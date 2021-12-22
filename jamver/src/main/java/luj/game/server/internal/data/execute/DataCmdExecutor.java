@@ -16,7 +16,7 @@ public class DataCmdExecutor {
     _lujbean = lujbean;
   }
 
-  public void execute() {
+  public void execute() throws Exception {
     DataCmdServiceImpl commandSvc = new DataCmdServiceImpl();
     commandSvc._dataSvc = _dataSvc;
     commandSvc._networkSvc = _netSvc;
@@ -25,15 +25,8 @@ public class DataCmdExecutor {
     //TODO: event服务有待实现
     commandSvc._eventSvc = null;
 
-    try {
-      _cmdKit.getCommand().onExecute(new CmdContextImpl(
-          _param, _loadResult, _cmdKit.getLogger(), commandSvc));
-
-    } catch (RuntimeException e) {
-      throw e;
-    } catch (Exception e) {
-      throw new UnsupportedOperationException(e);
-    }
+    _cmdKit.getCommand().onExecute(new CmdContextImpl(
+        _param, _loadResult, _cmdKit.getLogger(), commandSvc));
   }
 
   private final GameplayDataActor.CommandKit _cmdKit;

@@ -20,9 +20,9 @@ public enum MissingLogAdder {
     item._dataType = dataType;
     item._dataId = dataId;
 
-    LOG.debug("缓存项未存在：{}", itemKey);
+//    LOG.debug("缓存项未存在：{}", itemKey);
     logMap.put(itemKey, item);
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(MissingLogAdder.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(MissingLogAdder.class);
 }

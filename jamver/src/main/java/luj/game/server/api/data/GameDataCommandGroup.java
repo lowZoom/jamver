@@ -31,7 +31,7 @@ public interface GameDataCommandGroup {
 
     <T extends GameDataCommand<?, ?>> Element<T> as(Class<T> command);
 
-    void execute();
+    void execute() throws Exception;
   }
 
   void onExecute(Context ctx) throws Exception;

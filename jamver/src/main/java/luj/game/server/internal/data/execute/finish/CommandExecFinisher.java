@@ -56,9 +56,13 @@ public class CommandExecFinisher {
     LOG.debug("[game]执行数据CMD：{}", _cmdType);
 
     // 真正调用外部cmd逻辑
-    //TODO: 出错的时候要清除修改
-    //TODO: 并发到另外的线程去执行
-    new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
+    try {
+      //TODO: 并发到另外的线程去执行
+      new DataCmdExecutor(_commandKit, _cmdParam, loadResult, dataSvc, netSvc, _lujbean).execute();
+    } catch (Exception e) {
+      LOG.error(e.getMessage(), e);
+      //TODO: 出错的时候要清除修改
+    }
 
     String idField = _idGenState.getIdField();
     new ExecDataFinisherV2(_dataCache, _saveRef, idField, createLog, loadLog).finish();
