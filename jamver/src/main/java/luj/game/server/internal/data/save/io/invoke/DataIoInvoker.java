@@ -60,6 +60,7 @@ public class DataIoInvoker {
     created._primitive = datas.stream()
         .filter(e -> !created._set.containsKey(e.getKey()))
         .filter(e -> !created._map.containsKey(e.getKey()))
+        .filter(e -> e.getValue() != null) // 在业务里硬设为null
         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     return created;

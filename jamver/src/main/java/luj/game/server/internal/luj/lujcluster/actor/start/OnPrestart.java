@@ -9,7 +9,6 @@ final class OnPrestart implements JamStartActor.PreStart {
   @Override
   public void onHandle(Context ctx) throws Exception {
     JamStartActor self = ctx.getActorState(this);
-    self.getStartLatch().await();
 
     new StartListenTrigger(self).trigger();
   }

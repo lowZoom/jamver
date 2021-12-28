@@ -37,7 +37,7 @@ final class OnNodeStart implements NodeStartListener {
    * @see luj.game.server.internal.luj.lujcluster.actor.start.OnPrestart#onHandle
    */
   @Override
-  public void onStart(Context ctx) {
+  public void onStart(Context ctx) throws Exception {
     JambeanInLujcluster param = ctx.getStartParam();
 
     Map<String, GameplayDataActor.CommandKit> cmdMap = new ConcurrentHashMap<>(
@@ -63,8 +63,10 @@ final class OnNodeStart implements NodeStartListener {
       ref.tell(msg);
     }
 
+    startLatch.await();
+
     //FIXME: 临时用单独的actor实现，最后应该把上面的整合进来
-    JamStartActor startState = new JamStartActor(startLatch, param, allRef, cmdMap);
+    JamStartActor startState = new JamStartActor(param, allRef, cmdMap);
     ctx.createApplicationActor(startState);
   }
 
