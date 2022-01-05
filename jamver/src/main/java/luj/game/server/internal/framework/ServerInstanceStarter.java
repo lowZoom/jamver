@@ -1,9 +1,12 @@
 package luj.game.server.internal.framework;
 
+import com.google.common.collect.ImmutableList;
+import java.util.List;
 import luj.bean.api.LujBean;
 import luj.cache.api.LujCache;
 import luj.cluster.api.ClusterSession;
 import luj.cluster.api.LujCluster;
+import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.plugin.JamverBootRootInit;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.inject.ServerBeanCollector;
@@ -28,13 +31,17 @@ public class ServerInstanceStarter {
 
       ClusterSession lujcluster = LujCluster.start(internalCtx);
       startCluster(lujcluster, internalCtx);
+
+    } catch (Throwable t) {
+      LOG.error(t.getMessage(), t);
     }
   }
 
   /**
    * @see luj.game.server.internal.luj.lujcluster.OnNodeStart#onStart
    */
-  private void startCluster(ClusterSession lujcluster, ApplicationContext internalCtx) {
+  private void startCluster(ClusterSession lujcluster,
+      ApplicationContext internalCtx) throws Exception {
     ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
     JamverBootRootInit startPlugin = beanRoot.getBootInitPlugin();
     BootStartInvoker.Result startCfg = new BootStartInvoker(startPlugin).invoke();
@@ -42,14 +49,17 @@ public class ServerInstanceStarter {
     BootStartInvoker.Cluster clusterCfg = startCfg.clusterConfig();
     String host = clusterCfg.selfHost();
     int port = clusterCfg.selfPort();
-
     if (host == null) {
       LOG.debug("[game]未启用集群模块");
     }
 
+    List<GameStartListener> startListeners = ImmutableList.<GameStartListener>builder()
+        .addAll(beanRoot.getStartListenerList())
+        .addAll(startCfg.injectExtra().startListeners())
+        .build();
+
     lujcluster.startNode(host, port, clusterCfg.seedList(), new JambeanInLujcluster(
-        beanRoot.getStartListenerList(),
-        beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
+        startListeners, beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
         beanRoot.getCommandGroupList(), null, null,
         beanRoot.getClusterMessageList(), beanRoot.getClusterJoinList(),
         beanRoot.getNetAcceptHandler(), beanRoot.getNetDisconnectHandler(),

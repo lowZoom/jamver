@@ -10,6 +10,7 @@ final class ContextImpl implements JamverBootRootInit.Context {
     ReturnImpl result = new ReturnImpl();
     result._cluster = new ClusterImpl();
     result._network = createNetwork();
+    result._injectExtra = new InjectImpl();
     return result;
   }
 

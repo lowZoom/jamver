@@ -21,6 +21,13 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
     return this;
   }
 
+  @Override
+  public JamverBootRootInit.Return injectExtra(
+      Function<JamverBootRootInit.Inject, JamverBootRootInit.Inject> val) {
+    checkState(val.apply(_injectExtra) == _injectExtra);
+    return this;
+  }
+
   /**
    * @see #startParam
    */
@@ -43,6 +50,11 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
   }
 
   @Override
+  public BootStartInvoker.Inject injectExtra() {
+    return _injectExtra;
+  }
+
+  @Override
   public Object startParam() {
     return _param;
   }
@@ -52,5 +64,6 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
   ClusterImpl _cluster;
   NetworkImpl _network;
 
+  InjectImpl _injectExtra;
   Object _param;
 }

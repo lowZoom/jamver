@@ -2,6 +2,7 @@ package luj.game.server.api.plugin;
 
 import java.util.List;
 import java.util.function.Function;
+import luj.game.server.api.boot.GameStartListener;
 
 public interface JamverBootRootInit {
 
@@ -15,6 +16,8 @@ public interface JamverBootRootInit {
     Return cluster(Function<Cluster, Cluster> val);
 
     Return network(Function<Network, Network> val);
+
+    Return injectExtra(Function<Inject, Inject> val);
 
     Return param(Object val);
   }
@@ -40,5 +43,10 @@ public interface JamverBootRootInit {
     Network bind(Function<Address, Address> addr);
   }
 
-  Return onInit(Context ctx);
+  interface Inject {
+
+    Inject startListeners(List<GameStartListener> val);
+  }
+
+  Return onInit(Context ctx) throws Exception;
 }
