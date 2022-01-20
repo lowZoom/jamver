@@ -40,8 +40,8 @@ public class ServerBeanRoot {
     return _dataCommandCollect.getCommandGroupList();
   }
 
-  public List<ServerMessageHandler<?>> getClusterMessageList() {
-    return nonNull(_clusterMessageList);
+  public List<ServerMessageHandler<?>> getClusterMsgHandleList() {
+    return nonNull(_clusterMsgHandleList);
   }
 
   public List<ServerJoinListener> getClusterJoinList() {
@@ -91,7 +91,7 @@ public class ServerBeanRoot {
   private DataCommandCollect _dataCommandCollect;
 
   @Autowired(required = false)
-  private List<ServerMessageHandler<?>> _clusterMessageList;
+  private List<ServerMessageHandler<?>> _clusterMsgHandleList;
 
   @Autowired(required = false)
   private List<ServerJoinListener> _clusterJoinList;

@@ -1,10 +1,10 @@
 package luj.game.server.internal.luj.lujcluster.actor.cluster.receive;
 
 import luj.ava.spring.Internal;
-import luj.game.server.internal.cluster.handle.ServmsgHandleInvoker;
 import luj.game.server.internal.cluster.proto.decode.ClusterProtoDecoder;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
+import luj.game.server.internal.luj.lujcluster.actor.cluster.handle.ClusterRecvHandleMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +23,8 @@ final class OnClusterReceive implements ClusterCommActor.Handler<ClusterReceiveM
     Object msgObj = new ClusterProtoDecoder(
         protoPlugin.getProtoDecode(), msgKey, msg.getMessageData()).decode();
 
-    new ServmsgHandleInvoker(ctx.getRemoteNode(), self.getSiblingRef().getDataRef(),
-        self.getHandlerMap(), self.getCommandMap(), protoPlugin.getProtoEncode(), self.getLujbean(),
-        msgKey, msgObj).invoke();
+    Ref selfRef = ctx.getActorRef();
+    selfRef.tell(new ClusterRecvHandleMsg(msgKey, msgObj, ctx.getRemoteNode()));
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnClusterReceive.class);

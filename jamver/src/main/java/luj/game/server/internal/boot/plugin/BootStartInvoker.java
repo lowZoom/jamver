@@ -23,7 +23,15 @@ public class BootStartInvoker {
 
     int selfPort();
 
-    List<String> seedList();
+    String selfName();
+
+    List<String> selfTags();
+
+    List<String> akkaSeed();
+
+    String consulHost();
+
+    int consulPort();
   }
 
   public interface Network {

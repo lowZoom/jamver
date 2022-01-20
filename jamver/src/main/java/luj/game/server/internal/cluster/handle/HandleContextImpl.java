@@ -4,13 +4,6 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 
 final class HandleContextImpl implements ServerMessageHandler.Context {
 
-  HandleContextImpl(Object message, ServerMessageHandler.Server remoteServer,
-      ServerMessageHandler.Service service) {
-    _message = message;
-    _remoteServer = remoteServer;
-    _service = service;
-  }
-
   @Override
   public <M> M getMessage(ServerMessageHandler<M> handler) {
     return message(handler);
@@ -37,8 +30,8 @@ final class HandleContextImpl implements ServerMessageHandler.Context {
     return _service;
   }
 
-  private final Object _message;
-  private final ServerMessageHandler.Server _remoteServer;
+  Object _message;
+  ServerMessageHandler.Server _remoteServer;
 
-  private final ServerMessageHandler.Service _service;
+  ServerMessageHandler.Service _service;
 }

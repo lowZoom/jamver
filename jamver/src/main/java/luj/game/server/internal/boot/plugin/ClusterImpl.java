@@ -1,6 +1,8 @@
 package luj.game.server.internal.boot.plugin;
 
+import com.google.common.collect.ImmutableList;
 import java.util.List;
+import java.util.Set;
 import luj.game.server.api.plugin.JamverBootRootInit;
 
 final class ClusterImpl implements JamverBootRootInit.Cluster, BootStartInvoker.Cluster {
@@ -18,8 +20,37 @@ final class ClusterImpl implements JamverBootRootInit.Cluster, BootStartInvoker.
   }
 
   @Override
+  public JamverBootRootInit.Cluster selfName(String val) {
+    _selfName = val;
+    return this;
+  }
+
+  @Override
+  public JamverBootRootInit.Cluster selfTags(Set<String> val) {
+    _selfTags = val;
+    return this;
+  }
+
+  @Override
   public JamverBootRootInit.Cluster seedList(List<String> val) {
-    _seedList = val;
+    return discoveryAkkaSeed(val);
+  }
+
+  @Override
+  public JamverBootRootInit.Cluster discoveryAkkaSeed(List<String> val) {
+    _akkaSeed = val;
+    return this;
+  }
+
+  @Override
+  public JamverBootRootInit.Cluster discoveryConsulHost(String val) {
+    _consulHost = val;
+    return this;
+  }
+
+  @Override
+  public JamverBootRootInit.Cluster discoveryConsulPort(int val) {
+    _consulPort = val;
     return this;
   }
 
@@ -36,8 +67,28 @@ final class ClusterImpl implements JamverBootRootInit.Cluster, BootStartInvoker.
   }
 
   @Override
-  public List<String> seedList() {
-    return _seedList;
+  public String selfName() {
+    return _selfName;
+  }
+
+  @Override
+  public List<String> selfTags() {
+    return ImmutableList.copyOf(_selfTags);
+  }
+
+  @Override
+  public List<String> akkaSeed() {
+    return _akkaSeed;
+  }
+
+  @Override
+  public String consulHost() {
+    return _consulHost;
+  }
+
+  @Override
+  public int consulPort() {
+    return _consulPort;
   }
 
   /////////////////////////////////////////////
@@ -45,5 +96,10 @@ final class ClusterImpl implements JamverBootRootInit.Cluster, BootStartInvoker.
   String _selfHost;
   int _selfPort;
 
-  List<String> _seedList;
+  String _selfName;
+  Set<String> _selfTags;
+
+  List<String> _akkaSeed = ImmutableList.of();
+  String _consulHost;
+  int _consulPort;
 }

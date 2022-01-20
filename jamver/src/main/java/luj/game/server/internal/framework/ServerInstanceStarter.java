@@ -58,10 +58,10 @@ public class ServerInstanceStarter {
         .addAll(startCfg.injectExtra().startListeners())
         .build();
 
-    lujcluster.startNode(host, port, clusterCfg.seedList(), new JambeanInLujcluster(
+    JambeanInLujcluster jambean = new JambeanInLujcluster(
         startListeners, beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
         beanRoot.getCommandGroupList(), null, null,
-        beanRoot.getClusterMessageList(), beanRoot.getClusterJoinList(),
+        beanRoot.getClusterMsgHandleList(), beanRoot.getClusterJoinList(),
         beanRoot.getNetAcceptHandler(), beanRoot.getNetDisconnectHandler(),
         beanRoot.getProtoHandlerList(),
         beanRoot.getDataAllPlugin(),
@@ -70,7 +70,17 @@ public class ServerInstanceStarter {
         beanRoot.getDynamicInitPlugin(),
         LujCache.start(internalCtx), LujBean.start(),
         LujNet.create(internalCtx), startCfg.networkConfig(),
-        startCfg.startParam()));
+        startCfg.startParam());
+
+    lujcluster.startNode(c -> c
+        .selfHost(host)
+        .selfPort(port)
+        .selfName(clusterCfg.selfName())
+        .selfTags(clusterCfg.selfTags())
+        .discoveryAkkaSeed(clusterCfg.akkaSeed())
+        .discoveryConsulHost(clusterCfg.consulHost())
+        .discoveryConsulPort(clusterCfg.consulPort())
+        .startParam(jambean));
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(ServerInstanceStarter.class);

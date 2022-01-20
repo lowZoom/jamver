@@ -1,6 +1,7 @@
 package luj.game.server.api.plugin;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import luj.game.server.api.boot.GameStartListener;
 
@@ -28,7 +29,21 @@ public interface JamverBootRootInit {
 
     Cluster selfPort(int val);
 
+    Cluster selfName(String val);
+
+    Cluster selfTags(Set<String> val);
+
+    /**
+     * @see #discoveryAkkaSeed
+     */
+    @Deprecated
     Cluster seedList(List<String> val);
+
+    Cluster discoveryAkkaSeed(List<String> val);
+
+    Cluster discoveryConsulHost(String val);
+
+    Cluster discoveryConsulPort(int val);
   }
 
   interface Network {

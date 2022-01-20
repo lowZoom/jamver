@@ -4,14 +4,17 @@ import luj.game.server.api.cluster.ServerJoinListener;
 
 final class JoinContextImpl implements ServerJoinListener.Context {
 
-  JoinContextImpl(ServerJoinListener.Server remoteServer) {
-    _remoteServer = remoteServer;
-  }
-
   @Override
   public ServerJoinListener.Server remoteServer() {
     return _remoteServer;
   }
 
-  private final ServerJoinListener.Server _remoteServer;
+  @Override
+  public ServerJoinListener.Service service() {
+    return _service;
+  }
+
+  ServerJoinListener.Server _remoteServer;
+
+  ServerJoinListener.Service _service;
 }

@@ -1,9 +1,13 @@
 package luj.game.server.internal.luj.lujcluster.actor.cluster.send;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import luj.ava.spring.Internal;
 import luj.cluster.api.actor.ActorMessageHandler;
+import luj.cluster.api.node.NodeNewMemberListener;
+import luj.cluster.api.node.NodeType;
 import luj.game.server.internal.cluster.proto.encode.ClusterProtoEncodeAndWrapper;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.receive.ClusterReceiveMsg;
@@ -18,22 +22,49 @@ final class OnClusterSend implements ClusterCommActor.Handler<ClusterSendMsg> {
     ClusterCommActor self = ctx.getActorState(this);
     ClusterSendMsg msg = ctx.getMessage(this);
 
-    Multimap<String, ActorMessageHandler.Node> dispatchMap = self.getDispatchMap();
     String msgType = msg.getMessageType();
+    Object msgObj = msg.getMessageObj();
 
-    Collection<ActorMessageHandler.Node> nodeList = dispatchMap.get(msgType);
+    Collection<NodeNewMemberListener.Node> nodeList = getTargetList(self, msg);
     if (nodeList.isEmpty()) {
-      LOG.warn("消息没有对应的处理节点，将被丢弃：{}", msgType);
+      LOG.warn("[game]消息没有对应的处理节点，将被丢弃：{}", msgType);
       return;
     }
 
     ClusterReceiveMsg resultMsg = ClusterProtoEncodeAndWrapper.GET
-        .encodeAndWrap(msg.getMessageObj(), self.getProtoPlugin().getProtoEncode());
+        .encodeAndWrap(msgObj, self.getProtoPlugin().getProtoEncode());
 
-    for (ActorMessageHandler.Node node : nodeList) {
-      node.sendMessage(ClusterReceiveMsg.class.getName(), resultMsg);
+    for (NodeNewMemberListener.Node node : nodeList) {
+      LOG.debug("------------发送jam {}", resultMsg.getMessageKey());
+      node.sendMessage(CLUSTER_KEY, resultMsg);
     }
   }
 
+  private Collection<NodeNewMemberListener.Node> getTargetList(ClusterCommActor self,
+      ClusterSendMsg msg) {
+    NodeNewMemberListener.Node overrideNode = msg.getTargetNode();
+    if (overrideNode != null) {
+      return ImmutableList.of(overrideNode);
+    }
+
+    Multimap<String, ActorMessageHandler.Node> dispatchMap = self.getDispatchMap();
+    String msgType = msg.getMessageType();
+
+    return dispatchMap.get(msgType).stream()
+        .map(this::toNode)
+        .collect(Collectors.toList());
+  }
+
+  private NodeNewMemberListener.Node toNode(ActorMessageHandler.Node node) {
+    return new NodeNewMemberListener.Node() {
+      @Override
+      public void sendMessage(String msgKey, Object msg) {
+        node.sendMessage(msgKey, msg);
+      }
+    };
+  }
+
   private static final Logger LOG = LoggerFactory.getLogger(OnClusterSend.class);
+
+  private static final String CLUSTER_KEY = ClusterReceiveMsg.class.getName();
 }

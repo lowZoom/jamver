@@ -89,9 +89,11 @@ final class OnNodeStart implements NodeStartListener {
   private ClusterCommActor clusterActor(JambeanInLujcluster clusterParam,
       Map<String, GameplayDataActor.CommandKit> cmdMap) {
     Map<String, ServerMessageHandler<?>> handlerMap =
-        new ClusterHandleMapCollector(clusterParam.getClusterMessageList()).collect();
-    return new ClusterCommActor(ArrayListMultimap.create(),
-        handlerMap, cmdMap, clusterParam.getClusterProtoPlugin(), clusterParam.getLujbean());
+        new ClusterHandleMapCollector(clusterParam.getClusterMsgHandleList()).collect();
+
+    return new ClusterCommActor(ArrayListMultimap.create(), handlerMap,
+        clusterParam.getClusterJoinList(), cmdMap, clusterParam.getClusterProtoPlugin(),
+        clusterParam.getLujbean());
   }
 
   private NetRootActor networkActor(JambeanInLujcluster clusterParam,

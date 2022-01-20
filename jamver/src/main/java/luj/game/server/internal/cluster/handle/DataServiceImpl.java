@@ -22,7 +22,7 @@ final class DataServiceImpl implements ServerMessageHandler.Data {
   }
 
   /**
-   * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.OnDataCmdExec
+   * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.prepare.OnDataCmdExec
    */
   @Override
   public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param) {

@@ -5,26 +5,24 @@ import luj.bean.api.BeanContext;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
-import luj.game.server.api.plugin.JamverClusterProtoEncode;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ServmsgHandleInvoker {
 
-  public ServmsgHandleInvoker(ActorMessageHandler.Node remoteNode,
-      Tellable dataRef, Map<String, ServerMessageHandler<?>> handlerMap,
-      Map<String, GameplayDataActor.CommandKit> commandMap,
-      JamverClusterProtoEncode encodePlugin, BeanContext lujbean, String messageKey,
-      Object message) {
-    _remoteNode = remoteNode;
-    _dataRef = dataRef;
-    _handlerMap = handlerMap;
-    _commandMap = commandMap;
-    _encodePlugin = encodePlugin;
-    _lujbean = lujbean;
+  public ServmsgHandleInvoker(String messageKey, Object message,
+      Map<String, ServerMessageHandler<?>> handlerMap,
+      Map<String, GameplayDataActor.CommandKit> commandMap, ActorMessageHandler.Node remoteNode,
+      Tellable clusterRef, Tellable dataRef, BeanContext lujbean) {
     _messageKey = messageKey;
     _message = message;
+    _handlerMap = handlerMap;
+    _commandMap = commandMap;
+    _remoteNode = remoteNode;
+    _clusterRef = clusterRef;
+    _dataRef = dataRef;
+    _lujbean = lujbean;
   }
 
   public void invoke() {
@@ -34,11 +32,15 @@ public class ServmsgHandleInvoker {
       return;
     }
 
-    ServerImpl sender = new ServerImpl(_remoteNode, _encodePlugin);
-    DataServiceImpl dataSvc = createDataSvc(sender);
-    HandleServiceImpl handleSvc = new HandleServiceImpl(dataSvc);
+    HandleServiceImpl handleSvc = new HandleServiceImpl();
+    ServerImpl sender = makeRemoteServer();
+    handleSvc._dataService = createDataSvc(sender);
 
-    HandleContextImpl handleCtx = new HandleContextImpl(_message, sender, handleSvc);
+    HandleContextImpl handleCtx = new HandleContextImpl();
+    handleCtx._message = _message;
+    handleCtx._remoteServer = sender;
+    handleCtx._service = handleSvc;
+
     try {
       handler.onHandle(handleCtx);
     } catch (RuntimeException e) {
@@ -57,17 +59,24 @@ public class ServmsgHandleInvoker {
     return svc;
   }
 
+  private ServerImpl makeRemoteServer() {
+    ServerImpl sender = new ServerImpl();
+    sender._clusterRef = _clusterRef;
+    sender._remoteNode = _remoteNode;
+    return sender;
+  }
+
   private static final Logger LOG = LoggerFactory.getLogger(ServmsgHandleInvoker.class);
 
-  private final ActorMessageHandler.Node _remoteNode;
-  private final Tellable _dataRef;
+  private final String _messageKey;
+  private final Object _message;
 
   private final Map<String, ServerMessageHandler<?>> _handlerMap;
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 
-  private final JamverClusterProtoEncode _encodePlugin;
-  private final BeanContext _lujbean;
+  private final ActorMessageHandler.Node _remoteNode;
+  private final Tellable _clusterRef;
+  private final Tellable _dataRef;
 
-  private final String _messageKey;
-  private final Object _message;
+  private final BeanContext _lujbean;
 }

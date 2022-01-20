@@ -26,9 +26,8 @@ public class JambeanInLujcluster {
       List<GameDataCommand<?, ?>> dataCommandList, List<GameDataLoad<?, ?>> dataLoadList,
       List<GameDataCommandGroup> commandGroupList,
       List<GameEventListener<?>> eventListenerList, GameEventListener.Service eventListenService,
-      List<ServerMessageHandler<?>> clusterMessageList, List<ServerJoinListener> clusterJoinList,
-      GameAcceptHandler netAcceptHandler,
-      GameDisconnectHandler netDisconnectHandler,
+      List<ServerMessageHandler<?>> clusterMsgHandleList, List<ServerJoinListener> clusterJoinList,
+      GameAcceptHandler netAcceptHandler, GameDisconnectHandler netDisconnectHandler,
       List<GameProtoHandler<?>> protoHandlerList,
       DataAllPlugin dataAllPlugin,
       ClusterProtoPlugin clusterProtoPlugin,
@@ -42,7 +41,7 @@ public class JambeanInLujcluster {
     _commandGroupList = commandGroupList;
     _eventListenerList = eventListenerList;
     _eventListenService = eventListenService;
-    _clusterMessageList = clusterMessageList;
+    _clusterMsgHandleList = clusterMsgHandleList;
     _clusterJoinList = clusterJoinList;
     _netAcceptHandler = netAcceptHandler;
     _netDisconnectHandler = netDisconnectHandler;
@@ -82,8 +81,8 @@ public class JambeanInLujcluster {
     return _eventListenService;
   }
 
-  public List<ServerMessageHandler<?>> getClusterMessageList() {
-    return _clusterMessageList;
+  public List<ServerMessageHandler<?>> getClusterMsgHandleList() {
+    return _clusterMsgHandleList;
   }
 
   public List<ServerJoinListener> getClusterJoinList() {
@@ -147,7 +146,7 @@ public class JambeanInLujcluster {
   private final List<GameEventListener<?>> _eventListenerList;
   private final GameEventListener.Service _eventListenService;
 
-  private final List<ServerMessageHandler<?>> _clusterMessageList;
+  private final List<ServerMessageHandler<?>> _clusterMsgHandleList;
   private final List<ServerJoinListener> _clusterJoinList;
 
   private final GameAcceptHandler _netAcceptHandler;
