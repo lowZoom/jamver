@@ -22,16 +22,15 @@ public enum DataObjGetAndLocker {
     String locker = cacheItem.getLocker();
     checkState(locker == null, "%s：%s", dataKey, locker);
 
-    //TODO: 记录真正的上锁者
-    cacheItem.setLocker("lock");
-
     DataPresence presence = cacheItem.getPresence();
     DataEntity dataObj = cacheItem.getDataObjV2();
-
     if (presence == DataPresence.ABSENT) {
       checkState(dataObj == null, dataKey);
       return null;
     }
+
+    //TODO: 记录真正的上锁者
+    cacheItem.setLocker("lock");
 
     checkState(presence == DataPresence.PRESENT, "%s：%s", dataKey, presence);
     return checkNotNull(dataObj, dataKey);

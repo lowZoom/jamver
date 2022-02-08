@@ -1,5 +1,7 @@
 package luj.game.server.internal.data.execute.load.missing.log;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.List;
 import luj.game.server.internal.data.cache.CacheItem;
 import luj.game.server.internal.data.cache.DataPresence;
@@ -15,7 +17,12 @@ public enum UnusableLogAdder {
     }
 
     boolean locked = item.getLocker() != null;
-    if (locked || item.getPresence() == DataPresence.LOADING) {
+    DataPresence presence = item.getPresence();
+    if (locked) {
+      checkState(presence != DataPresence.ABSENT, "%s#%s", dataType.getSimpleName(), dataId);
+    }
+
+    if (locked || presence == DataPresence.LOADING) {
       lockedOrLoadingOut.add(item);
     }
   }
