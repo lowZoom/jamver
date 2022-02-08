@@ -28,7 +28,7 @@ public class DynamicClassCollector {
           .filter(this::isCandidateComponent)
           .forEach(d -> ctx.register(d.getBeanClass()));
 
-      //TODO: 看看有无必要搞个自动扫描注册根对象所有字段
+      //TODO: 看看有无必要搞个自动扫描并注册 根对象所有字段
       ctx.register(DataCommandCollect.class);
 
       ctx.register(injectRoot);

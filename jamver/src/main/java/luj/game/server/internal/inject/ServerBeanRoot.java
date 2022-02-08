@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ServerBeanRoot {
 
   public List<GameStartListener> getStartListenerList() {
-    return _startListenerList;
+    return nonNull(_startListenerList);
   }
 
   public List<GameDataCommand<?, ?>> getDataCommandList() {

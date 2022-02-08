@@ -35,7 +35,7 @@ final class OnClusterSend implements ClusterCommActor.Handler<ClusterSendMsg> {
         .encodeAndWrap(msgObj, self.getProtoPlugin().getProtoEncode());
 
     for (NodeNewMemberListener.Node node : nodeList) {
-      LOG.debug("------------发送jam {}", resultMsg.getMessageKey());
+//      LOG.debug("------------发送jam {}", resultMsg.getMessageKey());
       node.sendMessage(CLUSTER_KEY, resultMsg);
     }
   }

@@ -16,7 +16,7 @@ final class ServerImpl implements ServerMessageHandler.Server {
 
   @Override
   public String toString() {
-    return _remoteNode.toString();
+    return "Server[" + _remoteNode.getIp() + "]";
   }
 
   ActorMessageHandler.Node _remoteNode;
