@@ -1,6 +1,7 @@
 package luj.game.server.internal.boot.plugin;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import java.util.Set;
 import luj.game.server.api.plugin.JamverBootRootInit;
@@ -97,7 +98,7 @@ final class ClusterImpl implements JamverBootRootInit.Cluster, BootStartInvoker.
   int _selfPort;
 
   String _selfName;
-  Set<String> _selfTags;
+  Set<String> _selfTags = ImmutableSet.of();
 
   List<String> _akkaSeed = ImmutableList.of();
   String _consulHost;
