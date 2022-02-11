@@ -2,6 +2,7 @@ package luj.game.server.internal.cluster.handle.collect;
 
 import static java.util.stream.Collectors.toMap;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,7 +12,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 
 public class ClusterHandleMapCollector {
 
-  public ClusterHandleMapCollector(List<ServerMessageHandler<?>> handlerList) {
+  public ClusterHandleMapCollector(Collection<ServerMessageHandler<?>> handlerList) {
     _handlerList = handlerList;
   }
 
@@ -28,5 +29,5 @@ public class ClusterHandleMapCollector {
         .getName();
   }
 
-  private final List<ServerMessageHandler<?>> _handlerList;
+  private final Collection<ServerMessageHandler<?>> _handlerList;
 }

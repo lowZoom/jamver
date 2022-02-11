@@ -4,9 +4,9 @@ import java.util.Collection;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 
-public class RegisterCommandMsg {
+public class AddMoreCommandMsg {
 
-  public RegisterCommandMsg(Collection<GameDataCommand<?, ?>> dataCommand,
+  public AddMoreCommandMsg(Collection<GameDataCommand<?, ?>> dataCommand,
       Collection<GameDataLoad<?, ?>> dataLoad) {
     _dataCommand = dataCommand;
     _dataLoad = dataLoad;
