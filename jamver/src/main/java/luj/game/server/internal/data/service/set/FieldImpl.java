@@ -4,6 +4,7 @@ import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.data.types.map.history.MapDataUpdater;
 
+@Deprecated
 public class FieldImpl<T> implements GameDataCommand.Data.Field<T> {
 
   public FieldImpl(DataResultProxy curData, String curField) {

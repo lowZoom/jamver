@@ -2,7 +2,6 @@ package luj.game.server.internal.data.execute.service.data;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.common.base.Preconditions;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -54,7 +53,12 @@ public class DataServiceImpl implements GameDataCommand.Data {
 
   @Override
   public <T> Field<T> set(Supplier<T> field) {
+    _curField = null;
     field.get();
+
+    // 防止LoadResult被存起来，改到旧的Service上
+    checkNotNull(_curField, "该数据非法跨域");
+
     return new FieldImpl2<>(_curData, _curField);
   }
 

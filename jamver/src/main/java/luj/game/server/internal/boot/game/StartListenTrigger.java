@@ -30,16 +30,14 @@ public class StartListenTrigger {
 
   private GameStartListener.Service makeService(JambeanInLujcluster startParam) {
     ServiceData dataSvc = new ServiceData();
-
-    ServiceImpl service = new ServiceImpl();
-    service._dataService = dataSvc;
-
     dataSvc._commandMap = _actorState.getCommandMap();
     dataSvc._lujbean = startParam.getLujbean();
 
     dataSvc._dataRef = _actorState.getRefCollection().getDataRef();
 //    dataSvc._remoteRef =
 
+    ServiceImpl service = new ServiceImpl();
+    service._dataService = dataSvc;
     return service;
   }
 
