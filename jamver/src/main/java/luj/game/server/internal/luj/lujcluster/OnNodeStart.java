@@ -1,7 +1,7 @@
 package luj.game.server.internal.luj.lujcluster;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +12,7 @@ import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
 import luj.cluster.api.node.NodeStartListener;
+import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.internal.cluster.handle.collect.ClusterHandleMapCollector;
@@ -91,9 +92,10 @@ final class OnNodeStart implements NodeStartListener {
     Map<String, ServerMessageHandler<?>> handlerMap =
         new ClusterHandleMapCollector(clusterParam.getClusterMsgHandleList()).collect();
 
-    return new ClusterCommActor(ArrayListMultimap.create(), handlerMap,
-        clusterParam.getClusterJoinList(), cmdMap, clusterParam.getClusterProtoPlugin(),
-        clusterParam.getLujbean());
+    List<ServerJoinListener> joinList = new ArrayList<>(clusterParam.getClusterJoinList());
+
+    return new ClusterCommActor(joinList, handlerMap,
+        clusterParam.getClusterProtoPlugin(), cmdMap, clusterParam.getLujbean());
   }
 
   private NetRootActor networkActor(JambeanInLujcluster clusterParam,

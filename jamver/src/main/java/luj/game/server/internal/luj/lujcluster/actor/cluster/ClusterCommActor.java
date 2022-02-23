@@ -1,5 +1,6 @@
 package luj.game.server.internal.luj.lujcluster.actor.cluster;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,9 @@ public class ClusterCommActor {
     // NOOP
   }
 
-  public ClusterCommActor(Multimap<String, ActorMessageHandler.Node> dispatchMap,
-      Map<String, ServerMessageHandler<?>> handlerMap, List<ServerJoinListener> joinListeners,
-      Map<String, GameplayDataActor.CommandKit> commandMap, ClusterProtoPlugin protoPlugin,
-      BeanContext lujbean) {
-    _dispatchMap = dispatchMap;
+  public ClusterCommActor(List<ServerJoinListener> joinListeners,
+      Map<String, ServerMessageHandler<?>> handlerMap, ClusterProtoPlugin protoPlugin,
+      Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
     _handlerMap = handlerMap;
     _joinListeners = joinListeners;
     _commandMap = commandMap;
@@ -61,13 +60,15 @@ public class ClusterCommActor {
   }
 
   private TopLevelRefs _siblingRef;
-  private final Multimap<String, ActorMessageHandler.Node> _dispatchMap;
+
+  private final Multimap<String, ActorMessageHandler.Node> _dispatchMap
+      = ArrayListMultimap.create();
 
   //////////////
 
-  private final Map<String, ServerMessageHandler<?>> _handlerMap;
-
   private final List<ServerJoinListener> _joinListeners;
+
+  private final Map<String, ServerMessageHandler<?>> _handlerMap;
   private final ClusterProtoPlugin _protoPlugin;
 
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;

@@ -2,11 +2,13 @@ package luj.game.server.internal.dynamic.init;
 
 import java.util.Collection;
 import luj.cluster.api.actor.Tellable;
+import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.plugin.JamverDynamicRootInit;
-import luj.game.server.internal.luj.lujcluster.actor.cluster.register.handler.AddMoreHandlerMsg;
+import luj.game.server.internal.luj.lujcluster.actor.cluster.register.dynamic.handler.AddMessageHandlerMsg;
+import luj.game.server.internal.luj.lujcluster.actor.cluster.register.dynamic.join.AddJoinListenerMsg;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.register.AddMoreCommandMsg;
 
 final class ContextImpl implements JamverDynamicRootInit.Context {
@@ -24,8 +26,13 @@ final class ContextImpl implements JamverDynamicRootInit.Context {
   }
 
   @Override
-  public void registerServerMsgHandler(Collection<ServerMessageHandler<?>> handler) {
-    _clusterRef.tell(new AddMoreHandlerMsg(handler));
+  public void registerServerJoinListener(Collection<ServerJoinListener> listener) {
+    _clusterRef.tell(new AddJoinListenerMsg(listener));
+  }
+
+  @Override
+  public void registerServerMessageHandler(Collection<ServerMessageHandler<?>> handler) {
+    _clusterRef.tell(new AddMessageHandlerMsg(handler));
   }
 
   Object _startParam;

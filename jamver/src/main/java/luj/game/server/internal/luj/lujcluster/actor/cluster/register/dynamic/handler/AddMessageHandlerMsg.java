@@ -1,11 +1,11 @@
-package luj.game.server.internal.luj.lujcluster.actor.cluster.register.handler;
+package luj.game.server.internal.luj.lujcluster.actor.cluster.register.dynamic.handler;
 
 import java.util.Collection;
 import luj.game.server.api.cluster.ServerMessageHandler;
 
-public class AddMoreHandlerMsg {
+public class AddMessageHandlerMsg {
 
-  public AddMoreHandlerMsg(Collection<ServerMessageHandler<?>> messageHandler) {
+  public AddMessageHandlerMsg(Collection<ServerMessageHandler<?>> messageHandler) {
     _messageHandler = messageHandler;
   }
 

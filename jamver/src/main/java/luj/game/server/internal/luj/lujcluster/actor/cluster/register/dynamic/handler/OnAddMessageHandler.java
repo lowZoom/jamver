@@ -1,4 +1,4 @@
-package luj.game.server.internal.luj.lujcluster.actor.cluster.register.handler;
+package luj.game.server.internal.luj.lujcluster.actor.cluster.register.dynamic.handler;
 
 import java.util.Map;
 import luj.ava.spring.Internal;
@@ -9,12 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Internal
-final class OnAddMoreHandler implements ClusterCommActor.Handler<AddMoreHandlerMsg> {
+final class OnAddMessageHandler implements ClusterCommActor.Handler<AddMessageHandlerMsg> {
 
   @Override
   public void onHandle(Context ctx) {
     ClusterCommActor self = ctx.getActorState(this);
-    AddMoreHandlerMsg msg = ctx.getMessage(this);
+    AddMessageHandlerMsg msg = ctx.getMessage(this);
 
     Map<String, ServerMessageHandler<?>> addMap =
         new ClusterHandleMapCollector(msg.getMessageHandler()).collect();
@@ -23,5 +23,5 @@ final class OnAddMoreHandler implements ClusterCommActor.Handler<AddMoreHandlerM
     self.getHandlerMap().putAll(addMap);
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(OnAddMoreHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(OnAddMessageHandler.class);
 }

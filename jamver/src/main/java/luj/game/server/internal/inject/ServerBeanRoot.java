@@ -91,10 +91,10 @@ public class ServerBeanRoot {
   private DataCommandCollect _dataCommandCollect;
 
   @Autowired(required = false)
-  private List<ServerMessageHandler<?>> _clusterMsgHandleList;
+  private List<ServerJoinListener> _clusterJoinList;
 
   @Autowired(required = false)
-  private List<ServerJoinListener> _clusterJoinList;
+  private List<ServerMessageHandler<?>> _clusterMsgHandleList;
 
   @Autowired(required = false)
   private GameAcceptHandler _netAcceptHandler;
