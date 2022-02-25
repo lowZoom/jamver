@@ -34,21 +34,14 @@ public class CmdGroupExecutor {
     _lujbean = lujbean;
   }
 
-  public void execute() {
+  public void execute() throws Exception {
     ContextImpl ctx = new ContextImpl();
 
     ctx._elemList = _elemList.stream()
         .map(this::makeElem)
         .collect(Collectors.toList());
 
-    try {
-      _cmdGroup.onExecute(ctx);
-
-    } catch (RuntimeException e) {
-      throw e;
-    } catch (Exception e) {
-      throw new UnsupportedOperationException(e);
-    }
+    _cmdGroup.onExecute(ctx);
   }
 
   private ElementImpl<?> makeElem(GroupReqElement e) {

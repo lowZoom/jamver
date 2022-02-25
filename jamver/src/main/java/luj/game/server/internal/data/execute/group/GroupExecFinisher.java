@@ -9,10 +9,13 @@ import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
+import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
 import luj.game.server.internal.data.execute.finish.ExecDataFinisherV2;
 import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GroupExecFinisher {
 
@@ -31,17 +34,27 @@ public class GroupExecFinisher {
     _lujbean = lujbean;
   }
 
+  /**
+   * @see CommandExecFinisher#finish
+   */
   public void finish() {
     List<DataEntity> createLog = new ArrayList<>();
     List<DataEntity> loadLog = new ArrayList<>();
 
     // 真正执行cmd逻辑
-    new CmdGroupExecutor(_cmdGroup, _elemList, createLog,
-        loadLog, _dataCache, _idGenState, _dataRef, _remoteRef, _commandMap, _lujbean).execute();
+    try {
+      new CmdGroupExecutor(_cmdGroup, _elemList, createLog, loadLog,
+          _dataCache, _idGenState, _dataRef, _remoteRef, _commandMap, _lujbean).execute();
+    } catch (Exception e) {
+      LOG.error(e.getMessage(), e);
+      //TODO: 出错的时候要清除修改
+    }
 
     String idField = _idGenState.getIdField();
     new ExecDataFinisherV2(_dataCache, _saveRef, idField, createLog, loadLog).finish();
   }
+
+  private static final Logger LOG = LoggerFactory.getLogger(GroupExecFinisher.class);
 
   private final GameDataCommandGroup _cmdGroup;
   private final List<GroupReqElement> _elemList;
