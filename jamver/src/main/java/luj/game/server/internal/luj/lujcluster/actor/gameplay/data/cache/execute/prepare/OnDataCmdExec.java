@@ -44,10 +44,9 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
 
     CacheContainer dataCache = self.getDataCache();
     CacheSession lujcache = self.getLujcache();
-    CacheRequest cacheReq = DataLoadRequestMaker.create(cmdKit, param, dataCache, lujcache).make();
 
-    DataReadyChecker.Result readyResult = new DataReadyChecker(
-        ImmutableList.of(cacheReq), dataCache).check();
+    CacheRequest cacheReq = DataLoadRequestMaker.create(cmdKit, param, dataCache, lujcache).make();
+    DataReadyChecker.Result readyResult = new DataReadyChecker(ImmutableList.of(cacheReq)).check();
 
     //TODO: 还有客户端网络连接
     ServerMessageHandler.Server remoteRef = msg.getRemoteRef();

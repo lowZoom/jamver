@@ -37,7 +37,7 @@ public class CommandQueueWaker {
         commandReq, _dataCache, _idGenState, _dataRef, _saveRef, _lujbean).create();
 
     List<CacheRequest> cacheReq = behavior.getCacheReq();
-    DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq, _dataCache).check();
+    DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq).check();
 
     if (!readyResult.isReady()) {
       new MissingLoadRequestor(readyResult.getMissingList(),

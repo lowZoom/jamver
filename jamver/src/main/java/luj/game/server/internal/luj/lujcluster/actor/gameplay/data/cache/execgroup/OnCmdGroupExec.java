@@ -44,13 +44,13 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
         .map(c -> new GroupReqElement(c._kit, c._msg.param(), c._req))
         .collect(Collectors.toList());
 
+    DataReadyChecker.Result readyResult = new DataReadyChecker(reqList).check();
+    DataIdGenState idState = self.getIdGenState();
     CacheContainer dataCache = self.getDataCache();
-    DataReadyChecker.Result readyResult = new DataReadyChecker(reqList, dataCache).check();
 
     //TODO: 还有网络连接
     ServerMessageHandler.Server remoteRef = msg.remoteRef();
 
-    DataIdGenState idState = self.getIdGenState();
     if (!readyResult.isReady()) {
       // 发起数据读取
       new MissingLoadRequestor(readyResult.getMissingList(),
