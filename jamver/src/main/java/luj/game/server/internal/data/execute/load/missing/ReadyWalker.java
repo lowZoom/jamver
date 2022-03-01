@@ -18,8 +18,7 @@ final class ReadyWalker implements RequestWalkListener {
     return nodeOp.findWhenReady(ctx, _missingOut, _lockedOrLoadingOut);
   }
 
-  CacheContainer _cache;
-
   List<CacheItem> _lockedOrLoadingOut;
+
   MissingLog _missingOut;
 }

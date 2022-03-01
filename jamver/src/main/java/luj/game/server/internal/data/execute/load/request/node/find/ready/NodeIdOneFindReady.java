@@ -25,7 +25,7 @@ public enum NodeIdOneFindReady {
     return cache.get(dataKey);
   }
 
-  void logUnusable(CacheItem item, Class<?> dataType, Comparable<?> dataId,
+  void logIfUnusable(CacheItem item, Class<?> dataType, Comparable<?> dataId,
       MissingLog missingOut, List<CacheItem> lockedOrLoadingOut) {
     UnusableLogAdder.GET.add(item, dataType, dataId, missingOut, lockedOrLoadingOut);
   }

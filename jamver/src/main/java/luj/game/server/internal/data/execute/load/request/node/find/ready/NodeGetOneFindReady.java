@@ -29,9 +29,8 @@ public enum NodeGetOneFindReady {
     DataResultProxyV2 parentResult = getProxy(parentData);
     Comparable<?> dataId = idGetter.apply(parentResult.getInstance());
 
-    Class<?> dataType = ctx.getDataType();
     NodeIdOneFindReady util = NodeIdOneFindReady.GET;
-
+    Class<?> dataType = ctx.getDataType();
     return util.find(cache, dataType, dataId, missingOut, lockedOrLoadingOut);
   }
 

@@ -16,7 +16,7 @@ public enum NodeIdMultiFindReady {
 
     for (Comparable<?> id : idList) {
       CacheItem elemItem = util.cacheGet(cache, dataType, id);
-      util.logUnusable(elemItem, dataType, id, missingOut, lockedOrLoadingOut);
+      util.logIfUnusable(elemItem, dataType, id, missingOut, lockedOrLoadingOut);
     }
 
     return ImmutableList.of();

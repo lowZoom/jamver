@@ -28,11 +28,11 @@ public enum NodeGetMultiFindReady {
     //FIXME: load跟exec会在不同线程执行，可能会ConcurrentModificationException
     Collection<Comparable<?>> idList = idGetter.apply(parentResult.getInstance());
 
-    Class<?> dataType = ctx.getDataType();
     NodeIdOneFindReady util = NodeIdOneFindReady.GET;
+    Class<?> dataType = ctx.getDataType();
     for (Comparable<?> id : idList) {
       CacheItem elemItem = util.cacheGet(cache, dataType, id);
-      util.logUnusable(elemItem, dataType, id, missingOut, lockedOrLoadingOut);
+      util.logIfUnusable(elemItem, dataType, id, missingOut, lockedOrLoadingOut);
     }
 
     return ImmutableList.of();

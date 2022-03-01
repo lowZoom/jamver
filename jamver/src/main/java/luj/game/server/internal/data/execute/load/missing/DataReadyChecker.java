@@ -25,19 +25,16 @@ public class DataReadyChecker {
     Comparable<?> dataId();
   }
 
-  public DataReadyChecker(List<CacheRequest> reqList, CacheContainer cache) {
+  public DataReadyChecker(List<CacheRequest> reqList) {
     _reqList = reqList;
-    _cache = cache;
   }
 
   public Result check() {
-    ReadyWalker walker = new ReadyWalker();
-    walker._cache = _cache;
-
     List<CacheItem> lockedOrLoading = new ArrayList<>();
-    walker._lockedOrLoadingOut = lockedOrLoading;
-
     MissingLog missing = new MissingLog(new HashMap<>());
+
+    ReadyWalker walker = new ReadyWalker();
+    walker._lockedOrLoadingOut = lockedOrLoading;
     walker._missingOut = missing;
 
     for (CacheRequest req : _reqList) {
@@ -55,6 +52,4 @@ public class DataReadyChecker {
   }
 
   private final List<CacheRequest> _reqList;
-
-  private final CacheContainer _cache;
 }
