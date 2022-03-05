@@ -1,4 +1,4 @@
-package luj.game.server.internal.framework;
+package luj.game.server.internal.boot.node;
 
 
 import luj.ava.spring.Internal;

@@ -34,7 +34,7 @@ import luj.game.server.internal.network.proto.handle.collect.ProtoHandlerMapColl
 final class OnNodeStart implements NodeStartListener {
 
   /**
-   * @see luj.game.server.internal.framework.ServerInstanceStarter#start
+   * @see luj.game.server.internal.boot.node.ServerInstanceStarter#start
    * @see luj.game.server.internal.luj.lujcluster.actor.start.OnPrestart#onHandle
    */
   @Override

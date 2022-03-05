@@ -1,4 +1,4 @@
-package luj.game.server.internal.framework;
+package luj.game.server.internal.boot.node;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -9,6 +9,7 @@ import luj.cluster.api.LujCluster;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.plugin.JamverBootRootInit;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
+import luj.game.server.internal.framework.SpringContextCreator;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;

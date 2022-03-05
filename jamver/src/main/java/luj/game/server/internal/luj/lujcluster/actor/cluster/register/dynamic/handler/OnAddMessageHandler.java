@@ -19,7 +19,7 @@ final class OnAddMessageHandler implements ClusterCommActor.Handler<AddMessageHa
     Map<String, ServerMessageHandler<?>> addMap =
         new ClusterHandleMapCollector(msg.getMessageHandler()).collect();
 
-    LOG.debug("[game]新增MessageHandler，数量：{}", addMap.size());
+    LOG.debug("[game]新增ServerMessageHandler，数量：{}", addMap.size());
     self.getHandlerMap().putAll(addMap);
   }
 

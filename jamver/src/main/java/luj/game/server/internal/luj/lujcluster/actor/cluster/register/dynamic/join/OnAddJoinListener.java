@@ -16,7 +16,7 @@ final class OnAddJoinListener implements ClusterCommActor.Handler<AddJoinListene
     AddJoinListenerMsg msg = ctx.getMessage(this);
 
     Collection<ServerJoinListener> addList = msg.getJoinListener();
-    LOG.debug("[game]新增JoinListener，数量：{}", addList.size());
+    LOG.debug("[game]新增ServerJoinListener，数量：{}", addList.size());
 
     self.getJoinListeners().addAll(addList);
   }

@@ -1,5 +1,7 @@
 package luj.game.server.internal.boot.plugin;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
+
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import luj.game.server.api.boot.GameStartListener;
@@ -9,7 +11,7 @@ final class InjectImpl implements JamverBootRootInit.Inject, BootStartInvoker.In
 
   @Override
   public JamverBootRootInit.Inject startListeners(List<GameStartListener> val) {
-    _startListeners = val;
+    _startListeners = firstNonNull(val, ImmutableList.of());
     return this;
   }
 

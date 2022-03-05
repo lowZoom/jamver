@@ -18,7 +18,7 @@ final class OnAddMoreCommand implements GameplayDataActor.Handler<AddMoreCommand
     Map<String, GameplayDataActor.CommandKit> addMap = new CommandMapCollector(
         msg.getDataCommand(), msg.getDataLoad()).collect();
 
-    LOG.debug("[game]新增DataCommand，数量：{}", addMap.size());
+    LOG.debug("[game]新增GameDataCommand，数量：{}", addMap.size());
     self.getCommandMap().putAll(addMap);
   }
 

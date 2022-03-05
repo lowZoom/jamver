@@ -7,6 +7,8 @@ import java.util.List;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
 import luj.game.server.internal.luj.lujcluster.actor.start.JamStartActor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StartListenTrigger {
 
@@ -15,14 +17,18 @@ public class StartListenTrigger {
   }
 
   public void trigger() throws Exception {
-    StartContextImpl ctx = new StartContextImpl();
     JambeanInLujcluster startParam = _actorState.getStartParam();
+    List<GameStartListener> listnerList = nonNull(startParam.getStartListenerList());
+    if (listnerList.isEmpty()) {
+//      LOG.warn("[game]未发现任何GameStartListener");
+      return;
+    }
 
+    StartContextImpl ctx = new StartContextImpl();
     ctx._startParam = startParam.getAppStartParam();
     ctx._service = makeService(startParam);
 
-    List<GameStartListener> listnerList = startParam.getStartListenerList();
-    for (GameStartListener listener : nonNull(listnerList)) {
+    for (GameStartListener listener : listnerList) {
       //TODO: 出错应该打断启动退出
       listener.onStart(ctx);
     }
@@ -44,6 +50,8 @@ public class StartListenTrigger {
   private <T> List<T> nonNull(List<T> list) {
     return firstNonNull(list, ImmutableList.of());
   }
+
+//  private static final Logger LOG = LoggerFactory.getLogger(StartListenTrigger.class);
 
   private final JamStartActor _actorState;
 }
