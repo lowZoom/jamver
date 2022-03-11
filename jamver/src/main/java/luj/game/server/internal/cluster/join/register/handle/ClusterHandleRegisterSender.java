@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import luj.ava.reflect.type.TypeX;
-import luj.cluster.api.node.NodeNewMemberListener;
+import luj.cluster.api.node.member.NodeNewMemberListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.register.handle.JamRegisterHandleMsg;
 

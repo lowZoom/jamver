@@ -1,9 +1,8 @@
-package luj.game.server.internal.cluster.handle.collect;
+package luj.game.server.internal.cluster.message.handle.collect;
 
 import static java.util.stream.Collectors.toMap;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import luj.ava.reflect.type.TypeX;

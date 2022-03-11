@@ -1,4 +1,4 @@
-package luj.game.server.internal.cluster.handle;
+package luj.game.server.internal.cluster.message.handle;
 
 import java.util.Map;
 import luj.bean.api.BeanContext;

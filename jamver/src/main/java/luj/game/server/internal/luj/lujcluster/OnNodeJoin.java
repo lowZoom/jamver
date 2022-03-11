@@ -1,7 +1,7 @@
 package luj.game.server.internal.luj.lujcluster;
 
 import luj.ava.spring.Internal;
-import luj.cluster.api.node.NodeNewMemberListener;
+import luj.cluster.api.node.member.NodeNewMemberListener;
 import luj.game.server.internal.cluster.join.register.handle.ClusterHandleRegisterSender;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.join.ClusterJoinMsg;
 

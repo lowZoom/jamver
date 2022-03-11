@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import luj.bean.api.BeanContext;
 import luj.cluster.api.actor.Tellable;
-import luj.cluster.api.node.NodeNewMemberListener;
+import luj.cluster.api.node.member.NodeNewMemberListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 

@@ -12,10 +12,11 @@ import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
 import luj.cluster.api.node.NodeStartListener;
+import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.net.GameProtoHandler;
-import luj.game.server.internal.cluster.handle.collect.ClusterHandleMapCollector;
+import luj.game.server.internal.cluster.message.handle.collect.ClusterHandleMapCollector;
 import luj.game.server.internal.data.command.collect.CommandMapCollector;
 import luj.game.server.internal.data.command.collect.group.GroupMapCollector;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
@@ -93,8 +94,9 @@ final class OnNodeStart implements NodeStartListener {
         new ClusterHandleMapCollector(clusterParam.getClusterMsgHandleList()).collect();
 
     List<ServerJoinListener> joinList = new ArrayList<>(clusterParam.getClusterJoinList());
+    List<ServerHealthListener> healthList = new ArrayList<>(clusterParam.getClusterHealthList());
 
-    return new ClusterCommActor(joinList, handlerMap,
+    return new ClusterCommActor(joinList, healthList, handlerMap,
         clusterParam.getClusterProtoPlugin(), cmdMap, clusterParam.getLujbean());
   }
 

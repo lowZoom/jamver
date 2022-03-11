@@ -1,4 +1,4 @@
-package luj.game.server.internal.cluster.handle;
+package luj.game.server.internal.cluster.message.handle;
 
 import luj.game.server.api.cluster.ServerMessageHandler;
 

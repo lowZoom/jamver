@@ -1,7 +1,7 @@
 package luj.game.server.internal.luj.lujcluster.actor.cluster.receive;
 
 import luj.ava.spring.Internal;
-import luj.game.server.internal.cluster.proto.decode.ClusterProtoDecoder;
+import luj.game.server.internal.cluster.message.codec.decode.ClusterProtoDecoder;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.handle.ClusterRecvHandleMsg;

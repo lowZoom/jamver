@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import luj.game.server.api.boot.GameStartListener;
+import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
@@ -46,6 +47,10 @@ public class ServerBeanRoot {
 
   public List<ServerJoinListener> getClusterJoinList() {
     return nonNull(_clusterJoinList);
+  }
+
+  public List<ServerHealthListener> getClusterHealthList() {
+    return nonNull(_clusterHealthList);
   }
 
   public GameAcceptHandler getNetAcceptHandler() {
@@ -92,6 +97,9 @@ public class ServerBeanRoot {
 
   @Autowired(required = false)
   private List<ServerJoinListener> _clusterJoinList;
+
+  @Autowired(required = false)
+  private List<ServerHealthListener> _clusterHealthList;
 
   @Autowired(required = false)
   private List<ServerMessageHandler<?>> _clusterMsgHandleList;

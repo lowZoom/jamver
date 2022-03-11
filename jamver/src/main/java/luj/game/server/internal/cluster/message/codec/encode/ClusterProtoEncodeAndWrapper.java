@@ -1,4 +1,4 @@
-package luj.game.server.internal.cluster.proto.encode;
+package luj.game.server.internal.cluster.message.codec.encode;
 
 import luj.game.server.api.plugin.JamverClusterProtoEncode;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.receive.ClusterReceiveMsg;

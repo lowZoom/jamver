@@ -4,6 +4,7 @@ import java.util.List;
 import luj.bean.api.BeanContext;
 import luj.cache.api.CacheSession;
 import luj.game.server.api.boot.GameStartListener;
+import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
@@ -26,7 +27,8 @@ public class JambeanInLujcluster {
       List<GameDataCommand<?, ?>> dataCommandList, List<GameDataLoad<?, ?>> dataLoadList,
       List<GameDataCommandGroup> commandGroupList,
       List<GameEventListener<?>> eventListenerList, GameEventListener.Service eventListenService,
-      List<ServerMessageHandler<?>> clusterMsgHandleList, List<ServerJoinListener> clusterJoinList,
+      List<ServerMessageHandler<?>> clusterMsgHandleList,
+      List<ServerJoinListener> clusterJoinList, List<ServerHealthListener> clusterHealthList,
       GameAcceptHandler netAcceptHandler, GameDisconnectHandler netDisconnectHandler,
       List<GameProtoHandler<?>> protoHandlerList,
       DataAllPlugin dataAllPlugin,
@@ -43,6 +45,7 @@ public class JambeanInLujcluster {
     _eventListenService = eventListenService;
     _clusterMsgHandleList = clusterMsgHandleList;
     _clusterJoinList = clusterJoinList;
+    _clusterHealthList = clusterHealthList;
     _netAcceptHandler = netAcceptHandler;
     _netDisconnectHandler = netDisconnectHandler;
     _protoHandlerList = protoHandlerList;
@@ -87,6 +90,10 @@ public class JambeanInLujcluster {
 
   public List<ServerJoinListener> getClusterJoinList() {
     return _clusterJoinList;
+  }
+
+  public List<ServerHealthListener> getClusterHealthList() {
+    return _clusterHealthList;
   }
 
   public DataAllPlugin getDataAllPlugin() {
@@ -148,6 +155,7 @@ public class JambeanInLujcluster {
 
   private final List<ServerMessageHandler<?>> _clusterMsgHandleList;
   private final List<ServerJoinListener> _clusterJoinList;
+  private final List<ServerHealthListener> _clusterHealthList;
 
   private final GameAcceptHandler _netAcceptHandler;
   private final GameDisconnectHandler _netDisconnectHandler;

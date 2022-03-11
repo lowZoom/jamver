@@ -1,6 +1,6 @@
 package luj.game.server.internal.luj.lujcluster.actor.cluster.send;
 
-import luj.cluster.api.node.NodeNewMemberListener;
+import luj.cluster.api.node.member.NodeNewMemberListener;
 
 /**
  * 在节点本地寻找能处理该消息的远程节点，以进行实际发送

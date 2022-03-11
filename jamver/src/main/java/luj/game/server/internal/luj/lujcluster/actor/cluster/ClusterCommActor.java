@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import luj.bean.api.BeanContext;
 import luj.cluster.api.actor.ActorMessageHandler;
+import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -18,8 +19,10 @@ public class ClusterCommActor {
   }
 
   public ClusterCommActor(List<ServerJoinListener> joinListeners,
-      Map<String, ServerMessageHandler<?>> handlerMap, ClusterProtoPlugin protoPlugin,
-      Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
+      List<ServerHealthListener> healthListeners, Map<String, ServerMessageHandler<?>> handlerMap,
+      ClusterProtoPlugin protoPlugin, Map<String, GameplayDataActor.CommandKit> commandMap,
+      BeanContext lujbean) {
+    _healthListeners = healthListeners;
     _handlerMap = handlerMap;
     _joinListeners = joinListeners;
     _commandMap = commandMap;
@@ -47,6 +50,10 @@ public class ClusterCommActor {
     return _joinListeners;
   }
 
+  public List<ServerHealthListener> getHealthListeners() {
+    return _healthListeners;
+  }
+
   public Map<String, GameplayDataActor.CommandKit> getCommandMap() {
     return _commandMap;
   }
@@ -67,6 +74,7 @@ public class ClusterCommActor {
   //////////////
 
   private final List<ServerJoinListener> _joinListeners;
+  private final List<ServerHealthListener> _healthListeners;
 
   private final Map<String, ServerMessageHandler<?>> _handlerMap;
   private final ClusterProtoPlugin _protoPlugin;

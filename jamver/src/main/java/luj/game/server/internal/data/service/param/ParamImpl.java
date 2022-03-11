@@ -13,6 +13,7 @@ final class ParamImpl<T> implements CommandService.Param, CommandService.Field<T
     return (CommandService.Field<V>) this;
   }
 
+  @SuppressWarnings("DollarSignInName")
   @Override
   public CommandService.Param $(T value) {
     _paramBean.setField(_field, value);

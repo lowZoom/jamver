@@ -1,8 +1,8 @@
-package luj.game.server.internal.cluster.handle;
+package luj.game.server.internal.cluster.message.handle;
 
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.Tellable;
-import luj.cluster.api.node.NodeNewMemberListener;
+import luj.cluster.api.node.member.NodeNewMemberListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.send.ClusterSendMsg;
 

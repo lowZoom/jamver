@@ -1,7 +1,7 @@
 package luj.game.server.internal.luj.lujcluster.actor.cluster.handle;
 
 import luj.ava.spring.Internal;
-import luj.game.server.internal.cluster.handle.ServmsgHandleInvoker;
+import luj.game.server.internal.cluster.message.handle.ServmsgHandleInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 
 @Internal

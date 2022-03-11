@@ -1,6 +1,6 @@
 package luj.game.server.internal.luj.lujcluster.actor.cluster.join;
 
-import luj.cluster.api.node.NodeNewMemberListener;
+import luj.cluster.api.node.member.NodeNewMemberListener;
 
 public class ClusterJoinMsg {
 
