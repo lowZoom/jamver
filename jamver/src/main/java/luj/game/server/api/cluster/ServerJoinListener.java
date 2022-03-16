@@ -27,6 +27,8 @@ public interface ServerJoinListener {
 
   interface Server {
 
+    String name();
+
     Set<String> tags();
 
     void sendMessage(Object msg);
