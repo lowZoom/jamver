@@ -26,8 +26,8 @@ final class OnLoadFinish implements GameplayDataActor.Handler<LoadFinishMsg> {
     Map<String, Object> valueMap = msg.getDataValue();
     checkState(present == !valueMap.isEmpty());
 
-    new CacheLoadFinisher(dataType, dataId, present, valueMap,
-        self, self.getIdGenState(), ctx.getActorRef(), self.getSaveRef()).finish();
+    Ref selfRef = ctx.getActorRef();
+    CacheLoadFinisher.get(self, selfRef, dataType, dataId, present, valueMap).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnLoadFinish.class);

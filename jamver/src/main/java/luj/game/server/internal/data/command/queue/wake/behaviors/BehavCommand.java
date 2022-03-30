@@ -25,10 +25,9 @@ final class BehavCommand implements QueueWakeBehavior {
     DataCommandRequest commandReq = _factory._commandReq;
     GameplayDataActor.CommandKit cmdKit = commandReq.getCommandKit();
 
-    new CommandExecFinisher(cmdKit.getLoadResultType(), commandReq.getCacheReq(),
-        _factory._dataCache, _factory._idGenState, cmdKit.getCommandType().getName(), cmdKit,
-        commandReq.getCommandParam(), _factory._dataRef, _factory._saveRef,
-        commandReq.getRemoteRef(), _factory._lujbean).finish();
+    new CommandExecFinisher(cmdKit, commandReq.getCommandParam(), commandReq.getCacheReq(),
+        _factory._dataCache, _factory._idGenState, _factory._configs, _factory._dataRef,
+        _factory._saveRef, commandReq.getRemoteRef(), _factory._lujbean).finish();
   }
 
   private final WakeBehaviorFactory _factory;

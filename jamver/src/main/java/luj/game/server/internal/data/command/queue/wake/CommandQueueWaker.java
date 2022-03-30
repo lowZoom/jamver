@@ -6,6 +6,7 @@ import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
 import luj.cluster.api.actor.Tellable;
+import luj.config.api.container.ConfigContainer;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.command.queue.wake.behaviors.WakeBehaviorFactory;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
@@ -17,10 +18,11 @@ import org.slf4j.LoggerFactory;
 public class CommandQueueWaker {
 
   public CommandQueueWaker(Queue<DataCommandRequest> commandQueue, CacheContainer dataCache,
-      DataIdGenState idGenState, Tellable dataRef, Tellable saveRef, Tellable loadRef,
-      BeanContext lujbean) {
+      ConfigContainer configs, DataIdGenState idGenState, Tellable dataRef, Tellable saveRef,
+      Tellable loadRef, BeanContext lujbean) {
     _commandQueue = commandQueue;
     _dataCache = dataCache;
+    _configs = configs;
     _idGenState = idGenState;
     _dataRef = dataRef;
     _saveRef = saveRef;
@@ -33,8 +35,8 @@ public class CommandQueueWaker {
   }
 
   private boolean tryExecute(DataCommandRequest commandReq) {
-    QueueWakeBehavior behavior = new WakeBehaviorFactory(
-        commandReq, _dataCache, _idGenState, _dataRef, _saveRef, _lujbean).create();
+    QueueWakeBehavior behavior = new WakeBehaviorFactory(commandReq,
+        _dataCache, _idGenState, _configs, _dataRef, _saveRef, _lujbean).create();
 
     List<CacheRequest> cacheReq = behavior.getCacheReq();
     DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq).check();
@@ -58,7 +60,9 @@ public class CommandQueueWaker {
   private static final Logger LOG = LoggerFactory.getLogger(CommandQueueWaker.class);
 
   private final Queue<DataCommandRequest> _commandQueue;
+
   private final CacheContainer _dataCache;
+  private final ConfigContainer _configs;
   private final DataIdGenState _idGenState;
 
   private final Tellable _dataRef;

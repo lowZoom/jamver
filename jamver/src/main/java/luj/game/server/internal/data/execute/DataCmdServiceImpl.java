@@ -1,7 +1,9 @@
 package luj.game.server.internal.data.execute;
 
 import luj.bean.api.BeanContext;
+import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.data.GameDataCommand;
+import luj.game.server.internal.data.execute.service.config.ConfigServiceFactory;
 import luj.game.server.internal.data.execute.service.proto.ProtoServiceFactory;
 import luj.game.server.internal.data.execute.service.time.TimeServiceFactory;
 
@@ -19,7 +21,7 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public <C> GameDataCommand.Config<C> config(Class<C> configType) {
-    return null;
+    return ConfigServiceFactory.GET.create(configType, configType.getName(), _configs);
   }
 
   @Override
@@ -54,5 +56,6 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
   GameDataCommand.EventOld _eventSvc;
   GameDataCommand.Event<?> _eventSvc2;
 
+  ConfigContainer _configs;
   BeanContext _lujbean;
 }

@@ -3,6 +3,7 @@ package luj.game.server.internal.luj.lujcluster;
 import java.util.List;
 import luj.bean.api.BeanContext;
 import luj.cache.api.CacheSession;
+import luj.config.api.ConfigSession;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
@@ -14,6 +15,7 @@ import luj.game.server.api.event.GameEventListener;
 import luj.game.server.api.net.GameAcceptHandler;
 import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
+import luj.game.server.api.plugin.JamverConfigReload;
 import luj.game.server.api.plugin.JamverDynamicRootInit;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
@@ -34,7 +36,8 @@ public class JambeanInLujcluster {
       DataAllPlugin dataAllPlugin,
       ClusterProtoPlugin clusterProtoPlugin,
       NetAllPlugin netReceivePlugin, JamverDynamicRootInit dynamicInitPlugin,
-      CacheSession lujcache, BeanContext lujbean,
+      JamverConfigReload configReloadPlugin, CacheSession lujcache,
+      ConfigSession lujconfig, BeanContext lujbean,
       NetContext lujnet, BootStartInvoker.Network netParam,
       Object appStartParam) {
     _startListenerList = startListenerList;
@@ -53,7 +56,9 @@ public class JambeanInLujcluster {
     _clusterProtoPlugin = clusterProtoPlugin;
     _netReceivePlugin = netReceivePlugin;
     _dynamicInitPlugin = dynamicInitPlugin;
+    _configReloadPlugin = configReloadPlugin;
     _lujcache = lujcache;
+    _lujconfig = lujconfig;
     _lujbean = lujbean;
     _lujnet = lujnet;
     _netParam = netParam;
@@ -124,8 +129,16 @@ public class JambeanInLujcluster {
     return _dynamicInitPlugin;
   }
 
+  public JamverConfigReload getConfigReloadPlugin() {
+    return _configReloadPlugin;
+  }
+
   public CacheSession getLujcache() {
     return _lujcache;
+  }
+
+  public ConfigSession getLujconfig() {
+    return _lujconfig;
   }
 
   public BeanContext getLujbean() {
@@ -164,9 +177,12 @@ public class JambeanInLujcluster {
   private final DataAllPlugin _dataAllPlugin;
   private final ClusterProtoPlugin _clusterProtoPlugin;
   private final NetAllPlugin _netReceivePlugin;
+
   private final JamverDynamicRootInit _dynamicInitPlugin;
+  private final JamverConfigReload _configReloadPlugin;
 
   private final CacheSession _lujcache;
+  private final ConfigSession _lujconfig;
   private final BeanContext _lujbean;
 
   private final NetContext _lujnet;

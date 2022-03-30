@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
+import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
@@ -20,13 +21,15 @@ public class CmdGroupExecutor {
 
   public CmdGroupExecutor(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
       List<DataEntity> createLog, List<DataEntity> loadLog, CacheContainer dataCache,
-      DataIdGenState idGenState, Tellable dataRef, ServerMessageHandler.Server remoteRef,
-      Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
+      ConfigContainer configs, DataIdGenState idGenState, Tellable dataRef,
+      ServerMessageHandler.Server remoteRef, Map<String, GameplayDataActor.CommandKit> commandMap,
+      BeanContext lujbean) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
     _createLog = createLog;
     _loadLog = loadLog;
     _dataCache = dataCache;
+    _configs = configs;
     _idGenState = idGenState;
     _dataRef = dataRef;
     _remoteRef = remoteRef;
@@ -45,23 +48,24 @@ public class CmdGroupExecutor {
   }
 
   private ElementImpl<?> makeElem(GroupReqElement e) {
-    ElementImpl<?> result = new ElementImpl<>();
     GameplayDataActor.CommandKit cmdKit = e.getCommandKit();
-
-    result._cmdKit = cmdKit;
-    result._cmdParam = e.getCommandParam();
-    result._remoteRef = _remoteRef;
-    result._lujbean = _lujbean;
-
     LoadResultProxy resultProxy = LoadResultProxy.create(cmdKit.getLoadResultType());
+
     DataServiceImpl dataSvc = new DataServiceImpl(
         _idGenState, _dataRef, _createLog, _remoteRef, _commandMap, _lujbean);
 
     e.getCacheReq().walk(new ExecFinishWalker(
         _dataCache, resultProxy, _loadLog, dataSvc::specifySetField));
 
+    ElementImpl<?> result = new ElementImpl<>();
+    result._cmdKit = cmdKit;
+    result._cmdParam = e.getCommandParam();
     result._resultProxy = resultProxy;
     result._dataSvc = dataSvc;
+
+    result._configs = _configs;
+    result._remoteRef = _remoteRef;
+    result._lujbean = _lujbean;
 
     return result;
   }
@@ -73,6 +77,7 @@ public class CmdGroupExecutor {
   private final List<DataEntity> _loadLog;
 
   private final CacheContainer _dataCache;
+  private final ConfigContainer _configs;
   private final DataIdGenState _idGenState;
   private final Tellable _dataRef;
 

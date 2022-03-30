@@ -19,10 +19,14 @@ import luj.game.server.internal.data.instancev2.DataEntityCreator;
 import luj.game.server.internal.data.instancev2.DataType;
 import luj.game.server.internal.data.save.create.DataCreateRequestorV2;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CacheLoadFinisher {
+
+  public static CacheLoadFinisher get(GameplayDataActor dataState, Tellable dataRef,
+      Class<?> dataType, Comparable<?> dataId, boolean present, Map<String, Object> dataValue) {
+    return new CacheLoadFinisher(dataType, dataId, present, dataValue, dataState,
+        dataState.getIdGenState(), dataRef, dataState.getSaveRef());
+  }
 
   public CacheLoadFinisher(Class<?> dataType, Comparable<?> dataId, boolean present,
       Map<String, Object> dataValue, GameplayDataActor dataState, DataIdGenState idState,
@@ -42,7 +46,7 @@ public class CacheLoadFinisher {
     updateCache(cache);
 
     // 有新数据可用后，唤醒之前等待的CMD
-    new CommandQueueWaker(_dataState.getCommandQueue(), cache, _idState,
+    new CommandQueueWaker(_dataState.getCommandQueue(), cache, _dataState.getConfigs(), _idState,
         _dataRef, _saveRef, _dataState.getLoadRef(), _dataState.getLujbean()).wake();
   }
 

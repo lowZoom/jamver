@@ -10,7 +10,8 @@ public class DataRootInitInvoker {
   }
 
   public Object invoke() {
-    InitContextImpl ctx = new InitContextImpl(_startParam);
+    InitContextImpl ctx = new InitContextImpl();
+    ctx._startParam = _startParam;
     return _initPlugin.onInit(ctx);
   }
 

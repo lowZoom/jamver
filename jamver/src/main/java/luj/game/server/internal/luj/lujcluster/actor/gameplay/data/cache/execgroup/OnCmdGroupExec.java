@@ -64,8 +64,8 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
     }
 
     Ref selfRef = ctx.getActorRef();
-    new GroupExecFinisher(groupKit.getGroup(), elemList, dataCache, idState, selfRef,
-        self.getSaveRef(), remoteRef, self.getCommandMap(), self.getLujbean()).finish();
+    new GroupExecFinisher(groupKit.getGroup(), elemList, dataCache, self.getConfigs(), idState,
+        selfRef, self.getSaveRef(), remoteRef, self.getCommandMap(), self.getLujbean()).finish();
   }
 
   private Elem makeElem(CmdGroupExecMsg.Command msg, GameplayDataActor actor) {

@@ -6,8 +6,7 @@ import org.slf4j.Logger;
 
 final class CmdContextImpl implements GameDataCommand.Context {
 
-  CmdContextImpl(Object param, Object loadResult, Logger logger,
-      GameDataCommand.Service service) {
+  CmdContextImpl(Object param, Object loadResult, Logger logger, GameDataCommand.Service service) {
     _param = param;
     _loadResult = loadResult;
     _logger = logger;

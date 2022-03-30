@@ -13,7 +13,7 @@ public class DataIdPlugin {
     return _init;
   }
 
-  public JamverDataIdGenNext getGenerateNext() {
+  public JamverDataIdGenNext<?> getGenerateNext() {
     return _generateNext;
   }
 
@@ -21,5 +21,5 @@ public class DataIdPlugin {
   private JamverDataIdInit _init;
 
   @Autowired(required = false)
-  private JamverDataIdGenNext _generateNext;
+  private JamverDataIdGenNext<?> _generateNext;
 }

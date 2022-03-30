@@ -12,11 +12,13 @@ import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
 import luj.cluster.api.node.NodeStartListener;
+import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.internal.cluster.message.handle.collect.ClusterHandleMapCollector;
+import luj.game.server.internal.config.reload.ConfigReloadInvoker;
 import luj.game.server.internal.data.command.collect.CommandMapCollector;
 import luj.game.server.internal.data.command.collect.group.GroupMapCollector;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
@@ -77,10 +79,13 @@ final class OnNodeStart implements NodeStartListener {
     CacheSession lujcache = clusterParam.getLujcache();
     CacheContainer dataCache = lujcache.createCache();
 
-    Map<Class<?>, GameplayDataActor.GroupKit> groupMap = new GroupMapCollector(
-        clusterParam.getCommandGroupList()).collect();
+    ConfigContainer configs = new ConfigReloadInvoker(
+        clusterParam.getConfigReloadPlugin(), clusterParam.getAppStartParam()).invoke();
 
-    return new DataActorFactory(clusterParam, dataCache, cmdMap, groupMap).create();
+    Map<Class<?>, GameplayDataActor.GroupKit> groupMap =
+        new GroupMapCollector(clusterParam.getCommandGroupList()).collect();
+
+    return new DataActorFactory(clusterParam, dataCache, configs, cmdMap, groupMap).create();
   }
 
   private GameplayEventActor eventActor(JambeanInLujcluster clusterParam) {

@@ -1,12 +1,13 @@
 package luj.game.server.internal.data.execute.group;
 
 import luj.bean.api.BeanContext;
+import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
-import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
+import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
 final class ElementImpl<C> implements GameDataCommandGroup.Element<C> {
@@ -28,7 +29,8 @@ final class ElementImpl<C> implements GameDataCommandGroup.Element<C> {
     Object loadResult = _resultProxy.getInstance();
     GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 
-    new DataCmdExecutor(_cmdKit, _cmdParam, loadResult, _dataSvc, netSvc, _lujbean).execute();
+    new DataCmdExecutor(_cmdKit, _cmdParam, loadResult,
+        _dataSvc, netSvc, _configs, _lujbean).execute();
   }
 
   GameplayDataActor.CommandKit _cmdKit;
@@ -37,6 +39,7 @@ final class ElementImpl<C> implements GameDataCommandGroup.Element<C> {
   LoadResultProxy _resultProxy;
   GameDataCommand.Data _dataSvc;
 
+  ConfigContainer _configs;
   ServerMessageHandler.Server _remoteRef;
   BeanContext _lujbean;
 }

@@ -6,10 +6,10 @@ import luj.bean.api.LujBean;
 import luj.cache.api.LujCache;
 import luj.cluster.api.ClusterSession;
 import luj.cluster.api.LujCluster;
+import luj.config.api.LujConfig;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.plugin.JamverBootRootInit;
 import luj.game.server.internal.boot.plugin.BootStartInvoker;
-import luj.game.server.internal.framework.SpringContextCreator;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
@@ -70,7 +70,8 @@ public class ServerInstanceStarter {
         beanRoot.getClusterProtoPlugin(),
         beanRoot.getNetAllPlugin(),
         beanRoot.getDynamicInitPlugin(),
-        LujCache.start(internalCtx), LujBean.start(),
+        beanRoot.getConfigReloadPlugin(),
+        LujCache.start(internalCtx), LujConfig.start(), LujBean.start(),
         LujNet.create(internalCtx), startCfg.networkConfig(),
         startCfg.startParam());
 

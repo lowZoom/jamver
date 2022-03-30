@@ -1,5 +1,6 @@
 package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import luj.bean.api.BeanContext;
@@ -7,6 +8,7 @@ import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
@@ -52,13 +54,13 @@ public class GameplayDataActor {
     Class<?> getGroupType();
   }
 
-  public GameplayDataActor(CacheContainer dataCache, DataIdGenState idGenState,
-      Queue<DataCommandRequest> commandQueue, Map<String, CommandKit> commandMap,
+  public GameplayDataActor(CacheContainer dataCache, ConfigContainer configs,
+      DataIdGenState idGenState, Map<String, CommandKit> commandMap,
       Map<Class<?>, GroupKit> cmdGroupMap, CacheSession lujcache, BeanContext lujbean,
       DataAllPlugin allPlugin, Object startParam) {
     _dataCache = dataCache;
+    _configs = configs;
     _idGenState = idGenState;
-    _commandQueue = commandQueue;
     _commandMap = commandMap;
     _cmdGroupMap = cmdGroupMap;
     _lujcache = lujcache;
@@ -107,6 +109,10 @@ public class GameplayDataActor {
     return _dataCache;
   }
 
+  public ConfigContainer getConfigs() {
+    return _configs;
+  }
+
   public Queue<DataCommandRequest> getCommandQueue() {
     return _commandQueue;
   }
@@ -143,8 +149,10 @@ public class GameplayDataActor {
   private TopLevelRefs _siblingRef;
 
   private final CacheContainer _dataCache;
+  private final ConfigContainer _configs;
+
   private final DataIdGenState _idGenState;
-  private final Queue<DataCommandRequest> _commandQueue;
+  private final Queue<DataCommandRequest> _commandQueue = new LinkedList<>();
 
   /////////////////////////
 

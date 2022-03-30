@@ -1,4 +1,4 @@
-package luj.game.server.internal.framework;
+package luj.game.server.internal.boot.node;
 
 import java.lang.reflect.Modifier;
 import java.util.Optional;
