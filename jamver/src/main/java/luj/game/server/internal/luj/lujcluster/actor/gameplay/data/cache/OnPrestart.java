@@ -12,7 +12,13 @@ final class OnPrestart implements GameplayDataActor.PreStart {
   public void onHandle(Context ctx) {
     GameplayDataActor self = ctx.getActorState(this);
 
-    new DataActorStarter(self, ctx, LOG).start();
+    try {
+      new DataActorStarter(self, ctx, LOG).start();
+
+    } catch (Throwable t) {
+      LOG.error(t.getMessage(), t);
+      ctx.getSystem().shutdown();
+    }
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnPrestart.class);

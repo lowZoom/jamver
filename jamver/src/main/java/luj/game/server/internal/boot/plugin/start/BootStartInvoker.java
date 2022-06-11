@@ -1,4 +1,4 @@
-package luj.game.server.internal.boot.plugin;
+package luj.game.server.internal.boot.plugin.start;
 
 import java.util.List;
 import luj.game.server.api.boot.GameStartListener;
@@ -14,7 +14,7 @@ public class BootStartInvoker {
 
     Inject injectExtra();
 
-    Object startParam();
+    Param param();
   }
 
   public interface Cluster {
@@ -51,12 +51,19 @@ public class BootStartInvoker {
     List<GameStartListener> startListeners();
   }
 
+  public interface Param {
+
+    Object start();
+
+    Object shutdown();
+  }
+
   public BootStartInvoker(JamverBootRootInit startPlugin) {
     _startPlugin = startPlugin;
   }
 
   public Result invoke() throws Exception {
-    ContextImpl ctx = new ContextImpl();
+    StartContextImpl ctx = new StartContextImpl();
     return (Result) _startPlugin.onInit(ctx);
   }
 

@@ -1,4 +1,4 @@
-package luj.game.server.internal.boot.plugin;
+package luj.game.server.internal.boot.plugin.start;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

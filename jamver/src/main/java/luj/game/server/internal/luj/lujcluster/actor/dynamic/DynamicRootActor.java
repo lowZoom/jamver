@@ -2,6 +2,7 @@ package luj.game.server.internal.luj.lujcluster.actor.dynamic;
 
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.game.server.api.plugin.JamverDynamicRootInit;
+import luj.game.server.internal.luj.lujcluster.JamPluginCollect;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 
@@ -15,8 +16,8 @@ public class DynamicRootActor {
   }
 
   public static DynamicRootActor create(JambeanInLujcluster clusterParam) {
-    return new DynamicRootActor(clusterParam.getDynamicInitPlugin(),
-        clusterParam.getAppStartParam());
+    JamPluginCollect plugin = clusterParam.getAllPlugin();
+    return new DynamicRootActor(plugin.getDynamicInit(), clusterParam.getAppStartParam());
   }
 
   public DynamicRootActor(JamverDynamicRootInit initPlugin, Object startParam) {

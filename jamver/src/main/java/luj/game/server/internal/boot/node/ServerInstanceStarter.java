@@ -9,9 +9,10 @@ import luj.cluster.api.LujCluster;
 import luj.config.api.LujConfig;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.plugin.JamverBootRootInit;
-import luj.game.server.internal.boot.plugin.BootStartInvoker;
+import luj.game.server.internal.boot.plugin.start.BootStartInvoker;
 import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
+import luj.game.server.internal.luj.lujcluster.JamPluginCollect;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
 import luj.net.api.LujNet;
 import org.slf4j.Logger;
@@ -59,6 +60,13 @@ public class ServerInstanceStarter {
         .addAll(startCfg.injectExtra().startListeners())
         .build();
 
+    BootStartInvoker.Param appParam = startCfg.param();
+    JamPluginCollect allPlugin = new JamPluginCollect(beanRoot.getDataAllPlugin(),
+        beanRoot.getClusterProtoPlugin(),
+        beanRoot.getNetAllPlugin(),
+        beanRoot.getDynamicInitPlugin(),
+        beanRoot.getConfigReloadPlugin(), beanRoot.getBootShutdownPlugin());
+
     JambeanInLujcluster jambean = new JambeanInLujcluster(
         startListeners, beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
         beanRoot.getCommandGroupList(), null, null,
@@ -66,14 +74,9 @@ public class ServerInstanceStarter {
         beanRoot.getClusterHealthList(),
         beanRoot.getNetAcceptHandler(), beanRoot.getNetDisconnectHandler(),
         beanRoot.getProtoHandlerList(),
-        beanRoot.getDataAllPlugin(),
-        beanRoot.getClusterProtoPlugin(),
-        beanRoot.getNetAllPlugin(),
-        beanRoot.getDynamicInitPlugin(),
-        beanRoot.getConfigReloadPlugin(),
-        LujCache.start(internalCtx), LujConfig.start(), LujBean.start(),
+        allPlugin, LujCache.start(internalCtx), LujConfig.start(), LujBean.start(),
         LujNet.create(internalCtx), startCfg.networkConfig(),
-        startCfg.startParam());
+        appParam.start(), appParam.shutdown());
 
     lujcluster.startNode(c -> c
         .selfHost(host)

@@ -1,4 +1,4 @@
-package luj.game.server.internal.boot.plugin;
+package luj.game.server.internal.boot.plugin.start;
 
 import java.util.List;
 import luj.game.server.api.plugin.JamverBootRootInit;

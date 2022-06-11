@@ -79,8 +79,9 @@ final class OnNodeStart implements NodeStartListener {
     CacheSession lujcache = clusterParam.getLujcache();
     CacheContainer dataCache = lujcache.createCache();
 
+    JamPluginCollect plugin = clusterParam.getAllPlugin();
     ConfigContainer configs = new ConfigReloadInvoker(
-        clusterParam.getConfigReloadPlugin(), clusterParam.getAppStartParam()).invoke();
+        plugin.getConfigReload(), clusterParam.getAppStartParam()).invoke();
 
     Map<Class<?>, GameplayDataActor.GroupKit> groupMap =
         new GroupMapCollector(clusterParam.getCommandGroupList()).collect();
@@ -101,16 +102,19 @@ final class OnNodeStart implements NodeStartListener {
     List<ServerJoinListener> joinList = new ArrayList<>(clusterParam.getClusterJoinList());
     List<ServerHealthListener> healthList = new ArrayList<>(clusterParam.getClusterHealthList());
 
+    JamPluginCollect plugin = clusterParam.getAllPlugin();
     return new ClusterCommActor(joinList, healthList, handlerMap,
-        clusterParam.getClusterProtoPlugin(), cmdMap, clusterParam.getLujbean());
+        plugin.getClusterProto(), cmdMap, clusterParam.getLujbean());
   }
 
   private NetRootActor networkActor(JambeanInLujcluster clusterParam,
       Map<String, GameProtoHandler<?>> handlerMap,
       Map<String, GameplayDataActor.CommandKit> cmdMap) {
+    JamPluginCollect plugin = clusterParam.getAllPlugin();
+
     return new NetRootActor(new HashMap<>(), clusterParam.getNetAcceptHandler(),
         clusterParam.getNetDisconnectHandler(), handlerMap, cmdMap,
-        clusterParam.getLujnet(), clusterParam.getNetReceivePlugin(), clusterParam.getNetParam(),
+        clusterParam.getLujnet(), plugin.getNetAll(), clusterParam.getNetParam(),
         clusterParam.getLujbean());
   }
 

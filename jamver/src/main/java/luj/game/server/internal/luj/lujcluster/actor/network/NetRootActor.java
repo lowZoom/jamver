@@ -7,7 +7,7 @@ import luj.cluster.api.actor.ActorPreStartHandler;
 import luj.game.server.api.net.GameAcceptHandler;
 import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
-import luj.game.server.internal.boot.plugin.BootStartInvoker;
+import luj.game.server.internal.boot.plugin.start.BootStartInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import luj.net.api.NetContext;

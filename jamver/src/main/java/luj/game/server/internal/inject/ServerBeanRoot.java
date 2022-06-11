@@ -14,6 +14,7 @@ import luj.game.server.api.net.GameAcceptHandler;
 import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.api.plugin.JamverBootRootInit;
+import luj.game.server.api.plugin.JamverBootShutdown;
 import luj.game.server.api.plugin.JamverConfigReload;
 import luj.game.server.api.plugin.JamverDynamicRootInit;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
@@ -70,6 +71,10 @@ public class ServerBeanRoot {
     return _bootInitPlugin;
   }
 
+  public JamverBootShutdown getBootShutdownPlugin() {
+    return _bootShutdownPlugin;
+  }
+
   public DataAllPlugin getDataAllPlugin() {
     return _dataAllPlugin;
   }
@@ -120,6 +125,9 @@ public class ServerBeanRoot {
 
   @Autowired
   private JamverBootRootInit _bootInitPlugin;
+
+  @Autowired(required = false)
+  private JamverBootShutdown _bootShutdownPlugin;
 
   @Autowired
   private DataAllPlugin _dataAllPlugin;

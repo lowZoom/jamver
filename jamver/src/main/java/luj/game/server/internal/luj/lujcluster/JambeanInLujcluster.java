@@ -17,7 +17,7 @@ import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.api.plugin.JamverConfigReload;
 import luj.game.server.api.plugin.JamverDynamicRootInit;
-import luj.game.server.internal.boot.plugin.BootStartInvoker;
+import luj.game.server.internal.boot.plugin.start.BootStartInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetAllPlugin;
@@ -33,13 +33,10 @@ public class JambeanInLujcluster {
       List<ServerJoinListener> clusterJoinList, List<ServerHealthListener> clusterHealthList,
       GameAcceptHandler netAcceptHandler, GameDisconnectHandler netDisconnectHandler,
       List<GameProtoHandler<?>> protoHandlerList,
-      DataAllPlugin dataAllPlugin,
-      ClusterProtoPlugin clusterProtoPlugin,
-      NetAllPlugin netReceivePlugin, JamverDynamicRootInit dynamicInitPlugin,
-      JamverConfigReload configReloadPlugin, CacheSession lujcache,
+      JamPluginCollect allPlugin, CacheSession lujcache,
       ConfigSession lujconfig, BeanContext lujbean,
       NetContext lujnet, BootStartInvoker.Network netParam,
-      Object appStartParam) {
+      Object appStartParam, Object appShutdownParam) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
     _dataLoadList = dataLoadList;
@@ -52,17 +49,14 @@ public class JambeanInLujcluster {
     _netAcceptHandler = netAcceptHandler;
     _netDisconnectHandler = netDisconnectHandler;
     _protoHandlerList = protoHandlerList;
-    _dataAllPlugin = dataAllPlugin;
-    _clusterProtoPlugin = clusterProtoPlugin;
-    _netReceivePlugin = netReceivePlugin;
-    _dynamicInitPlugin = dynamicInitPlugin;
-    _configReloadPlugin = configReloadPlugin;
+    _allPlugin = allPlugin;
     _lujcache = lujcache;
     _lujconfig = lujconfig;
     _lujbean = lujbean;
     _lujnet = lujnet;
     _netParam = netParam;
     _appStartParam = appStartParam;
+    _appShutdownParam = appShutdownParam;
   }
 
   public List<GameStartListener> getStartListenerList() {
@@ -101,13 +95,6 @@ public class JambeanInLujcluster {
     return _clusterHealthList;
   }
 
-  public DataAllPlugin getDataAllPlugin() {
-    return _dataAllPlugin;
-  }
-
-  public ClusterProtoPlugin getClusterProtoPlugin() {
-    return _clusterProtoPlugin;
-  }
 
   public GameAcceptHandler getNetAcceptHandler() {
     return _netAcceptHandler;
@@ -121,16 +108,8 @@ public class JambeanInLujcluster {
     return _protoHandlerList;
   }
 
-  public NetAllPlugin getNetReceivePlugin() {
-    return _netReceivePlugin;
-  }
-
-  public JamverDynamicRootInit getDynamicInitPlugin() {
-    return _dynamicInitPlugin;
-  }
-
-  public JamverConfigReload getConfigReloadPlugin() {
-    return _configReloadPlugin;
+  public JamPluginCollect getAllPlugin() {
+    return _allPlugin;
   }
 
   public CacheSession getLujcache() {
@@ -157,6 +136,10 @@ public class JambeanInLujcluster {
     return _appStartParam;
   }
 
+  public Object getAppShutdownParam() {
+    return _appShutdownParam;
+  }
+
   private final List<GameStartListener> _startListenerList;
 
   private final List<GameDataCommand<?, ?>> _dataCommandList;
@@ -174,12 +157,7 @@ public class JambeanInLujcluster {
   private final GameDisconnectHandler _netDisconnectHandler;
   private final List<GameProtoHandler<?>> _protoHandlerList;
 
-  private final DataAllPlugin _dataAllPlugin;
-  private final ClusterProtoPlugin _clusterProtoPlugin;
-  private final NetAllPlugin _netReceivePlugin;
-
-  private final JamverDynamicRootInit _dynamicInitPlugin;
-  private final JamverConfigReload _configReloadPlugin;
+  private final JamPluginCollect _allPlugin;
 
   private final CacheSession _lujcache;
   private final ConfigSession _lujconfig;
@@ -189,7 +167,8 @@ public class JambeanInLujcluster {
   private final BootStartInvoker.Network _netParam;
 
   /**
-   * @see luj.game.server.api.plugin.JamverBootRootInit.Return#param
+   * @see luj.game.server.api.plugin.JamverBootRootInit.Param#start
    */
   private final Object _appStartParam;
+  private final Object _appShutdownParam;
 }

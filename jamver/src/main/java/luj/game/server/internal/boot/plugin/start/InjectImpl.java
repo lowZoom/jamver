@@ -1,4 +1,4 @@
-package luj.game.server.internal.boot.plugin;
+package luj.game.server.internal.boot.plugin.start;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 

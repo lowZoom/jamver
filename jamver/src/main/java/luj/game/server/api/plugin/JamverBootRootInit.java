@@ -20,7 +20,13 @@ public interface JamverBootRootInit {
 
     Return injectExtra(Function<Inject, Inject> val);
 
+    /**
+     * @see #param(Function)
+     */
+    @Deprecated
     Return param(Object val);
+
+    Return param(Function<Param, Param> val);
   }
 
   interface Cluster {
@@ -61,6 +67,13 @@ public interface JamverBootRootInit {
   interface Inject {
 
     Inject startListeners(List<GameStartListener> val);
+  }
+
+  interface Param {
+
+    Param start(Object val);
+
+    Param shutdown(Object val);
   }
 
   Return onInit(Context ctx) throws Exception;

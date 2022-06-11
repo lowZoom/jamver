@@ -20,7 +20,7 @@ public class DataActorFactory {
   }
 
   public GameplayDataActor create() {
-    DataAllPlugin allPlugin = _clusterParam.getDataAllPlugin();
+    DataAllPlugin allPlugin = _clusterParam.getAllPlugin().getDataAll();
 
     DataIdPlugin idPlugin = allPlugin.getIdPlugin();
     DataIdGenState idGenState = new DataIdGenState(idPlugin.getGenerateNext());

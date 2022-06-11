@@ -1,4 +1,4 @@
-package luj.game.server.internal.boot.plugin;
+package luj.game.server.internal.boot.plugin.start;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -28,12 +28,15 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
     return this;
   }
 
-  /**
-   * @see #startParam
-   */
   @Override
   public JamverBootRootInit.Return param(Object val) {
-    _param = val;
+    return param(p -> p.start(val));
+  }
+
+  @Override
+  public JamverBootRootInit.Return param(
+      Function<JamverBootRootInit.Param, JamverBootRootInit.Param> val) {
+    checkState(val.apply(_param) == _param);
     return this;
   }
 
@@ -55,7 +58,7 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
   }
 
   @Override
-  public Object startParam() {
+  public BootStartInvoker.Param param() {
     return _param;
   }
 
@@ -65,5 +68,5 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
   NetworkImpl _network;
 
   InjectImpl _injectExtra;
-  Object _param;
+  ParamImpl _param;
 }
