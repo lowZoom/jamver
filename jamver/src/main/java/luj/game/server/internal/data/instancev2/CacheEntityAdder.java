@@ -25,8 +25,6 @@ public class CacheEntityAdder {
     cacheItem.setPresence(DataPresence.PRESENT);
     cacheItem.setDataObjV2(_dataObj);
 
-    //TODO: setLock(true)
-
     String dataKey = new CacheKeyMaker(dataType.getName(), dataId).make();
 //    LOG.debug("新增缓存项：{}", dataKey);
 

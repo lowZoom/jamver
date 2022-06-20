@@ -1,5 +1,6 @@
 package luj.game.server.internal.data.save.wait.add;
 
+import static com.google.common.base.Preconditions.checkState;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.save.wait.BatchUpdateItem;
 import luj.game.server.internal.data.save.wait.IoWaitBatch;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.update.DUpdateMsgMap;
@@ -23,10 +25,13 @@ public class IoWaitUpdateAdder {
   public void add() {
     //TODO: 如果数据在同一批次里创建，还可以将更新直接并进创建动作里
 
-    Map<Comparable<?>, BatchUpdateItem> batchMap = _batch.getUpdateMap();
+    String dataType = _msg.getDataType();
     Comparable<?> dataId = _msg.getDataId();
+    String cacheKey = new CacheKeyMaker(dataType, dataId).make();
 
-    BatchUpdateItem oldItem = batchMap.get(dataId);
+    Map<String, BatchUpdateItem> batchMap = _batch.getUpdateMap();
+    BatchUpdateItem oldItem = batchMap.get(cacheKey);
+
     if (oldItem != null) {
       mergeItem(oldItem);
       return;
@@ -38,12 +43,12 @@ public class IoWaitUpdateAdder {
     Map<String, DUpdateMsgMap> mapUpdated = _msg.getMapUpdated().entrySet().stream()
         .collect(toMap(Map.Entry::getKey, e -> mapToMutable(e.getValue())));
 
-    BatchUpdateItem newItem = new BatchUpdateItem(dataId, _msg.getDataType(), _msg.getIdField(),
+    BatchUpdateItem newItem = new BatchUpdateItem(dataType, dataId, _msg.getIdField(),
         new HashMap<>(_msg.getPrimitiveUpdated()),
         new HashMap<>(setUpdated),
         new HashMap<>(mapUpdated));
 
-    batchMap.put(dataId, newItem);
+    batchMap.put(cacheKey, newItem);
   }
 
   private DUpdateMsgSet setToMutable(DUpdateMsgSet src) {
@@ -58,15 +63,19 @@ public class IoWaitUpdateAdder {
     return new DUpdateMsgMap(update, remove);
   }
 
-  private void mergeItem(BatchUpdateItem item) {
-    item.getPrimitiveUpdated().putAll(_msg.getPrimitiveUpdated());
+  private void mergeItem(BatchUpdateItem oldItem) {
+    String oldType = oldItem.getDataType();
+    String newType = _msg.getDataType();
+    checkState(oldType.equals(newType), "OLD:%s, NEW:%s", oldType, newType);
 
-    Map<String, DUpdateMsgSet> setFields = item.getSetUpdated();
+    oldItem.getPrimitiveUpdated().putAll(_msg.getPrimitiveUpdated());
+
+    Map<String, DUpdateMsgSet> setFields = oldItem.getSetUpdated();
     for (Map.Entry<String, DUpdateMsgSet> e : _msg.getSetUpdated().entrySet()) {
       setMerge(setFields, e.getKey(), e.getValue());
     }
 
-    Map<String, DUpdateMsgMap> mapFields = item.getMapUpdated();
+    Map<String, DUpdateMsgMap> mapFields = oldItem.getMapUpdated();
     for (Map.Entry<String, DUpdateMsgMap> e : _msg.getMapUpdated().entrySet()) {
       mapMerge(mapFields, e.getKey(), e.getValue());
     }

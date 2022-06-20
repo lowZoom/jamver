@@ -9,6 +9,7 @@ import luj.game.server.internal.data.types.map.history.MapWithHistory;
 public enum DataDirtyChecker {
   GET;
 
+  @Deprecated
   public boolean isDirty(DataTempProxy data) {
     return isDirty0(data.getDataMapV2());
   }
@@ -17,7 +18,7 @@ public enum DataDirtyChecker {
     return isDirty0(data.getFieldValueMap());
   }
 
-  boolean isDirty0(MapWithHistory<String, Object> value) {
+  private boolean isDirty0(MapWithHistory<String, Object> value) {
     if (MapChangedChecker.GET.isChanged(value)) {
       return true;
     }

@@ -6,7 +6,7 @@ import java.util.Map;
 public class IoWaitBatch {
 
   public IoWaitBatch(List<BatchCreateItem> createList,
-      Map<Comparable<?>, BatchUpdateItem> updateMap) {
+      Map<String, BatchUpdateItem> updateMap) {
     _createList = createList;
     _updateMap = updateMap;
   }
@@ -15,11 +15,11 @@ public class IoWaitBatch {
     return _createList;
   }
 
-  public Map<Comparable<?>, BatchUpdateItem> getUpdateMap() {
+  public Map<String, BatchUpdateItem> getUpdateMap() {
     return _updateMap;
   }
 
   private final List<BatchCreateItem> _createList;
 
-  private final Map<Comparable<?>, BatchUpdateItem> _updateMap;
+  private final Map<String, BatchUpdateItem> _updateMap;
 }

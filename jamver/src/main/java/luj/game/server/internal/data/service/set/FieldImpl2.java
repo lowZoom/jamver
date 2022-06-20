@@ -13,6 +13,8 @@ public class FieldImpl2<T> implements GameDataCommand.Data.Field<T> {
 
   @Override
   public void $(T value) {
+    //TODO: 校验不能把null设进原生类型
+
     MapDataUpdater.GET.update(_curData.getData().getFieldValueMap(), _curField, value);
   }
 
