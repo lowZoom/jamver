@@ -15,12 +15,26 @@ public interface JamverDynamicRootInit {
      */
     <T> T getStartParam();
 
+    /**
+     * @see #registerAll
+     */
+    @Deprecated
     void registerDataCommand(Collection<GameDataCommand<?, ?>> command,
         Collection<GameDataLoad<?, ?>> load);
 
+    /**
+     * @see #registerAll
+     */
+    @Deprecated
     void registerServerJoinListener(Collection<ServerJoinListener> listener);
 
+    /**
+     * @see #registerAll
+     */
+    @Deprecated
     void registerServerMessageHandler(Collection<ServerMessageHandler<?>> handler);
+
+    void registerAll(Collection<?> beans);
   }
 
   void onInit(Context ctx);

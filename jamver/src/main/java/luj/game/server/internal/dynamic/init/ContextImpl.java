@@ -1,5 +1,6 @@
 package luj.game.server.internal.dynamic.init;
 
+import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerJoinListener;
@@ -35,8 +36,15 @@ final class ContextImpl implements JamverDynamicRootInit.Context {
     _clusterRef.tell(new AddMessageHandlerMsg(handler));
   }
 
+  @Override
+  public void registerAll(Collection<?> beans) {
+    _registerAll = beans;
+  }
+
   Object _startParam;
 
   Tellable _dataRef;
   Tellable _clusterRef;
+
+  Collection<?> _registerAll = ImmutableList.of();
 }

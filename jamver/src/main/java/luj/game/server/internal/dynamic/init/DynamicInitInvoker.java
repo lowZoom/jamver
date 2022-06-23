@@ -20,6 +20,8 @@ public class DynamicInitInvoker {
     ctx._startParam = _startParam;
 
     _initPlugin.onInit(ctx);
+
+    new DynamicAllRegister(ctx._registerAll, _dataRef, _clusterRef).register();
   }
 
   private final JamverDynamicRootInit _initPlugin;
