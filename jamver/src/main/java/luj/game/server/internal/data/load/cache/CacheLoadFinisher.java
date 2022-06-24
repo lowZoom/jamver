@@ -45,9 +45,12 @@ public class CacheLoadFinisher {
     CacheContainer cache = _dataState.getDataCache();
     updateCache(cache);
 
+    Tellable loadRef = _dataState.getLoadRef();
+    Tellable eventRef = _dataState.getSiblingRef().getEventRef();
+
     // 有新数据可用后，唤醒之前等待的CMD
-    new CommandQueueWaker(_dataState.getCommandQueue(), cache, _dataState.getConfigs(), _idState,
-        _dataRef, _saveRef, _dataState.getLoadRef(), _dataState.getLujbean()).wake();
+    new CommandQueueWaker(_dataState.getCommandQueue(), cache, _idState, _dataState.getConfigs(),
+        _dataRef, _saveRef, loadRef, eventRef, _dataState.getLujbean()).wake();
   }
 
   private void updateCache(CacheContainer cache) {

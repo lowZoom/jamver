@@ -21,17 +21,18 @@ public class CmdGroupExecutor {
 
   public CmdGroupExecutor(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
       List<DataEntity> createLog, List<DataEntity> loadLog, CacheContainer dataCache,
-      ConfigContainer configs, DataIdGenState idGenState, Tellable dataRef,
-      ServerMessageHandler.Server remoteRef, Map<String, GameplayDataActor.CommandKit> commandMap,
-      BeanContext lujbean) {
+      DataIdGenState idGenState, ConfigContainer configs, Tellable dataRef,
+      Tellable eventRef, ServerMessageHandler.Server remoteRef,
+      Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
     _createLog = createLog;
     _loadLog = loadLog;
     _dataCache = dataCache;
-    _configs = configs;
     _idGenState = idGenState;
+    _configs = configs;
     _dataRef = dataRef;
+    _eventRef = eventRef;
     _remoteRef = remoteRef;
     _commandMap = commandMap;
     _lujbean = lujbean;
@@ -64,6 +65,8 @@ public class CmdGroupExecutor {
     result._dataSvc = dataSvc;
 
     result._configs = _configs;
+    result._eventRef = _eventRef;
+
     result._remoteRef = _remoteRef;
     result._lujbean = _lujbean;
 
@@ -77,9 +80,11 @@ public class CmdGroupExecutor {
   private final List<DataEntity> _loadLog;
 
   private final CacheContainer _dataCache;
-  private final ConfigContainer _configs;
   private final DataIdGenState _idGenState;
+  private final ConfigContainer _configs;
+
   private final Tellable _dataRef;
+  private final Tellable _eventRef;
 
   private final ServerMessageHandler.Server _remoteRef;
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;

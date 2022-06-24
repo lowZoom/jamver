@@ -24,7 +24,8 @@ public class CommandExecFinisher {
   public CommandExecFinisher(GameplayDataActor.CommandKit commandKit, Object cmdParam,
       CacheRequest cacheReq, CacheContainer dataCache, DataIdGenState idGenState,
       ConfigContainer configs, Tellable dataRef, Tellable saveRef,
-      ServerMessageHandler.Server remoteRef, BeanContext lujbean) {
+      Tellable eventRef, ServerMessageHandler.Server remoteRef,
+      BeanContext lujbean) {
     _commandKit = commandKit;
     _cmdParam = cmdParam;
     _cacheReq = cacheReq;
@@ -33,6 +34,7 @@ public class CommandExecFinisher {
     _configs = configs;
     _dataRef = dataRef;
     _saveRef = saveRef;
+    _eventRef = eventRef;
     _remoteRef = remoteRef;
     _lujbean = lujbean;
   }
@@ -43,8 +45,9 @@ public class CommandExecFinisher {
 
     Class<?> loadResultType = _commandKit.getLoadResultType();
     LoadResultProxy resultProxy = LoadResultProxy.create(loadResultType);
-    DataServiceImpl dataSvc = new DataServiceImpl(
-        _idGenState, _dataRef, createLog, _remoteRef, _commandKit.getParentMap(), _lujbean);
+
+    DataServiceImpl dataSvc = new DataServiceImpl(_idGenState,
+        _dataRef, createLog, _remoteRef, _commandKit.getParentMap(), _lujbean);
 
     // 收集并锁定要用的数据
     _cacheReq.walk(new ExecFinishWalker(
@@ -60,7 +63,7 @@ public class CommandExecFinisher {
     try {
       //TODO: 并发到另外的线程去执行
       new DataCmdExecutor(_commandKit, _cmdParam,
-          loadResult, dataSvc, netSvc, _configs, _lujbean).execute();
+          loadResult, dataSvc, netSvc, _eventRef, _configs, _lujbean).execute();
 
     } catch (Exception e) {
       LOG.error(e.getMessage(), e);
@@ -85,6 +88,7 @@ public class CommandExecFinisher {
   private final Tellable _dataRef;
   private final Tellable _saveRef;
 
+  private final Tellable _eventRef;
   private final ServerMessageHandler.Server _remoteRef;
   private final BeanContext _lujbean;
 }

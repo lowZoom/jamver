@@ -12,13 +12,14 @@ public class WakeBehaviorFactory {
 
   public WakeBehaviorFactory(DataCommandRequest commandReq, CacheContainer dataCache,
       DataIdGenState idGenState, ConfigContainer configs, Tellable dataRef, Tellable saveRef,
-      BeanContext lujbean) {
+      Tellable eventRef, BeanContext lujbean) {
     _commandReq = commandReq;
     _dataCache = dataCache;
     _idGenState = idGenState;
     _configs = configs;
     _dataRef = dataRef;
     _saveRef = saveRef;
+    _eventRef = eventRef;
     _lujbean = lujbean;
   }
 
@@ -40,6 +41,7 @@ public class WakeBehaviorFactory {
 
   final Tellable _dataRef;
   final Tellable _saveRef;
+  final Tellable _eventRef;
 
   final BeanContext _lujbean;
 }

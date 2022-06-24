@@ -1,7 +1,6 @@
 package luj.game.server.internal.luj.lujcluster.actor.dynamic.start;
 
 import luj.ava.spring.Internal;
-import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.plugin.JamverDynamicRootInit;
 import luj.game.server.internal.dynamic.init.DynamicInitInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.dynamic.DynamicRootActor;
@@ -32,10 +31,10 @@ final class OnStartRef implements DynamicRootActor.Handler<StartRefMsg> {
     }
 
     TopLevelRefs sibling = self.getSiblingRef();
-    Tellable dataRef = sibling.getDataRef();
-    Tellable clusterRef = sibling.getClusterRef();
 
-    new DynamicInitInvoker(initPlugin, dataRef, clusterRef, self.getStartParam()).invoke();
+    new DynamicInitInvoker(initPlugin,
+        sibling.getDataRef(), sibling.getEventRef(), sibling.getClusterRef(),
+        self.getStartParam()).invoke();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnStartRef.class);

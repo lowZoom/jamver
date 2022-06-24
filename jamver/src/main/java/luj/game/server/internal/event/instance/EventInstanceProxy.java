@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
+@Deprecated
 public class EventInstanceProxy implements InvocationHandler {
 
   public EventInstanceProxy(Map<String, Object> fieldMap) {

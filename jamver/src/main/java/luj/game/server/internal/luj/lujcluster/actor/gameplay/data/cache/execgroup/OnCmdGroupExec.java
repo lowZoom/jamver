@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import luj.ava.spring.Internal;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.data.command.queue.add.WaitQueueGroupAdder;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
@@ -48,7 +49,7 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
     DataIdGenState idState = self.getIdGenState();
     CacheContainer dataCache = self.getDataCache();
 
-    //TODO: 还有网络连接
+    @Deprecated
     ServerMessageHandler.Server remoteRef = msg.remoteRef();
 
     if (!readyResult.isReady()) {
@@ -64,8 +65,11 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
     }
 
     Ref selfRef = ctx.getActorRef();
-    new GroupExecFinisher(groupKit.getGroup(), elemList, dataCache, self.getConfigs(), idState,
-        selfRef, self.getSaveRef(), remoteRef, self.getCommandMap(), self.getLujbean()).finish();
+    Tellable eventRef = self.getSiblingRef().getEventRef();
+
+    new GroupExecFinisher(groupKit.getGroup(), elemList, dataCache, idState, self.getConfigs(),
+        selfRef, self.getSaveRef(), eventRef, remoteRef, self.getCommandMap(), self.getLujbean())
+        .finish();
   }
 
   private Elem makeElem(CmdGroupExecMsg.Command msg, GameplayDataActor actor) {

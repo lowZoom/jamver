@@ -157,6 +157,10 @@ public interface GameDataCommand<P, D> {
     @Deprecated
     Session session(Comparable<?> sessionId);
 
+    /**
+     * @see luj.game.server.api.cluster.ServerMessageHandler.Context#remoteServer
+     */
+    @Deprecated
     Server server();
 
     Http http();

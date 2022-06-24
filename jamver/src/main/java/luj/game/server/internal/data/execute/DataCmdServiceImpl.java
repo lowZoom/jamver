@@ -1,10 +1,9 @@
 package luj.game.server.internal.data.execute;
 
-import luj.bean.api.BeanContext;
 import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.service.config.ConfigServiceFactory;
-import luj.game.server.internal.data.execute.service.proto.ProtoServiceFactory;
+import luj.game.server.internal.data.execute.service.event.EventServiceFactory;
 import luj.game.server.internal.data.execute.service.time.TimeServiceFactory;
 
 final class DataCmdServiceImpl implements GameDataCommand.Service {
@@ -16,7 +15,7 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public GameDataCommand.Proto proto() {
-    return new ProtoServiceFactory(_lujbean).create();
+    return _protoSvc;
   }
 
   @Override
@@ -26,13 +25,12 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public GameDataCommand.EventOld event() {
-    return _eventSvc;
+    throw new UnsupportedOperationException("event已废弃");
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public <E> GameDataCommand.Event<E> event(Class<E> eventType) {
-    return (GameDataCommand.Event<E>) _eventSvc2;
+    return _eventSvc.create(eventType);
   }
 
   @Override
@@ -51,11 +49,10 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
   }
 
   GameDataCommand.Data _dataSvc;
+
+  GameDataCommand.Proto _protoSvc;
   GameDataCommand.Network _networkSvc;
 
-  GameDataCommand.EventOld _eventSvc;
-  GameDataCommand.Event<?> _eventSvc2;
-
   ConfigContainer _configs;
-  BeanContext _lujbean;
+  EventServiceFactory _eventSvc;
 }

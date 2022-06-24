@@ -20,16 +20,17 @@ import org.slf4j.LoggerFactory;
 public class GroupExecFinisher {
 
   public GroupExecFinisher(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
-      CacheContainer dataCache, ConfigContainer configs, DataIdGenState idGenState,
-      Tellable dataRef, Tellable saveRef, ServerMessageHandler.Server remoteRef,
+      CacheContainer dataCache, DataIdGenState idGenState, ConfigContainer configs,
+      Tellable dataRef, Tellable saveRef, Tellable eventRef, ServerMessageHandler.Server remoteRef,
       Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
     _cmdGroup = cmdGroup;
     _elemList = elemList;
     _dataCache = dataCache;
-    _configs = configs;
     _idGenState = idGenState;
+    _configs = configs;
     _dataRef = dataRef;
     _saveRef = saveRef;
+    _eventRef = eventRef;
     _remoteRef = remoteRef;
     _commandMap = commandMap;
     _lujbean = lujbean;
@@ -44,8 +45,8 @@ public class GroupExecFinisher {
 
     // 真正执行cmd逻辑
     try {
-      new CmdGroupExecutor(_cmdGroup, _elemList, createLog, loadLog,
-          _dataCache, _configs, _idGenState, _dataRef, _remoteRef, _commandMap, _lujbean).execute();
+      new CmdGroupExecutor(_cmdGroup, _elemList, createLog, loadLog, _dataCache,
+          _idGenState, _configs, _dataRef, _eventRef, _remoteRef, _commandMap, _lujbean).execute();
 
     } catch (Exception e) {
       LOG.error(e.getMessage(), e);
@@ -62,12 +63,13 @@ public class GroupExecFinisher {
   private final List<GroupReqElement> _elemList;
 
   private final CacheContainer _dataCache;
-  private final ConfigContainer _configs;
   private final DataIdGenState _idGenState;
+  private final ConfigContainer _configs;
 
   private final Tellable _dataRef;
   private final Tellable _saveRef;
 
+  private final Tellable _eventRef;
   private final ServerMessageHandler.Server _remoteRef;
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 

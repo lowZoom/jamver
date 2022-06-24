@@ -2,8 +2,7 @@ package luj.game.server.internal.event.listener.collect;
 
 import static java.util.stream.Collectors.groupingBy;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import luj.ava.reflect.type.TypeX;
@@ -12,7 +11,7 @@ import luj.game.server.api.event.GameEventListener;
 
 public class EventListenerMapCollector {
 
-  public EventListenerMapCollector(List<GameEventListener<?>> listenerList) {
+  public EventListenerMapCollector(Collection<GameEventListener<?>> listenerList) {
     _listenerList = listenerList;
   }
 
@@ -28,5 +27,5 @@ public class EventListenerMapCollector {
         .asClass();
   }
 
-  private final List<GameEventListener<?>> _listenerList;
+  private final Collection<GameEventListener<?>> _listenerList;
 }

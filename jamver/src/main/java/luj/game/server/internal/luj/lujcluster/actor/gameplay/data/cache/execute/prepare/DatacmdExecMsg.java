@@ -18,6 +18,7 @@ public class DatacmdExecMsg {
     return _param;
   }
 
+  @Deprecated
   public ServerMessageHandler.Server getRemoteRef() {
     return _remoteRef;
   }

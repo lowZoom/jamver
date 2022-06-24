@@ -16,5 +16,6 @@ public interface CmdGroupExecMsg {
 
   List<Command> commands();
 
+  @Deprecated
   ServerMessageHandler.Server remoteRef();
 }

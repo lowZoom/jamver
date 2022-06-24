@@ -2,11 +2,16 @@ package luj.game.server.internal.event.fire;
 
 import java.util.function.BiConsumer;
 import luj.cluster.api.actor.ActorPreStartHandler;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.internal.event.instance.EventBuilderProxy;
 import luj.game.server.internal.event.instance.EventInstanceCreator;
 import luj.game.server.internal.event.instance.EventInstanceProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.fire.FireEventMsg;
 
+/**
+ * @see EventFirerV2
+ */
+@Deprecated
 public class EventFirer {
 
   public EventFirer(Class<?> eventType, BiConsumer<?, ?> builder,
@@ -16,7 +21,6 @@ public class EventFirer {
     _eventRef = eventRef;
   }
 
-  @SuppressWarnings("unchecked")
   public void fire() {
     EventInstanceProxy instanceProxy = new EventInstanceCreator(_eventType).create();
     EventBuilderProxy builderProxy = new EventBuilderProxy(instanceProxy).init(_eventType);
@@ -31,5 +35,5 @@ public class EventFirer {
   private final Class<?> _eventType;
   private final BiConsumer<?, ?> _builder;
 
-  private final ActorPreStartHandler.Actor _eventRef;
+  private final Tellable _eventRef;
 }

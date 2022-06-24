@@ -8,6 +8,7 @@ import luj.ava.spring.Internal;
 import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.internal.data.command.queue.add.WaitQueueAdder;
 import luj.game.server.internal.data.execute.finish.CommandExecFinisher;
@@ -48,7 +49,7 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     CacheRequest cacheReq = DataLoadRequestMaker.create(cmdKit, param, dataCache, lujcache).make();
     DataReadyChecker.Result readyResult = new DataReadyChecker(ImmutableList.of(cacheReq)).check();
 
-    //TODO: 还有客户端网络连接
+    @Deprecated
     ServerMessageHandler.Server remoteRef = msg.getRemoteRef();
 
     DataIdGenState idState = self.getIdGenState();
@@ -64,8 +65,10 @@ final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {
     }
 
     Ref selfRef = ctx.getActorRef();
-    new CommandExecFinisher(cmdKit, param, cacheReq, dataCache, idState, self.getConfigs(), selfRef,
-        self.getSaveRef(), remoteRef, self.getLujbean()).finish();
+    Tellable eventRef = self.getSiblingRef().getEventRef();
+
+    new CommandExecFinisher(cmdKit, param, cacheReq, dataCache, idState, self.getConfigs(),
+        selfRef, self.getSaveRef(), eventRef, remoteRef, self.getLujbean()).finish();
   }
 
 //  private static final Logger LOG = LoggerFactory.getLogger(OnDataCmdExec.class);

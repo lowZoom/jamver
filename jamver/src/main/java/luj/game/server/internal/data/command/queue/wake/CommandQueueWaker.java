@@ -18,15 +18,16 @@ import org.slf4j.LoggerFactory;
 public class CommandQueueWaker {
 
   public CommandQueueWaker(Queue<DataCommandRequest> commandQueue, CacheContainer dataCache,
-      ConfigContainer configs, DataIdGenState idGenState, Tellable dataRef, Tellable saveRef,
-      Tellable loadRef, BeanContext lujbean) {
+      DataIdGenState idGenState, ConfigContainer configs, Tellable dataRef, Tellable saveRef,
+      Tellable loadRef, Tellable eventRef, BeanContext lujbean) {
     _commandQueue = commandQueue;
     _dataCache = dataCache;
-    _configs = configs;
     _idGenState = idGenState;
+    _configs = configs;
     _dataRef = dataRef;
     _saveRef = saveRef;
     _loadRef = loadRef;
+    _eventRef = eventRef;
     _lujbean = lujbean;
   }
 
@@ -35,8 +36,8 @@ public class CommandQueueWaker {
   }
 
   private boolean tryExecute(DataCommandRequest commandReq) {
-    QueueWakeBehavior behavior = new WakeBehaviorFactory(commandReq,
-        _dataCache, _idGenState, _configs, _dataRef, _saveRef, _lujbean).create();
+    QueueWakeBehavior behavior = new WakeBehaviorFactory(commandReq, _dataCache,
+        _idGenState, _configs, _dataRef, _saveRef, _eventRef, _lujbean).create();
 
     List<CacheRequest> cacheReq = behavior.getCacheReq();
     DataReadyChecker.Result readyResult = new DataReadyChecker(cacheReq).check();
@@ -62,12 +63,13 @@ public class CommandQueueWaker {
   private final Queue<DataCommandRequest> _commandQueue;
 
   private final CacheContainer _dataCache;
-  private final ConfigContainer _configs;
   private final DataIdGenState _idGenState;
+  private final ConfigContainer _configs;
 
   private final Tellable _dataRef;
   private final Tellable _saveRef;
   private final Tellable _loadRef;
 
+  private final Tellable _eventRef;
   private final BeanContext _lujbean;
 }

@@ -15,12 +15,11 @@ final class ServiceData implements GameAcceptHandler.Data {
   @Override
   public <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType) {
     return new CommandServiceFactory(_lujbean, _dataRef,
-        _remoteRef, commandType, _commandMap).create();
+        null, commandType, _commandMap).create();
   }
 
   Map<String, GameplayDataActor.CommandKit> _commandMap;
   BeanContext _lujbean;
 
   Tellable _dataRef;
-  ServerMessageHandler.Server _remoteRef;
 }

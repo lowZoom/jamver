@@ -18,8 +18,13 @@ final class OnFireEvent implements GameplayEventActor.Handler<FireEventMsg> {
     List<GameEventListener<?>> listenerList = actor.getListenerMap()
         .getOrDefault(eventType.getName(), ImmutableList.of());
 
+    if (listenerList.isEmpty()) {
+      return;
+    }
+
     Object event = msg.getEvent();
     ListenerContextImpl listenerCtx = new ListenerContextImpl(event, actor.getListenService());
+
     for (GameEventListener<?> listener : listenerList) {
       listener.onEvent(listenerCtx);
     }
