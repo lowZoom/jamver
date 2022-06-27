@@ -65,7 +65,7 @@ public class CommandExecFinisher {
       new DataCmdExecutor(_commandKit, _cmdParam,
           loadResult, dataSvc, netSvc, _eventRef, _configs, _lujbean).execute();
 
-    } catch (Exception e) {
+    } catch (Throwable e) {
       LOG.error(e.getMessage(), e);
       //TODO: 出错的时候要清除修改
     }
