@@ -1,7 +1,10 @@
 package luj.game.server.internal.data.execute;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.data.GameDataCommand;
+import luj.game.server.api.plugin.JamverConfigReload;
 import luj.game.server.internal.data.execute.service.config.ConfigServiceFactory;
 import luj.game.server.internal.data.execute.service.event.EventServiceFactory;
 import luj.game.server.internal.data.execute.service.time.TimeServiceFactory;
@@ -20,6 +23,7 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
 
   @Override
   public <C> GameDataCommand.Config<C> config(Class<C> configType) {
+    checkNotNull(_configs, "See [%s]", JamverConfigReload.class);
     return ConfigServiceFactory.GET.create(configType, configType.getName(), _configs);
   }
 
