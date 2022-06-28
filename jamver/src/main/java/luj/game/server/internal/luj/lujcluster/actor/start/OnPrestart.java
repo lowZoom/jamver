@@ -10,6 +10,6 @@ final class OnPrestart implements JamStartActor.PreStart {
   public void onHandle(Context ctx) throws Exception {
     JamStartActor self = ctx.getActorState(this);
 
-    new StartListenTrigger(self).trigger();
+    StartListenTrigger.get(self).trigger();
   }
 }

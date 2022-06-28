@@ -1,32 +1,43 @@
 package luj.game.server.internal.boot.game;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
-
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
 import luj.game.server.internal.luj.lujcluster.actor.start.JamStartActor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StartListenTrigger {
 
-  public StartListenTrigger(JamStartActor actorState) {
-    _actorState = actorState;
+  public static StartListenTrigger get(JamStartActor actorState) {
+    JambeanInLujcluster startParam = actorState.getStartParam();
+
+    ServiceData dataSvc = new ServiceData();
+    dataSvc._commandMap = actorState.getCommandMap();
+    dataSvc._lujbean = startParam.getLujbean();
+    dataSvc._dataRef = actorState.getRefCollection().getDataRef();
+
+    return new StartListenTrigger(startParam.getStartListenerList(),
+        startParam.getAppStartParam(), dataSvc);
+  }
+
+  public StartListenTrigger(List<GameStartListener> listenerList, Object startParam,
+      GameStartListener.Data dataService) {
+    _listenerList = listenerList;
+    _startParam = startParam;
+    _dataService = dataService;
   }
 
   public void trigger() throws Exception {
-    JambeanInLujcluster startParam = _actorState.getStartParam();
-    List<GameStartListener> listnerList = nonNull(startParam.getStartListenerList());
+    List<GameStartListener> listnerList = nonNull(_listenerList);
     if (listnerList.isEmpty()) {
 //      LOG.warn("[game]未发现任何GameStartListener");
       return;
     }
 
     StartContextImpl ctx = new StartContextImpl();
-    ctx._startParam = startParam.getAppStartParam();
-    ctx._service = makeService(startParam);
+    ctx._startParam = _startParam;
+    ctx._service = makeService();
 
     for (GameStartListener listener : listnerList) {
       //TODO: 出错应该打断启动退出
@@ -34,24 +45,20 @@ public class StartListenTrigger {
     }
   }
 
-  private GameStartListener.Service makeService(JambeanInLujcluster startParam) {
-    ServiceData dataSvc = new ServiceData();
-    dataSvc._commandMap = _actorState.getCommandMap();
-    dataSvc._lujbean = startParam.getLujbean();
-
-    dataSvc._dataRef = _actorState.getRefCollection().getDataRef();
-//    dataSvc._remoteRef =
-
+  private GameStartListener.Service makeService() {
     ServiceImpl service = new ServiceImpl();
-    service._dataService = dataSvc;
+    service._dataService = _dataService;
     return service;
   }
 
   private <T> List<T> nonNull(List<T> list) {
-    return firstNonNull(list, ImmutableList.of());
+    return MoreObjects.firstNonNull(list, ImmutableList.of());
   }
 
 //  private static final Logger LOG = LoggerFactory.getLogger(StartListenTrigger.class);
 
-  private final JamStartActor _actorState;
+  private final List<GameStartListener> _listenerList;
+
+  private final Object _startParam;
+  private final GameStartListener.Data _dataService;
 }

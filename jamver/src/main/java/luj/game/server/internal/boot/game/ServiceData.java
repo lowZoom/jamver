@@ -19,8 +19,7 @@ final class ServiceData implements GameStartListener.Data {
 
   @Override
   public <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType) {
-    return new CommandServiceFactory(_lujbean,
-        _dataRef, null, commandType, _commandMap).create();
+    return new CommandServiceFactory(_lujbean, _dataRef, null, commandType, _commandMap).create();
   }
 
   Map<String, GameplayDataActor.CommandKit> _commandMap;
