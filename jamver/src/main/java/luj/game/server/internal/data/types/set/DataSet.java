@@ -47,7 +47,7 @@ public class DataSet<E> implements Set<E>, HasOp {
 
   @Override
   public boolean addAll(Collection<? extends E> c) {
-    throw new UnsupportedOperationException("");
+    return SetDataAdder.GET.addAll(_value, c);
   }
 
   @Override
