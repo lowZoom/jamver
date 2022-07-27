@@ -6,8 +6,8 @@ final class HandleServiceImpl implements ServerMessageHandler.Service {
 
   @Override
   public ServerMessageHandler.Data data() {
-    return _dataService;
+    return _dataSvc;
   }
 
-  DataServiceImpl _dataService;
+  DataServiceImpl _dataSvc;
 }

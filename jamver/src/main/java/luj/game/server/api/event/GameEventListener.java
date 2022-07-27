@@ -29,6 +29,10 @@ public interface GameEventListener<E> {
 
     Data data();
 
+    /**
+     * @deprecated 准备移除
+     */
+    @Deprecated
     Network network();
   }
 
@@ -43,6 +47,7 @@ public interface GameEventListener<E> {
     <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
   }
 
+  @Deprecated
   interface Network {
 
     Server server();
@@ -53,5 +58,5 @@ public interface GameEventListener<E> {
     <T> void send(Class<T> msgType, BiConsumer<CommandService.Param, T> msgValue);
   }
 
-  void onEvent(Context ctx);
+  void onEvent(Context ctx) throws Exception;
 }

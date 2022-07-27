@@ -15,12 +15,7 @@ import luj.game.server.api.event.GameEventListener;
 import luj.game.server.api.net.GameAcceptHandler;
 import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
-import luj.game.server.api.plugin.JamverConfigReload;
-import luj.game.server.api.plugin.JamverDynamicRootInit;
 import luj.game.server.internal.boot.plugin.start.BootStartInvoker;
-import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterProtoPlugin;
-import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataAllPlugin;
-import luj.game.server.internal.luj.lujcluster.actor.network.NetAllPlugin;
 import luj.net.api.NetContext;
 
 public class JambeanInLujcluster {
@@ -79,6 +74,10 @@ public class JambeanInLujcluster {
     return _eventListenerList;
   }
 
+  /**
+   * @deprecated 准备移除
+   */
+  @Deprecated
   public GameEventListener.Service getEventListenService() {
     return _eventListenService;
   }

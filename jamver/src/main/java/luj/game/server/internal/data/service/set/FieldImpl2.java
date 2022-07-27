@@ -15,6 +15,8 @@ public class FieldImpl2<T> implements GameDataCommand.Data.Field<T> {
   public void $(T value) {
     //TODO: 校验不能把null设进原生类型
 
+    //TODO: 校验不能替换掉集合
+
     MapDataUpdater.GET.update(_curData.getData().getFieldValueMap(), _curField, value);
   }
 

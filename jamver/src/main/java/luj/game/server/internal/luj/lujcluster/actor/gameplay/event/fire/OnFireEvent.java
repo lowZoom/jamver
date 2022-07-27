@@ -3,7 +3,9 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.event.fire;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import luj.ava.spring.Internal;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.event.GameEventListener;
+import luj.game.server.internal.event.listener.invoke.EventListenInvoker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.GameplayEventActor;
 
 @Internal
@@ -22,11 +24,9 @@ final class OnFireEvent implements GameplayEventActor.Handler<FireEventMsg> {
       return;
     }
 
-    Object event = msg.getEvent();
-    ListenerContextImpl listenerCtx = new ListenerContextImpl(event, actor.getListenService());
+    Tellable dataRef = actor.getSiblingRef().getDataRef();
 
-    for (GameEventListener<?> listener : listenerList) {
-      listener.onEvent(listenerCtx);
-    }
+    new EventListenInvoker(listenerList, msg.getEvent(), actor.getListenService(),
+        dataRef, actor.getCommandMap(), actor.getLujbean()).invoke();
   }
 }

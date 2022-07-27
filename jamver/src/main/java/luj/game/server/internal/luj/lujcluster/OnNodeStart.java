@@ -16,6 +16,7 @@ import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
+import luj.game.server.api.event.GameEventListener;
 import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.internal.cluster.message.handle.collect.ClusterHandleMapCollector;
 import luj.game.server.internal.config.reload.ConfigReloadInvoker;
@@ -52,7 +53,7 @@ final class OnNodeStart implements NodeStartListener {
 
     TopLevelRefs allRef = new TopLevelRefs(
         ctx.createApplicationActor(dataActor(param, cmdMap)),
-        ctx.createApplicationActor(eventActor(param)),
+        ctx.createApplicationActor(eventActor(param, cmdMap)),
         ctx.createApplicationActor(clusterActor(param, cmdMap)),
         ctx.createApplicationActor(networkActor(param, handlerMap, cmdMap)),
         ctx.createApplicationActor(dynamicActor(param))
@@ -89,9 +90,13 @@ final class OnNodeStart implements NodeStartListener {
     return new DataActorFactory(clusterParam, dataCache, configs, cmdMap, groupMap).create();
   }
 
-  private GameplayEventActor eventActor(JambeanInLujcluster clusterParam) {
-    return new GameplayEventActor(new EventListenerMapCollector(
-        clusterParam.getEventListenerList()).collect(), clusterParam.getEventListenService());
+  private GameplayEventActor eventActor(JambeanInLujcluster clusterParam,
+      Map<String, GameplayDataActor.CommandKit> cmdMap) {
+    Map<String, List<GameEventListener<?>>> listenerMap = new EventListenerMapCollector(
+        clusterParam.getEventListenerList()).collect();
+
+    return new GameplayEventActor(listenerMap, cmdMap,
+        clusterParam.getLujbean(), clusterParam.getEventListenService());
   }
 
   private ClusterCommActor clusterActor(JambeanInLujcluster clusterParam,

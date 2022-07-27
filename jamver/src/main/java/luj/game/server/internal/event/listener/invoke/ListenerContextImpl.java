@@ -1,13 +1,8 @@
-package luj.game.server.internal.luj.lujcluster.actor.gameplay.event.fire;
+package luj.game.server.internal.event.listener.invoke;
 
 import luj.game.server.api.event.GameEventListener;
 
 final class ListenerContextImpl implements GameEventListener.Context {
-
-  ListenerContextImpl(Object event, GameEventListener.Service service) {
-    _event = event;
-    _service = service;
-  }
 
   @SuppressWarnings("unchecked")
   @Override
@@ -20,7 +15,7 @@ final class ListenerContextImpl implements GameEventListener.Context {
     return _service;
   }
 
-  private final Object _event;
+  Object _event;
 
-  private final GameEventListener.Service _service;
+  GameEventListener.Service _service;
 }

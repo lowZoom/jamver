@@ -34,7 +34,7 @@ public class ServmsgHandleInvoker {
 
     HandleServiceImpl handleSvc = new HandleServiceImpl();
     ServerImpl sender = makeRemoteServer();
-    handleSvc._dataService = createDataSvc(sender);
+    handleSvc._dataSvc = createDataSvc(sender);
 
     HandleContextImpl handleCtx = new HandleContextImpl();
     handleCtx._message = _message;
