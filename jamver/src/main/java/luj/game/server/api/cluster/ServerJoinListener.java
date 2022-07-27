@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Set;
+import java.util.function.BiFunction;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.service.CommandService;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,9 @@ public interface ServerJoinListener {
     Set<String> tags();
 
     void sendMessage(Object msg);
+
+    <T> void sendMessage(Class<T> msgType,
+        BiFunction<CommandService.Param, T, CommandService.Param> msgValue);
   }
 
   interface Service {
