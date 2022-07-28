@@ -25,6 +25,7 @@ public class ClusterJoinFirer {
     ServerImpl server = new ServerImpl();
     server._remoteNode = _remoteNode;
     server._clusterRef = _clusterRef;
+    server._lujbean = _lujbean;
 
     JoinServiceImpl joinSvc = new JoinServiceImpl();
     joinSvc._dataService = createDataSvc();
