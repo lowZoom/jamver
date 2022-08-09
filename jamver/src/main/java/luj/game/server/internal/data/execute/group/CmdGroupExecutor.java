@@ -11,6 +11,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
 import luj.game.server.internal.data.execute.finish.ExecFinishWalker;
+import luj.game.server.internal.data.execute.load.request.node.find.finish.lock.DataPair;
 import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
 import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
@@ -20,7 +21,7 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.Gamepla
 public class CmdGroupExecutor {
 
   public CmdGroupExecutor(GameDataCommandGroup cmdGroup, List<GroupReqElement> elemList,
-      List<DataEntity> createLog, List<DataEntity> loadLog, CacheContainer dataCache,
+      List<DataEntity> createLog, Map<String, DataPair> loadLog, CacheContainer dataCache,
       DataIdGenState idGenState, ConfigContainer configs, Tellable dataRef,
       Tellable eventRef, ServerMessageHandler.Server remoteRef,
       Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
@@ -77,7 +78,7 @@ public class CmdGroupExecutor {
   private final List<GroupReqElement> _elemList;
 
   private final List<DataEntity> _createLog;
-  private final List<DataEntity> _loadLog;
+  private final Map<String, DataPair> _loadLog;
 
   private final CacheContainer _dataCache;
   private final DataIdGenState _idGenState;

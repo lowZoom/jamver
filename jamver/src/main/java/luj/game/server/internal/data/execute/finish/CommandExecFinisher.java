@@ -1,7 +1,9 @@
 package luj.game.server.internal.data.execute.finish;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import luj.bean.api.BeanContext;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
@@ -10,6 +12,7 @@ import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
+import luj.game.server.internal.data.execute.load.request.node.find.finish.lock.DataPair;
 import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
 import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
 import luj.game.server.internal.data.id.state.DataIdGenState;
@@ -41,7 +44,7 @@ public class CommandExecFinisher {
 
   public void finish() {
     List<DataEntity> createLog = new ArrayList<>();
-    List<DataEntity> loadLog = new ArrayList<>();
+    Map<String, DataPair> loadLog = new HashMap<>();
 
     Class<?> loadResultType = _commandKit.getLoadResultType();
     LoadResultProxy resultProxy = LoadResultProxy.create(loadResultType);
@@ -71,7 +74,7 @@ public class CommandExecFinisher {
     }
 
     String idField = _idGenState.getIdField();
-    new ExecDataFinisherV2(_dataCache, _saveRef, idField, createLog, loadLog).finish();
+    ExecDataFinisherV2.get(_dataCache, _saveRef, idField, createLog, loadLog).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(CommandExecFinisher.class);

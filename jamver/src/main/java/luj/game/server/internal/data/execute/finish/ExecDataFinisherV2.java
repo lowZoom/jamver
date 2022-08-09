@@ -2,10 +2,13 @@ package luj.game.server.internal.data.execute.finish;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
+import luj.game.server.internal.data.execute.load.request.node.find.finish.lock.DataPair;
 import luj.game.server.internal.data.execute.save.CommandSaveRequestorV2;
 import luj.game.server.internal.data.instance.value.change.DataDirtyChecker;
 import luj.game.server.internal.data.instance.value.change.DataModificationApplier;
@@ -17,8 +20,17 @@ import luj.game.server.internal.data.types.map.history.MapWithHistory;
 
 public class ExecDataFinisherV2 {
 
+  public static ExecDataFinisherV2 get(CacheContainer dataCache, Tellable saveRef, String idField,
+      List<DataEntity> createLog, Map<String, DataPair> loadLog) {
+    List<DataEntity> logList = loadLog.values().stream()
+        .map(DataPair::getData)
+        .collect(Collectors.toList());
+
+    return new ExecDataFinisherV2(dataCache, saveRef, idField, createLog, logList);
+  }
+
   public ExecDataFinisherV2(CacheContainer dataCache, Tellable saveRef, String idField,
-      List<DataEntity> createLog, List<DataEntity> loadLog) {
+      List<DataEntity> createLog, Collection<DataEntity> loadLog) {
     _dataCache = dataCache;
     _saveRef = saveRef;
     _idField = idField;
@@ -74,5 +86,5 @@ public class ExecDataFinisherV2 {
   private final String _idField;
 
   private final List<DataEntity> _createLog;
-  private final List<DataEntity> _loadLog;
+  private final Collection<DataEntity> _loadLog;
 }

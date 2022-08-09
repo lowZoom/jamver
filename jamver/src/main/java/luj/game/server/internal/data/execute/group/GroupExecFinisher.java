@@ -1,6 +1,7 @@
 package luj.game.server.internal.data.execute.group;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import luj.bean.api.BeanContext;
@@ -11,6 +12,7 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.command.queue.element.GroupReqElement;
 import luj.game.server.internal.data.execute.finish.ExecDataFinisherV2;
+import luj.game.server.internal.data.execute.load.request.node.find.finish.lock.DataPair;
 import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -41,7 +43,7 @@ public class GroupExecFinisher {
    */
   public void finish() {
     List<DataEntity> createLog = new ArrayList<>();
-    List<DataEntity> loadLog = new ArrayList<>();
+    Map<String, DataPair> loadLog = new HashMap<>();
 
     // 真正执行cmd逻辑
     try {
@@ -54,7 +56,7 @@ public class GroupExecFinisher {
     }
 
     String idField = _idGenState.getIdField();
-    new ExecDataFinisherV2(_dataCache, _saveRef, idField, createLog, loadLog).finish();
+    ExecDataFinisherV2.get(_dataCache, _saveRef, idField, createLog, loadLog).finish();
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(GroupExecFinisher.class);
