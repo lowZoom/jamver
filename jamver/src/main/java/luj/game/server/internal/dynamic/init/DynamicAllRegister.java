@@ -1,8 +1,10 @@
 package luj.game.server.internal.dynamic.init;
 
+import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import luj.cluster.api.actor.Tellable;
+import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
@@ -23,9 +25,9 @@ final class DynamicAllRegister {
     _clusterRef = clusterRef;
   }
 
-  void register() {
+  Collection<GameStartListener> register() {
     if (_registerList.isEmpty()) {
-      return;
+      return ImmutableList.of();
     }
 
     _eventRef.tell(new AddEventListenerMsg(findBeans(GameEventListener.class)));
@@ -35,6 +37,8 @@ final class DynamicAllRegister {
 
     _clusterRef.tell(new AddJoinListenerMsg(findBeans(ServerJoinListener.class)));
     _clusterRef.tell(new AddMessageHandlerMsg(findBeans(ServerMessageHandler.class)));
+
+    return findBeans(GameStartListener.class);
   }
 
   @SuppressWarnings("unchecked")

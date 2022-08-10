@@ -1,6 +1,8 @@
 package luj.game.server.internal.dynamic.init;
 
+import java.util.Collection;
 import luj.cluster.api.actor.Tellable;
+import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.plugin.JamverDynamicRootInit;
 
 public class DynamicInitInvoker {
@@ -14,7 +16,7 @@ public class DynamicInitInvoker {
     _startParam = startParam;
   }
 
-  public void invoke() {
+  public Collection<GameStartListener> invoke() {
     ContextImpl ctx = new ContextImpl();
     ctx._dataRef = _dataRef;
     ctx._clusterRef = _clusterRef;
@@ -22,7 +24,8 @@ public class DynamicInitInvoker {
 
     _initPlugin.onInit(ctx);
 
-    new DynamicAllRegister(ctx._registerAll, _eventRef, _dataRef, _clusterRef).register();
+    return new DynamicAllRegister(ctx._registerAll,
+        _eventRef, _dataRef, _clusterRef).register();
   }
 
   private final JamverDynamicRootInit _initPlugin;

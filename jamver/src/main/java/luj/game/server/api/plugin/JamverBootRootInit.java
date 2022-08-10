@@ -18,6 +18,10 @@ public interface JamverBootRootInit {
 
     Return network(Function<Network, Network> val);
 
+    /**
+     * @see JamverDynamicRootInit.Context#registerAll
+     */
+    @Deprecated
     Return injectExtra(Function<Inject, Inject> val);
 
     /**

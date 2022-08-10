@@ -24,7 +24,6 @@ import luj.game.server.internal.data.command.collect.CommandMapCollector;
 import luj.game.server.internal.data.command.collect.group.GroupMapCollector;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
-import luj.game.server.internal.luj.lujcluster.actor.dynamic.DynamicRootActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataActorFactory;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.event.GameplayEventActor;
@@ -55,12 +54,11 @@ final class OnNodeStart implements NodeStartListener {
         ctx.createApplicationActor(dataActor(param, cmdMap)),
         ctx.createApplicationActor(eventActor(param, cmdMap)),
         ctx.createApplicationActor(clusterActor(param, cmdMap)),
-        ctx.createApplicationActor(networkActor(param, handlerMap, cmdMap)),
-        ctx.createApplicationActor(dynamicActor(param))
+        ctx.createApplicationActor(networkActor(param, handlerMap, cmdMap))
     );
 
-    List<Tellable> refList = ImmutableList.of(allRef.getDataRef(), allRef.getEventRef(),
-        allRef.getClusterRef(), allRef.getNetworkRef(), allRef.getDynamicRef());
+    List<Tellable> refList = ImmutableList.of(allRef.getDataRef(),
+        allRef.getEventRef(), allRef.getClusterRef(), allRef.getNetworkRef());
 
     CountDownLatch startLatch = new CountDownLatch(refList.size());
     StartRefMsg msg = new StartRefMsg(allRef, startLatch);
@@ -71,7 +69,7 @@ final class OnNodeStart implements NodeStartListener {
     startLatch.await();
 
     //FIXME: 临时用单独的actor实现，最后应该把上面的整合进来
-    JamStartActor startState = new JamStartActor(param, allRef, cmdMap);
+    JamStartActor startState = JamStartActor.create(param, allRef, cmdMap);
     ctx.createApplicationActor(startState);
   }
 
@@ -121,9 +119,5 @@ final class OnNodeStart implements NodeStartListener {
         clusterParam.getNetDisconnectHandler(), handlerMap, cmdMap,
         clusterParam.getLujnet(), plugin.getNetAll(), clusterParam.getNetParam(),
         clusterParam.getLujbean());
-  }
-
-  private DynamicRootActor dynamicActor(JambeanInLujcluster clusterParam) {
-    return DynamicRootActor.create(clusterParam);
   }
 }

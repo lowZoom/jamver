@@ -9,7 +9,8 @@ import luj.game.server.internal.luj.lujcluster.actor.start.JamStartActor;
 
 public class StartListenTrigger {
 
-  public static StartListenTrigger get(JamStartActor actorState) {
+  public static StartListenTrigger get(JamStartActor actorState,
+      List<GameStartListener> listenerList) {
     JambeanInLujcluster startParam = actorState.getStartParam();
 
     ServiceData dataSvc = new ServiceData();
@@ -17,8 +18,7 @@ public class StartListenTrigger {
     dataSvc._lujbean = startParam.getLujbean();
     dataSvc._dataRef = actorState.getRefCollection().getDataRef();
 
-    return new StartListenTrigger(startParam.getStartListenerList(),
-        startParam.getAppStartParam(), dataSvc);
+    return new StartListenTrigger(listenerList, startParam.getAppStartParam(), dataSvc);
   }
 
   public StartListenTrigger(List<GameStartListener> listenerList, Object startParam,
@@ -40,7 +40,6 @@ public class StartListenTrigger {
     ctx._service = makeService();
 
     for (GameStartListener listener : listnerList) {
-      //TODO: 出错应该打断启动退出
       listener.onStart(ctx);
     }
   }
