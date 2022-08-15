@@ -19,10 +19,5 @@ final class NetServiceImpl implements GameDataCommand.Network {
     throw new UnsupportedOperationException("server");
   }
 
-  @Override
-  public GameDataCommand.Http http() {
-    throw new UnsupportedOperationException("http");
-  }
-
   GameDataCommand.Session _session;
 }

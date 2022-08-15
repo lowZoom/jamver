@@ -5,13 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import luj.game.server.api.data.service.CommandService;
-import luj.game.server.api.net.GameHttpHandler;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -162,8 +160,6 @@ public interface GameDataCommand<P, D> {
      */
     @Deprecated
     Server server();
-
-    Http http();
   }
 
   interface Session {
@@ -174,12 +170,6 @@ public interface GameDataCommand<P, D> {
   interface Server {
 
     <T> void send(Class<T> msgType, BiConsumer<CommandService.Param, T> msgValue);
-  }
-
-  interface Http {
-
-    void request(String url, Map<String, Object> params,
-        Class<? extends GameHttpHandler<?>> handler);
   }
   //----------------------------------------------------
 
