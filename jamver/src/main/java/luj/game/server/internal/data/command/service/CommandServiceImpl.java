@@ -6,25 +6,22 @@ import java.util.function.BiFunction;
 import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.service.param.CommandParamMaker;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.prepare.DatacmdExecMsg;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.schedule.DatacmdScheduleMsg;
 
 final class CommandServiceImpl<P> implements CommandService<P> {
 
   @Override
   public void execute(BiFunction<Param, P, Param> param) {
+    //TODO: param不允许传null
     execute0(param == null ? null : param::apply);
   }
 
   /**
-   * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.OnDataCmdExec#onHandle
+   * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.prepare.OnDataCmdExec#onHandle
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void execute0(BiConsumer<Param, P> param) {
-    //TODO: 校验param里不能包含数据对象
-
-    Object paramObj = (_paramType == Void.class) ? null : new CommandParamMaker(
-        _paramType, (BiConsumer<CommandService.Param, Object>) param, _factory._lujbean).make();
-
+    Object paramObj = makeParamObj(param);
     DatacmdExecMsg msg = new DatacmdExecMsg(_commandType.getName(), paramObj, _factory._remoteRef);
     _factory._dataRef.tell(msg);
   }
@@ -36,7 +33,11 @@ final class CommandServiceImpl<P> implements CommandService<P> {
 
   @Override
   public void schedule(Duration delay, BiFunction<Param, P, Param> param) {
-    throw new UnsupportedOperationException("schedule尚未实现");
+    String cmdType = _commandType.getName();
+    Object paramObj = makeParamObj(param::apply);
+
+    DatacmdScheduleMsg msg = new DatacmdScheduleMsg(cmdType, paramObj, -1, delay);
+    _factory._dataRef.tell(msg);
   }
 
   @Override
@@ -48,6 +49,14 @@ final class CommandServiceImpl<P> implements CommandService<P> {
   @Override
   public void cancelSchedule() {
     throw new UnsupportedOperationException("cancelSchedule尚未实现");
+  }
+
+  @SuppressWarnings("unchecked")
+  private Object makeParamObj(BiConsumer<Param, P> param) {
+    //TODO: 校验param里不能包含数据对象
+
+    return (_paramType == Void.class) ? null : new CommandParamMaker(
+        _paramType, (BiConsumer<CommandService.Param, Object>) param, _factory._lujbean).make();
   }
 
   Class<?> _commandType;

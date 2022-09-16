@@ -25,6 +25,10 @@ public interface CommandService<P> {
 
   void execute(BiFunction<Param, P, Param> param);
 
+  /**
+   * @see #schedule(Duration, BiFunction)
+   */
+  @Deprecated
   void schedule(Duration delay);
 
   void schedule(Duration delay, BiFunction<Param, P, Param> param);

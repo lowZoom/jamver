@@ -14,6 +14,7 @@ import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.command.queue.DataCommandRequest;
 import luj.game.server.internal.data.id.state.DataIdGenState;
+import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.schedule.state.ScheduleMap;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import org.slf4j.Logger;
 
@@ -117,6 +118,10 @@ public class GameplayDataActor {
     return _commandQueue;
   }
 
+  public ScheduleMap getScheduleMap() {
+    return _scheduleMap;
+  }
+
   public Map<String, CommandKit> getCommandMap() {
     return _commandMap;
   }
@@ -153,6 +158,7 @@ public class GameplayDataActor {
 
   private final DataIdGenState _idGenState;
   private final Queue<DataCommandRequest> _commandQueue = new LinkedList<>();
+  private final ScheduleMap _scheduleMap = new ScheduleMap();
 
   /////////////////////////
 
