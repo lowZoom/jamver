@@ -15,5 +15,5 @@ public interface JamverDataRootInit {
     <T> T getStartParam();
   }
 
-  Object onInit(Context ctx);
+  Object onInit(Context ctx) throws Exception;
 }

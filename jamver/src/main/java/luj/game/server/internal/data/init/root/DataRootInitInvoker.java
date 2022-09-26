@@ -9,9 +9,10 @@ public class DataRootInitInvoker {
     _startParam = startParam;
   }
 
-  public Object invoke() {
+  public Object invoke() throws Exception {
     InitContextImpl ctx = new InitContextImpl();
     ctx._startParam = _startParam;
+
     return _initPlugin.onInit(ctx);
   }
 

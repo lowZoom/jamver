@@ -32,6 +32,16 @@ public class DataActorStarter {
   }
 
   public void start() {
+    try {
+      startImpl();
+
+    } catch (Throwable t) {
+      _log.error(t.getMessage(), t);
+      _context.getSystem().shutdown();
+    }
+  }
+
+  private void startImpl() throws Exception {
     DataAllPlugin allPlugin = _self.getAllPlugin();
 
     JamverDataRootInit initPlugin = allPlugin.getRootInitPlugin();
@@ -49,7 +59,7 @@ public class DataActorStarter {
     _self.setSaveRef(saveRef);
   }
 
-  private Object initRoot(GameplayDataActor self, boolean skipInit) {
+  private Object initRoot(GameplayDataActor self, boolean skipInit) throws Exception {
     if (skipInit) {
       _log.debug("[game]未发现数据模块初始化，跳过");
       return null;
