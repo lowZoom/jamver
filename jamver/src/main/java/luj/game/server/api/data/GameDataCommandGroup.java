@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
+//TODO: 考虑废除此机制
+@Deprecated
 public interface GameDataCommandGroup {
 
   @Target(ElementType.TYPE)

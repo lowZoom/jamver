@@ -52,6 +52,7 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
     @Deprecated
     ServerMessageHandler.Server remoteRef = msg.remoteRef();
 
+    Map<String, GameplayDataActor.CommandKit> commandMap = self.getCommandMap();
     if (!readyResult.isReady()) {
       // 发起数据读取
       new MissingLoadRequestor(readyResult.getMissingList(),
@@ -59,7 +60,7 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
 
       // 加入等待队列
       new WaitQueueGroupAdder(self.getCommandQueue(),
-          groupKit.getGroup(), elemList, remoteRef).addGroup();
+          groupKit.getGroup(), elemList, commandMap, remoteRef).addGroup();
 
       return;
     }
@@ -68,7 +69,7 @@ final class OnCmdGroupExec implements GameplayDataActor.Handler<CmdGroupExecMsg>
     Tellable eventRef = self.getSiblingRef().getEventRef();
 
     new GroupExecFinisher(groupKit.getGroup(), elemList, dataCache, idState, self.getConfigs(),
-        selfRef, self.getSaveRef(), eventRef, remoteRef, self.getCommandMap(), self.getLujbean())
+        selfRef, self.getSaveRef(), eventRef, remoteRef, commandMap, self.getLujbean())
         .finish();
   }
 

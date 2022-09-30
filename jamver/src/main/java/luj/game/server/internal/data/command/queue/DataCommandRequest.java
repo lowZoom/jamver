@@ -1,6 +1,7 @@
 package luj.game.server.internal.data.command.queue;
 
 import java.util.List;
+import java.util.Map;
 import luj.cache.api.request.CacheRequest;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommandGroup;
@@ -29,6 +30,10 @@ public class DataCommandRequest {
     return _groupElemList;
   }
 
+  public Map<String, GameplayDataActor.CommandKit> getCommandMap() {
+    return _commandMap;
+  }
+
   public ServerMessageHandler.Server getRemoteRef() {
     return _remoteRef;
   }
@@ -40,5 +45,6 @@ public class DataCommandRequest {
   GameDataCommandGroup _cmdGroup;
   List<GroupReqElement> _groupElemList;
 
+  Map<String, GameplayDataActor.CommandKit> _commandMap;
   ServerMessageHandler.Server _remoteRef;
 }
