@@ -16,7 +16,7 @@ public class StartListenTrigger {
     ServiceData dataSvc = new ServiceData();
     dataSvc._commandMap = actorState.getCommandMap();
     dataSvc._lujbean = startParam.getLujbean();
-    dataSvc._dataRef = actorState.getRefCollection().getDataRef();
+    dataSvc._dataRef = actorState.getDataRef();
 
     return new StartListenTrigger(listenerList, startParam.getAppStartParam(), dataSvc);
   }

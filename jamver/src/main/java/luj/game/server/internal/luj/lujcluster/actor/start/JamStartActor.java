@@ -1,10 +1,13 @@
 package luj.game.server.internal.luj.lujcluster.actor.start;
 
+import com.google.common.collect.ImmutableList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import luj.cluster.api.actor.ActorMessageHandler;
 import luj.cluster.api.actor.ActorPreStartHandler;
-import luj.game.server.api.plugin.JamverDynamicRootInit;
-import luj.game.server.internal.luj.lujcluster.JamPluginCollect;
+import luj.cluster.api.actor.Tellable;
+import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
@@ -19,39 +22,41 @@ public class JamStartActor {
     // NOOP
   }
 
-  public static JamStartActor create(JambeanInLujcluster clusterParam,
-      TopLevelRefs refCollection, Map<String, GameplayDataActor.CommandKit> commandMap) {
-    JamPluginCollect plugin = clusterParam.getAllPlugin();
-    return new JamStartActor(plugin.getDynamicInit(), clusterParam, refCollection, commandMap);
+  public static JamStartActor create(Collection<GameStartListener> dynamicStart,
+      JambeanInLujcluster clusterParam, TopLevelRefs refCollection,
+      Map<String, GameplayDataActor.CommandKit> commandMap) {
+    return new JamStartActor(ImmutableList.copyOf(dynamicStart), clusterParam,
+        refCollection.getDataRef(), commandMap);
   }
 
-  public JamStartActor(JamverDynamicRootInit dynamicInit, JambeanInLujcluster startParam,
-      TopLevelRefs refCollection, Map<String, GameplayDataActor.CommandKit> commandMap) {
-    _dynamicInit = dynamicInit;
+  public JamStartActor(List<GameStartListener> dynamicStart, JambeanInLujcluster startParam,
+      Tellable dataRef, Map<String, GameplayDataActor.CommandKit> commandMap) {
+    _dynamicStart = dynamicStart;
     _startParam = startParam;
-    _refCollection = refCollection;
+    _dataRef = dataRef;
     _commandMap = commandMap;
   }
 
-  public JamverDynamicRootInit getDynamicInit() {
-    return _dynamicInit;
+  public List<GameStartListener> getDynamicStart() {
+    return _dynamicStart;
   }
 
   public JambeanInLujcluster getStartParam() {
     return _startParam;
   }
 
-  public TopLevelRefs getRefCollection() {
-    return _refCollection;
+  public Tellable getDataRef() {
+    return _dataRef;
   }
 
   public Map<String, GameplayDataActor.CommandKit> getCommandMap() {
     return _commandMap;
   }
 
-  private final JamverDynamicRootInit _dynamicInit;
-  private final JambeanInLujcluster _startParam;
+  private final List<GameStartListener> _dynamicStart;
 
-  private final TopLevelRefs _refCollection;
+  private final JambeanInLujcluster _startParam;
+  private final Tellable _dataRef;
+
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 }

@@ -2,6 +2,7 @@ package luj.game.server.internal.luj.lujcluster;
 
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,15 +14,18 @@ import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
 import luj.cluster.api.node.NodeStartListener;
 import luj.config.api.container.ConfigContainer;
+import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.event.GameEventListener;
 import luj.game.server.api.net.GameProtoHandler;
+import luj.game.server.api.plugin.JamverDynamicRootInit;
 import luj.game.server.internal.cluster.message.handle.collect.ClusterHandleMapCollector;
 import luj.game.server.internal.config.reload.ConfigReloadInvoker;
 import luj.game.server.internal.data.command.collect.CommandMapCollector;
 import luj.game.server.internal.data.command.collect.group.GroupMapCollector;
+import luj.game.server.internal.dynamic.init.DynamicInitInvoker;
 import luj.game.server.internal.event.listener.collect.EventListenerMapCollector;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.DataActorFactory;
@@ -32,6 +36,8 @@ import luj.game.server.internal.luj.lujcluster.actor.start.JamStartActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.StartRefMsg;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import luj.game.server.internal.network.proto.handle.collect.ProtoHandlerMapCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Internal
 final class OnNodeStart implements NodeStartListener {
@@ -50,6 +56,7 @@ final class OnNodeStart implements NodeStartListener {
     Map<String, GameProtoHandler<?>> handlerMap = new ProtoHandlerMapCollector(
         param.getProtoHandlerList()).collect();
 
+    // 先创建所有actor
     TopLevelRefs allRef = new TopLevelRefs(
         ctx.createApplicationActor(dataActor(param, cmdMap)),
         ctx.createApplicationActor(eventActor(param, cmdMap)),
@@ -57,6 +64,10 @@ final class OnNodeStart implements NodeStartListener {
         ctx.createApplicationActor(networkActor(param, handlerMap, cmdMap))
     );
 
+    // 再初始化热更加载
+    Collection<GameStartListener> dynamicStart = initDynamic(param, allRef);
+
+    // 最后等待初始化完成
     List<Tellable> refList = ImmutableList.of(allRef.getDataRef(),
         allRef.getEventRef(), allRef.getClusterRef(), allRef.getNetworkRef());
 
@@ -68,9 +79,22 @@ final class OnNodeStart implements NodeStartListener {
 
     startLatch.await();
 
-    //FIXME: 临时用单独的actor实现，最后应该把上面的整合进来
-    JamStartActor startState = JamStartActor.create(param, allRef, cmdMap);
+    // 初始化完成后，再调用外部启动监听
+    JamStartActor startState = JamStartActor.create(dynamicStart, param, allRef, cmdMap);
     ctx.createApplicationActor(startState);
+  }
+
+  private Collection<GameStartListener> initDynamic(JambeanInLujcluster clusterParam,
+      TopLevelRefs allRef) {
+    JamverDynamicRootInit initPlugin = clusterParam.getAllPlugin().getDynamicInit();
+    if (initPlugin == null) {
+      LOG.debug("[game]未启用热更模块");
+      return ImmutableList.of();
+    }
+
+    Object appParam = clusterParam.getAppStartParam();
+    return new DynamicInitInvoker(initPlugin, allRef.getDataRef(), allRef.getEventRef(),
+        allRef.getClusterRef(), appParam).invoke();
   }
 
   private GameplayDataActor dataActor(JambeanInLujcluster clusterParam,
@@ -120,4 +144,6 @@ final class OnNodeStart implements NodeStartListener {
         clusterParam.getLujnet(), plugin.getNetAll(), clusterParam.getNetParam(),
         clusterParam.getLujbean());
   }
+
+  private static final Logger LOG = LoggerFactory.getLogger(OnNodeStart.class);
 }
