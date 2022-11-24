@@ -1,8 +1,8 @@
 package luj.game.server.internal.luj.lujcluster.actor.network.start;
 
-import luj.ava.spring.Internal;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.StartRefMsg;
+import luj.spring.anno.Internal;
 
 @Internal
 final class OnStartRef implements NetRootActor.Handler<StartRefMsg> {

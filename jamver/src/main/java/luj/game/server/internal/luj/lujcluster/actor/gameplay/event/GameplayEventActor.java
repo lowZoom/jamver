@@ -20,12 +20,10 @@ public class GameplayEventActor {
   }
 
   public GameplayEventActor(Map<String, List<GameEventListener<?>>> listenerMap,
-      Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean,
-      GameEventListener.Service listenService) {
+      Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
     _listenerMap = listenerMap;
     _commandMap = commandMap;
     _lujbean = lujbean;
-    _listenService = listenService;
   }
 
   public TopLevelRefs getSiblingRef() {
@@ -48,19 +46,10 @@ public class GameplayEventActor {
     return _lujbean;
   }
 
-  /**
-   * @deprecated 准备移除
-   */
-  @Deprecated
-  public GameEventListener.Service getListenService() {
-    return _listenService;
-  }
-
   private TopLevelRefs _siblingRef;
 
   private final Map<String, List<GameEventListener<?>>> _listenerMap;
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 
   private final BeanContext _lujbean;
-  private final GameEventListener.Service _listenService;
 }

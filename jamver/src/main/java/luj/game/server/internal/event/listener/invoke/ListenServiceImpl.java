@@ -9,10 +9,5 @@ final class ListenServiceImpl implements GameEventListener.Service {
     return _dataSvc;
   }
 
-  @Override
-  public GameEventListener.Network network() {
-    throw new UnsupportedOperationException("该接口已弃用");
-  }
-
   DataServiceImpl _dataSvc;
 }

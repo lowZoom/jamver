@@ -12,11 +12,9 @@ import org.slf4j.LoggerFactory;
 public class EventListenInvoker {
 
   public EventListenInvoker(List<GameEventListener<?>> listenerList, Object event,
-      GameEventListener.Service service, Tellable dataRef,
-      Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
+      Tellable dataRef, Map<String, GameplayDataActor.CommandKit> commandMap, BeanContext lujbean) {
     _listenerList = listenerList;
     _event = event;
-    _service = service;
     _dataRef = dataRef;
     _commandMap = commandMap;
     _lujbean = lujbean;
@@ -42,10 +40,6 @@ public class EventListenInvoker {
   }
 
   private GameEventListener.Service makeEventService() {
-    if (_service != null) {
-      return _service;
-    }
-
     DataServiceImpl dataSvc = new DataServiceImpl();
     dataSvc._dataRef = _dataRef;
     dataSvc._commandMap = _commandMap;
@@ -60,9 +54,7 @@ public class EventListenInvoker {
   private static final Logger LOG = LoggerFactory.getLogger(EventListenInvoker.class);
 
   private final List<GameEventListener<?>> _listenerList;
-
   private final Object _event;
-  private final GameEventListener.Service _service;
 
   private final Tellable _dataRef;
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;

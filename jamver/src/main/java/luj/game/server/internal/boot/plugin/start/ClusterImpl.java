@@ -33,11 +33,6 @@ final class ClusterImpl implements JamverBootRootInit.Cluster, BootStartInvoker.
   }
 
   @Override
-  public JamverBootRootInit.Cluster seedList(List<String> val) {
-    return discoveryAkkaSeed(val);
-  }
-
-  @Override
   public JamverBootRootInit.Cluster discoveryAkkaSeed(List<String> val) {
     _akkaSeed = val;
     return this;

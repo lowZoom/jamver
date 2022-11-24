@@ -3,12 +3,10 @@ package luj.game.server.internal.luj.lujcluster;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
-import luj.ava.spring.Internal;
 import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cluster.api.actor.Tellable;
@@ -36,6 +34,7 @@ import luj.game.server.internal.luj.lujcluster.actor.start.JamStartActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.StartRefMsg;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
 import luj.game.server.internal.network.proto.handle.collect.ProtoHandlerMapCollector;
+import luj.spring.anno.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,8 +116,7 @@ final class OnNodeStart implements NodeStartListener {
     Map<String, List<GameEventListener<?>>> listenerMap = new EventListenerMapCollector(
         clusterParam.getEventListenerList()).collect();
 
-    return new GameplayEventActor(listenerMap, cmdMap,
-        clusterParam.getLujbean(), clusterParam.getEventListenService());
+    return new GameplayEventActor(listenerMap, cmdMap, clusterParam.getLujbean());
   }
 
   private ClusterCommActor clusterActor(JambeanInLujcluster clusterParam,
@@ -139,10 +137,7 @@ final class OnNodeStart implements NodeStartListener {
       Map<String, GameplayDataActor.CommandKit> cmdMap) {
     JamPluginCollect plugin = clusterParam.getAllPlugin();
 
-    return new NetRootActor(new HashMap<>(), clusterParam.getNetAcceptHandler(),
-        clusterParam.getNetDisconnectHandler(), handlerMap, cmdMap,
-        clusterParam.getLujnet(), plugin.getNetAll(), clusterParam.getNetParam(),
-        clusterParam.getLujbean());
+    return new NetRootActor(handlerMap, cmdMap, plugin.getNetAll(), clusterParam.getLujbean());
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnNodeStart.class);

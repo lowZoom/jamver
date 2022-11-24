@@ -10,8 +10,6 @@ public class BootStartInvoker {
 
     Cluster clusterConfig();
 
-    Network networkConfig();
-
     Inject injectExtra();
 
     Param param();
@@ -32,18 +30,6 @@ public class BootStartInvoker {
     String consulHost();
 
     int consulPort();
-  }
-
-  public interface Network {
-
-    interface Address {
-
-      String host();
-
-      int port();
-    }
-
-    List<Address> bind();
   }
 
   public interface Inject {

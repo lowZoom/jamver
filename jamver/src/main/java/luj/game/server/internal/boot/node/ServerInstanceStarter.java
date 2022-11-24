@@ -14,7 +14,6 @@ import luj.game.server.internal.inject.ServerBeanCollector;
 import luj.game.server.internal.inject.ServerBeanRoot;
 import luj.game.server.internal.luj.lujcluster.JamPluginCollect;
 import luj.game.server.internal.luj.lujcluster.JambeanInLujcluster;
-import luj.net.api.LujNet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -69,13 +68,11 @@ public class ServerInstanceStarter {
 
     JambeanInLujcluster jambean = new JambeanInLujcluster(
         startListeners, beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
-        beanRoot.getCommandGroupList(), null, null,
+        beanRoot.getCommandGroupList(),
         beanRoot.getClusterMsgHandleList(), beanRoot.getClusterJoinList(),
         beanRoot.getClusterHealthList(),
-        beanRoot.getNetAcceptHandler(), beanRoot.getNetDisconnectHandler(),
-        beanRoot.getProtoHandlerList(),
+        ImmutableList.of(), beanRoot.getProtoHandlerList(),
         allPlugin, LujCache.start(internalCtx), LujConfig.start(), LujBean.start(),
-        LujNet.create(internalCtx), startCfg.networkConfig(),
         appParam.start(), appParam.shutdown());
 
     lujcluster.startNode(c -> c

@@ -10,8 +10,6 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
-import luj.game.server.api.net.GameAcceptHandler;
-import luj.game.server.api.net.GameDisconnectHandler;
 import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.api.plugin.JamverBootRootInit;
 import luj.game.server.api.plugin.JamverBootShutdown;
@@ -53,14 +51,6 @@ public class ServerBeanRoot {
 
   public List<ServerHealthListener> getClusterHealthList() {
     return nonNull(_clusterHealthList);
-  }
-
-  public GameAcceptHandler getNetAcceptHandler() {
-    return _netAcceptHandler;
-  }
-
-  public GameDisconnectHandler getNetDisconnectHandler() {
-    return _netDisconnectHandler;
   }
 
   public List<GameProtoHandler<?>> getProtoHandlerList() {
@@ -113,12 +103,6 @@ public class ServerBeanRoot {
 
   @Autowired(required = false)
   private List<ServerMessageHandler<?>> _clusterMsgHandleList;
-
-  @Autowired(required = false)
-  private GameAcceptHandler _netAcceptHandler;
-
-  @Autowired(required = false)
-  private GameDisconnectHandler _netDisconnectHandler;
 
   @Autowired(required = false)
   private List<GameProtoHandler<?>> _protoHandlerList;

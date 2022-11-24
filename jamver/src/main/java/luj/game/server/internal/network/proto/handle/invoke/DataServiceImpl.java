@@ -12,11 +12,6 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.Gamepla
 final class DataServiceImpl implements GameProtoHandler.Data {
 
   @Override
-  public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param) {
-    throw new UnsupportedOperationException("executeCommand已废弃");
-  }
-
-  @Override
   public <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType) {
     return new CommandServiceFactory(_lujbean, _dataRef,
         null, commandType, _commandMap).create();

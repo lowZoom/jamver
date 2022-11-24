@@ -11,22 +11,11 @@ final class ContextImpl implements GameProtoHandler.Context {
   }
 
   @Override
-  public Integer connectionId() {
-    return _connId;
-  }
-
-  @Override
-  public GameProtoHandler.Player player() {
-    throw new UnsupportedOperationException("player已废弃");
-  }
-
-  @Override
   public GameProtoHandler.Service service() {
     return _service;
   }
 
   Object _proto;
-  Integer _connId;
 
   HandleServiceImpl _service;
 }

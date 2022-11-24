@@ -12,11 +12,6 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.Gamepla
 final class DataServiceImpl implements GameEventListener.Data {
 
   @Override
-  public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType, P param) {
-    throw new UnsupportedOperationException("该接口已弃用");
-  }
-
-  @Override
   public <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType) {
     return new CommandServiceFactory(_lujbean, _dataRef, null, commandType, _commandMap).create();
   }

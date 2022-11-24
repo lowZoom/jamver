@@ -16,19 +16,11 @@ public interface JamverBootRootInit {
 
     Return cluster(Function<Cluster, Cluster> val);
 
-    Return network(Function<Network, Network> val);
-
     /**
      * @see JamverDynamicRootInit.Context#registerAll
      */
     @Deprecated
     Return injectExtra(Function<Inject, Inject> val);
-
-    /**
-     * @see #param(Function)
-     */
-    @Deprecated
-    Return param(Object val);
 
     Return param(Function<Param, Param> val);
   }
@@ -43,29 +35,11 @@ public interface JamverBootRootInit {
 
     Cluster selfTags(Set<String> val);
 
-    /**
-     * @see #discoveryAkkaSeed
-     */
-    @Deprecated
-    Cluster seedList(List<String> val);
-
     Cluster discoveryAkkaSeed(List<String> val);
 
     Cluster discoveryConsulHost(String val);
 
     Cluster discoveryConsulPort(int val);
-  }
-
-  interface Network {
-
-    interface Address {
-
-      Address host(String val);
-
-      Address port(int port);
-    }
-
-    Network bind(Function<Address, Address> addr);
   }
 
   interface Inject {
