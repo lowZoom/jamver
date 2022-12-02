@@ -90,41 +90,41 @@ public class ServerBeanRoot {
   }
 
   @Autowired(required = false)
-  private List<GameStartListener> _startListenerList;
+  List<GameStartListener> _startListenerList;
 
   @Autowired
-  private DataCommandCollect _dataCommandCollect;
+  DataCommandCollect _dataCommandCollect;
 
   @Autowired(required = false)
-  private List<ServerJoinListener> _clusterJoinList;
+  List<ServerJoinListener> _clusterJoinList;
 
   @Autowired(required = false)
-  private List<ServerHealthListener> _clusterHealthList;
+  List<ServerHealthListener> _clusterHealthList;
 
   @Autowired(required = false)
-  private List<ServerMessageHandler<?>> _clusterMsgHandleList;
+  List<ServerMessageHandler<?>> _clusterMsgHandleList;
 
   @Autowired(required = false)
-  private List<GameProtoHandler<?>> _protoHandlerList;
+  List<GameProtoHandler<?>> _protoHandlerList;
 
   @Autowired
-  private JamverBootRootInit _bootInitPlugin;
+  JamverBootRootInit _bootInitPlugin;
 
   @Autowired(required = false)
-  private JamverBootShutdown _bootShutdownPlugin;
+  JamverBootShutdown _bootShutdownPlugin;
 
   @Autowired
-  private DataAllPlugin _dataAllPlugin;
+  DataAllPlugin _dataAllPlugin;
 
   @Autowired
-  private ClusterProtoPlugin _clusterProtoPlugin;
+  ClusterProtoPlugin _clusterProtoPlugin;
 
   @Autowired
-  private NetAllPlugin _netAllPlugin;
+  NetAllPlugin _netAllPlugin;
 
   @Autowired(required = false)
-  private JamverDynamicRootInit _dynamicInitPlugin;
+  JamverDynamicRootInit _dynamicInitPlugin;
 
   @Autowired(required = false)
-  private JamverConfigReload _configReloadPlugin;
+  JamverConfigReload _configReloadPlugin;
 }

@@ -5,13 +5,21 @@ import luj.game.server.api.plugin.JamverBootRootInit;
 final class StartContextImpl implements JamverBootRootInit.Context {
 
   @Override
-  public ReturnImpl startConfig() {
-    var result = new ReturnImpl();
-    result._cluster = new ClusterImpl();
-
-    result._injectExtra = new InjectImpl();
-    result._param = new ParamImpl();
+  public JamverBootRootInit.Internal internal() {
+    var result = new InternalImpl();
+    result._network = _network;
 
     return result;
   }
+
+  @Override
+  public ReturnImpl startConfig() {
+    var result = new ReturnImpl();
+    result._cluster = new RClusterImpl();
+    result._param = new RParamImpl();
+
+    return result;
+  }
+
+  JamverBootRootInit.Network _network;
 }

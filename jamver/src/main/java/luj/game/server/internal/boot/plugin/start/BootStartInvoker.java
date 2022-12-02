@@ -1,6 +1,7 @@
 package luj.game.server.internal.boot.plugin.start;
 
 import java.util.List;
+import luj.cluster.api.actor.Tellable;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.plugin.JamverBootRootInit;
 
@@ -8,9 +9,27 @@ public class BootStartInvoker {
 
   public interface Result {
 
-    Cluster clusterConfig();
+    Config config();
 
-    Inject injectExtra();
+    Internal internal();
+  }
+
+  public interface Internal {
+
+    /**
+     * @see luj.game.server.api.plugin.JamverBootRootInit.Internal
+     */
+    Network network0();
+  }
+
+  public interface Network {
+
+    void init(Tellable networkRef);
+  }
+
+  public interface Config {
+
+    Cluster cluster();
 
     Param param();
   }
@@ -49,8 +68,25 @@ public class BootStartInvoker {
   }
 
   public Result invoke() throws Exception {
-    StartContextImpl ctx = new StartContextImpl();
-    return (Result) _startPlugin.onInit(ctx);
+    var network = new INetworkImpl();
+    var ctx = new StartContextImpl();
+    ctx._network = network;
+
+    var config = (BootStartInvoker.Config) _startPlugin.onInit(ctx);
+    var internal = new InternalImpl();
+    internal._network = network;
+
+    return new Result() {
+      @Override
+      public Config config() {
+        return config;
+      }
+
+      @Override
+      public Internal internal() {
+        return internal;
+      }
+    };
   }
 
   private final JamverBootRootInit _startPlugin;

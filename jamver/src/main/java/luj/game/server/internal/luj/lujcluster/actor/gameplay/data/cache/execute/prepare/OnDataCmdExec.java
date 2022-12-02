@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.collect.ImmutableList;
 import java.util.Map;
-import luj.ava.spring.Internal;
 import luj.cache.api.CacheSession;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
@@ -17,6 +16,7 @@ import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
 import luj.game.server.internal.data.execute.load.request.MissingLoadRequestor;
 import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
+import luj.spring.anno.Internal;
 
 @Internal
 final class OnDataCmdExec implements GameplayDataActor.Handler<DatacmdExecMsg> {

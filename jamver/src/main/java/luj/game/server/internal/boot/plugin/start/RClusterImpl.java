@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import luj.game.server.api.plugin.JamverBootRootInit;
 
-final class ClusterImpl implements JamverBootRootInit.Cluster, BootStartInvoker.Cluster {
+final class RClusterImpl implements JamverBootRootInit.Cluster, BootStartInvoker.Cluster {
 
   @Override
   public JamverBootRootInit.Cluster selfHost(String val) {

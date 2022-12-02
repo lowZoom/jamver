@@ -10,25 +10,14 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute
 
 final class CommandServiceImpl<P> implements CommandService<P> {
 
-  @Override
-  public void execute(BiFunction<Param, P, Param> param) {
-    //TODO: param不允许传null
-    execute0(param == null ? null : param::apply);
-  }
-
   /**
    * @see luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.execute.prepare.OnDataCmdExec#onHandle
    */
   @Override
-  public void execute0(BiConsumer<Param, P> param) {
-    Object paramObj = makeParamObj(param);
+  public void execute(BiFunction<Param, P, Param> param) {
+    Object paramObj = makeParamObj(param::apply);
     DatacmdExecMsg msg = new DatacmdExecMsg(_commandType.getName(), paramObj, _factory._remoteRef);
     _factory._dataRef.tell(msg);
-  }
-
-  @Override
-  public void schedule(Duration delay) {
-    throw new UnsupportedOperationException("schedule尚未实现");
   }
 
   @Override

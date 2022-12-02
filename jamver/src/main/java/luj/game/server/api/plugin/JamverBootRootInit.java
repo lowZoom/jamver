@@ -3,24 +3,29 @@ package luj.game.server.api.plugin;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import luj.game.server.api.boot.GameStartListener;
 
 public interface JamverBootRootInit {
 
   interface Context {
 
+    Internal internal();
+
     Return startConfig();
+  }
+
+  interface Internal {
+
+    Network network();
+  }
+
+  interface Network {
+
+    void receiveProto(String key, Object proto);
   }
 
   interface Return {
 
     Return cluster(Function<Cluster, Cluster> val);
-
-    /**
-     * @see JamverDynamicRootInit.Context#registerAll
-     */
-    @Deprecated
-    Return injectExtra(Function<Inject, Inject> val);
 
     Return param(Function<Param, Param> val);
   }
@@ -40,11 +45,6 @@ public interface JamverBootRootInit {
     Cluster discoveryConsulHost(String val);
 
     Cluster discoveryConsulPort(int val);
-  }
-
-  interface Inject {
-
-    Inject startListeners(List<GameStartListener> val);
   }
 
   interface Param {

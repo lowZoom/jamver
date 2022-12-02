@@ -8,7 +8,7 @@ public enum ProtoHandleInvoker {
 
   public void invoke(GameProtoHandler<?> handler, Object proto,
       NetRootActor actorState) throws Exception {
-    ContextImpl ctx = new ContextImpl();
+    var ctx = new ContextImpl();
     ctx._service = makeService(actorState);
     ctx._proto = proto;
 
@@ -16,17 +16,15 @@ public enum ProtoHandleInvoker {
   }
 
   private HandleServiceImpl makeService(NetRootActor actorState) {
-    HandleServiceImpl svc = new HandleServiceImpl();
-
-    DataServiceImpl dataSvc = new DataServiceImpl();
-    svc._dataSvc = dataSvc;
-
+    var dataSvc = new DataServiceImpl();
     dataSvc._commandMap = actorState.getCommandMap();
     dataSvc._lujbean = actorState.getLujbean();
 
     dataSvc._dataRef = actorState.getSiblingRef().getDataRef();
 //    dataSvc._remoteRef =
 
+    var svc = new HandleServiceImpl();
+    svc._dataSvc = dataSvc;
     return svc;
   }
 }

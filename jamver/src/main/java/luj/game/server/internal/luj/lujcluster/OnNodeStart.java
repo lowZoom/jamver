@@ -33,7 +33,7 @@ import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.JamStartActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.StartRefMsg;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
-import luj.game.server.internal.network.proto.handle.collect.ProtoHandlerMapCollector;
+import luj.game.server.internal.network.proto.handle.collect.ProtoHandleMapCollector;
 import luj.spring.anno.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,26 +52,29 @@ final class OnNodeStart implements NodeStartListener {
     Map<String, GameplayDataActor.CommandKit> cmdMap = new ConcurrentHashMap<>(
         new CommandMapCollector(param.getDataCommandList(), param.getDataLoadList()).collect());
 
-    Map<String, GameProtoHandler<?>> handlerMap = new ProtoHandlerMapCollector(
+    Map<String, GameProtoHandler<?>> handlerMap = new ProtoHandleMapCollector(
         param.getProtoHandlerList()).collect();
 
     // 先创建所有actor
-    TopLevelRefs allRef = new TopLevelRefs(
+    var allRef = new TopLevelRefs(
         ctx.createApplicationActor(dataActor(param, cmdMap)),
         ctx.createApplicationActor(eventActor(param, cmdMap)),
         ctx.createApplicationActor(clusterActor(param, cmdMap)),
         ctx.createApplicationActor(networkActor(param, handlerMap, cmdMap))
     );
 
-    // 再初始化热更加载
+    // 初始化对外接口
+    param.getJamverInternal().network0().init(allRef.getNetworkRef());
+
+    // 初始化热更加载
     Collection<GameStartListener> dynamicStart = initDynamic(param, allRef);
 
-    // 最后等待初始化完成
+    // 最后等待各actor初始化完成
     List<Tellable> refList = ImmutableList.of(allRef.getDataRef(),
         allRef.getEventRef(), allRef.getClusterRef(), allRef.getNetworkRef());
 
-    CountDownLatch startLatch = new CountDownLatch(refList.size());
-    StartRefMsg msg = new StartRefMsg(allRef, startLatch);
+    var startLatch = new CountDownLatch(refList.size());
+    var msg = new StartRefMsg(allRef, startLatch);
     for (Tellable ref : refList) {
       ref.tell(msg);
     }
@@ -92,8 +95,7 @@ final class OnNodeStart implements NodeStartListener {
     }
 
     Object appParam = clusterParam.getAppStartParam();
-    return new DynamicInitInvoker(initPlugin, allRef.getDataRef(), allRef.getEventRef(),
-        allRef.getClusterRef(), appParam).invoke();
+    return new DynamicInitInvoker(initPlugin, allRef, appParam).invoke();
   }
 
   private GameplayDataActor dataActor(JambeanInLujcluster clusterParam,

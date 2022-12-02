@@ -1,9 +1,9 @@
 package luj.game.server.internal.luj.lujcluster.actor.start;
 
 import com.google.common.collect.ImmutableList;
-import luj.ava.spring.Internal;
 import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.internal.luj.lujcluster.actor.start.trigger.TriggerStartMsg;
+import luj.spring.anno.Internal;
 
 @Internal
 final class OnPrestart implements JamStartActor.PreStart {

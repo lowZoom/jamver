@@ -1,10 +1,11 @@
 package luj.game.server.internal.inject;
 
+import com.google.common.collect.ImmutableList;
 import java.util.List;
-import luj.ava.spring.Internal;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
+import luj.spring.anno.Internal;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Internal
@@ -23,11 +24,11 @@ public class DataCommandCollect {
   }
 
   @Autowired(required = false)
-  private List<GameDataCommand<?, ?>> _dataCommandList;
+  List<GameDataCommand<?, ?>> _dataCommandList = ImmutableList.of();
 
   @Autowired(required = false)
-  private List<GameDataLoad<?, ?>> _dataLoadList;
+  List<GameDataLoad<?, ?>> _dataLoadList = ImmutableList.of();
 
   @Autowired(required = false)
-  private List<GameDataCommandGroup> _commandGroupList;
+  List<GameDataCommandGroup> _commandGroupList = ImmutableList.of();
 }

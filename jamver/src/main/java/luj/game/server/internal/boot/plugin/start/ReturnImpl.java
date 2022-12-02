@@ -5,19 +5,12 @@ import static com.google.common.base.Preconditions.checkState;
 import java.util.function.Function;
 import luj.game.server.api.plugin.JamverBootRootInit;
 
-final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Result {
+final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Config {
 
   @Override
   public JamverBootRootInit.Return cluster(
       Function<JamverBootRootInit.Cluster, JamverBootRootInit.Cluster> val) {
     checkState(val.apply(_cluster) == _cluster);
-    return this;
-  }
-
-  @Override
-  public JamverBootRootInit.Return injectExtra(
-      Function<JamverBootRootInit.Inject, JamverBootRootInit.Inject> val) {
-    checkState(val.apply(_injectExtra) == _injectExtra);
     return this;
   }
 
@@ -31,13 +24,8 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
   /////////////////////////////////////////////
 
   @Override
-  public BootStartInvoker.Cluster clusterConfig() {
+  public BootStartInvoker.Cluster cluster() {
     return _cluster;
-  }
-
-  @Override
-  public BootStartInvoker.Inject injectExtra() {
-    return _injectExtra;
   }
 
   @Override
@@ -47,8 +35,7 @@ final class ReturnImpl implements JamverBootRootInit.Return, BootStartInvoker.Re
 
   /////////////////////////////////////////////
 
-  ClusterImpl _cluster;
+  RClusterImpl _cluster;
 
-  InjectImpl _injectExtra;
-  ParamImpl _param;
+  RParamImpl _param;
 }

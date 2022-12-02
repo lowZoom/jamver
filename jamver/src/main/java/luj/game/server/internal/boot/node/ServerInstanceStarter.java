@@ -1,13 +1,11 @@
 package luj.game.server.internal.boot.node;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
 import luj.bean.api.LujBean;
 import luj.cache.api.LujCache;
 import luj.cluster.api.ClusterSession;
 import luj.cluster.api.LujCluster;
 import luj.config.api.LujConfig;
-import luj.game.server.api.boot.GameStartListener;
 import luj.game.server.api.plugin.JamverBootRootInit;
 import luj.game.server.internal.boot.plugin.start.BootStartInvoker;
 import luj.game.server.internal.inject.ServerBeanCollector;
@@ -45,34 +43,30 @@ public class ServerInstanceStarter {
       ApplicationContext internalCtx) throws Exception {
     ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
     JamverBootRootInit startPlugin = beanRoot.getBootInitPlugin();
-    BootStartInvoker.Result startCfg = new BootStartInvoker(startPlugin).invoke();
 
-    BootStartInvoker.Cluster clusterCfg = startCfg.clusterConfig();
+    BootStartInvoker.Result startResult = new BootStartInvoker(startPlugin).invoke();
+    BootStartInvoker.Config startCfg = startResult.config();
+
+    BootStartInvoker.Cluster clusterCfg = startCfg.cluster();
     String host = clusterCfg.selfHost();
     int port = clusterCfg.selfPort();
     if (host == null) {
       LOG.debug("[game]未启用集群模块");
     }
 
-    List<GameStartListener> startListeners = ImmutableList.<GameStartListener>builder()
-        .addAll(beanRoot.getStartListenerList())
-        .addAll(startCfg.injectExtra().startListeners())
-        .build();
-
     BootStartInvoker.Param appParam = startCfg.param();
-    JamPluginCollect allPlugin = new JamPluginCollect(beanRoot.getDataAllPlugin(),
-        beanRoot.getClusterProtoPlugin(),
-        beanRoot.getNetAllPlugin(),
-        beanRoot.getDynamicInitPlugin(),
-        beanRoot.getConfigReloadPlugin(), beanRoot.getBootShutdownPlugin());
+    var allPlugin = new JamPluginCollect(beanRoot.getDataAllPlugin(),
+        beanRoot.getClusterProtoPlugin(), beanRoot.getNetAllPlugin(),
+        beanRoot.getDynamicInitPlugin(), beanRoot.getConfigReloadPlugin(),
+        beanRoot.getBootShutdownPlugin());
 
-    JambeanInLujcluster jambean = new JambeanInLujcluster(
-        startListeners, beanRoot.getDataCommandList(), beanRoot.getDataLoadList(),
-        beanRoot.getCommandGroupList(),
+    var jambean = new JambeanInLujcluster(beanRoot.getStartListenerList(),
+        beanRoot.getDataCommandList(), beanRoot.getDataLoadList(), beanRoot.getCommandGroupList(),
         beanRoot.getClusterMsgHandleList(), beanRoot.getClusterJoinList(),
         beanRoot.getClusterHealthList(),
         ImmutableList.of(), beanRoot.getProtoHandlerList(),
-        allPlugin, LujCache.start(internalCtx), LujConfig.start(), LujBean.start(),
+        allPlugin, startResult.internal(),
+        LujCache.start(internalCtx), LujConfig.start(), LujBean.start(),
         appParam.start(), appParam.shutdown());
 
     lujcluster.startNode(c -> c

@@ -21,10 +21,10 @@ public class NetRootActor {
     // NOOP
   }
 
-  public NetRootActor(Map<String, GameProtoHandler<?>> protoHandlerMap,
+  public NetRootActor(Map<String, GameProtoHandler<?>> protoHandleMap,
       Map<String, GameplayDataActor.CommandKit> commandMap, NetAllPlugin allPlugin,
       BeanContext lujbean) {
-    _protoHandlerMap = protoHandlerMap;
+    _protoHandleMap = protoHandleMap;
     _commandMap = commandMap;
     _allPlugin = allPlugin;
     _lujbean = lujbean;
@@ -38,8 +38,8 @@ public class NetRootActor {
     _siblingRef = siblingRef;
   }
 
-  public Map<String, GameProtoHandler<?>> getProtoHandlerMap() {
-    return _protoHandlerMap;
+  public Map<String, GameProtoHandler<?>> getProtoHandleMap() {
+    return _protoHandleMap;
   }
 
   public Map<String, GameplayDataActor.CommandKit> getCommandMap() {
@@ -56,7 +56,7 @@ public class NetRootActor {
 
   private TopLevelRefs _siblingRef;
 
-  private final Map<String, GameProtoHandler<?>> _protoHandlerMap;
+  private final Map<String, GameProtoHandler<?>> _protoHandleMap;
   private final Map<String, GameplayDataActor.CommandKit> _commandMap;
 
   private final NetAllPlugin _allPlugin;

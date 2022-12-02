@@ -13,6 +13,7 @@ import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.api.event.GameEventListener;
 import luj.game.server.api.net.GameProtoHandler;
+import luj.game.server.internal.boot.plugin.start.BootStartInvoker;
 
 public class JambeanInLujcluster {
 
@@ -22,9 +23,8 @@ public class JambeanInLujcluster {
       List<ServerMessageHandler<?>> clusterMsgHandleList,
       List<ServerJoinListener> clusterJoinList, List<ServerHealthListener> clusterHealthList,
       List<GameEventListener<?>> eventListenerList, List<GameProtoHandler<?>> protoHandlerList,
-      JamPluginCollect allPlugin, CacheSession lujcache,
-      ConfigSession lujconfig, BeanContext lujbean,
-      Object appStartParam, Object appShutdownParam) {
+      JamPluginCollect allPlugin, BootStartInvoker.Internal jamverInternal, CacheSession lujcache,
+      ConfigSession lujconfig, BeanContext lujbean, Object appStartParam, Object appShutdownParam) {
     _startListenerList = startListenerList;
     _dataCommandList = dataCommandList;
     _dataLoadList = dataLoadList;
@@ -35,6 +35,7 @@ public class JambeanInLujcluster {
     _eventListenerList = eventListenerList;
     _protoHandlerList = protoHandlerList;
     _allPlugin = allPlugin;
+    _jamverInternal = jamverInternal;
     _lujcache = lujcache;
     _lujconfig = lujconfig;
     _lujbean = lujbean;
@@ -82,6 +83,10 @@ public class JambeanInLujcluster {
     return _allPlugin;
   }
 
+  public BootStartInvoker.Internal getJamverInternal() {
+    return _jamverInternal;
+  }
+
   public CacheSession getLujcache() {
     return _lujcache;
   }
@@ -116,6 +121,7 @@ public class JambeanInLujcluster {
   private final List<GameProtoHandler<?>> _protoHandlerList;
 
   private final JamPluginCollect _allPlugin;
+  private final BootStartInvoker.Internal _jamverInternal;
 
   private final CacheSession _lujcache;
   private final ConfigSession _lujconfig;

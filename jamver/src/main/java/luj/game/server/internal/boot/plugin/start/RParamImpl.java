@@ -2,7 +2,7 @@ package luj.game.server.internal.boot.plugin.start;
 
 import luj.game.server.api.plugin.JamverBootRootInit;
 
-final class ParamImpl implements JamverBootRootInit.Param, BootStartInvoker.Param {
+final class RParamImpl implements JamverBootRootInit.Param, BootStartInvoker.Param {
 
   @Override
   public JamverBootRootInit.Param start(Object val) {
