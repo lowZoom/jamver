@@ -7,7 +7,6 @@ import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.api.data.GameDataCommandGroup;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
-import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
 import luj.game.server.internal.data.load.result.LoadResultProxy;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
 
@@ -28,10 +27,9 @@ final class ElementImpl<C> implements GameDataCommandGroup.Element<C> {
   @Override
   public void execute() throws Exception {
     Object loadResult = _resultProxy.getInstance();
-    GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 
     new DataCmdExecutor(_cmdKit, _cmdParam, loadResult,
-        _dataSvc, netSvc, _eventRef, _configs, _lujbean).execute();
+        _dataSvc, _eventRef, _configs, _lujbean).execute();
   }
 
   GameplayDataActor.CommandKit _cmdKit;

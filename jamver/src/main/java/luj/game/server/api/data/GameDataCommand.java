@@ -4,8 +4,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Collection;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -28,8 +26,6 @@ public interface GameDataCommand<P, D> {
 
     <D> D data(GameDataCommand<?, D> cmd);
 
-    DataCommandException error(String messageTemplate, Object... messageArgs);
-
     Logger logger();
 
     Service service();
@@ -43,15 +39,7 @@ public interface GameDataCommand<P, D> {
 
     <C> Config<C> config(Class<C> configType);
 
-    /**
-     * @see #event(Class)
-     */
-    @Deprecated
-    EventOld event();
-
     <E> Event<E> event(Class<E> eventType);
-
-    Network network();
 
     Random random();
 
@@ -69,24 +57,11 @@ public interface GameDataCommand<P, D> {
 
     <T> T create(Class<T> dataType);
 
-    /**
-     * @see #set(Supplier)
-     */
-    @Deprecated
-    <T> void set(Supplier<T> field, T value);
-
     <T> Field<T> set(Supplier<T> field);
 
     <T extends Comparable<T>> T id(Object data);
 
     boolean exists(Object data);
-
-    /**
-     * TODO: 准备弃用
-     *
-     * @see #command
-     */
-    <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType);
 
     <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType);
   }
@@ -104,12 +79,6 @@ public interface GameDataCommand<P, D> {
     C find(Comparable<?> id);
 
     C findGlobal();
-
-    /**
-     * @see #all
-     */
-    @Deprecated
-    Collection<C> list();
 
     Iterable<C> all();
 
@@ -130,46 +99,6 @@ public interface GameDataCommand<P, D> {
     }
 
     void fire(BiFunction<Instance, E, Instance> e);
-  }
-
-  @Deprecated
-  interface EventOld {
-
-    @Deprecated
-    interface FieldOld {
-
-      <T> FieldOld set(Supplier<T> field, T value);
-    }
-
-    <T> void fire(Class<T> eventType, BiConsumer<FieldOld, T> builder);
-  }
-  //----------------------------------------------------
-
-  interface Network {
-
-    Session session();
-
-    /**
-     * @see #session()
-     */
-    @Deprecated
-    Session session(Comparable<?> sessionId);
-
-    /**
-     * @see luj.game.server.api.cluster.ServerMessageHandler.Context#remoteServer
-     */
-    @Deprecated
-    Server server();
-  }
-
-  interface Session {
-
-    void send(Object proto);
-  }
-
-  interface Server {
-
-    <T> void send(Class<T> msgType, BiConsumer<CommandService.Param, T> msgValue);
   }
   //----------------------------------------------------
 

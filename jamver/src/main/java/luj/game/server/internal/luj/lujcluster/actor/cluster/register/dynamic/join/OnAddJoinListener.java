@@ -1,9 +1,9 @@
 package luj.game.server.internal.luj.lujcluster.actor.cluster.register.dynamic.join;
 
 import java.util.Collection;
-import luj.ava.spring.Internal;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.internal.luj.lujcluster.actor.cluster.ClusterCommActor;
+import luj.spring.anno.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

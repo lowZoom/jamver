@@ -25,7 +25,7 @@ public class DataIoInvoker {
   }
 
   public void invoke() {
-    IoContextImpl ctx = new IoContextImpl();
+    var ctx = new IoContextImpl();
     ctx._saveState = _saveState;
 
     ctx._created = _createList.stream()
@@ -40,7 +40,7 @@ public class DataIoInvoker {
   }
 
   private CreatedImpl wrapCreate(BatchCreateItem item) {
-    CreatedImpl created = new CreatedImpl();
+    var created = new CreatedImpl();
     created._item = item;
 
     IdImpl id = new IdImpl();
@@ -67,7 +67,7 @@ public class DataIoInvoker {
   }
 
   private ChangedImpl wrapUpdate(BatchUpdateItem item) {
-    ChangedImpl changed = new ChangedImpl();
+    var changed = new ChangedImpl();
     changed._item = item;
 
     IdImpl id = new IdImpl();
@@ -85,13 +85,13 @@ public class DataIoInvoker {
   }
 
   private ChSetImpl wrapSet(DUpdateMsgSet msg) {
-    ChSetImpl set = new ChSetImpl();
+    var set = new ChSetImpl();
     set._msg = msg;
     return set;
   }
 
   private ChMapImpl wrapMap(DUpdateMsgMap msg) {
-    ChMapImpl map = new ChMapImpl();
+    var map = new ChMapImpl();
     map._msg = msg;
     return map;
   }

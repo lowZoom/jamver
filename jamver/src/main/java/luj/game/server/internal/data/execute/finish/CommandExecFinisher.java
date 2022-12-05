@@ -10,11 +10,9 @@ import luj.cache.api.request.CacheRequest;
 import luj.cluster.api.actor.Tellable;
 import luj.config.api.container.ConfigContainer;
 import luj.game.server.api.cluster.ServerMessageHandler;
-import luj.game.server.api.data.GameDataCommand;
 import luj.game.server.internal.data.execute.DataCmdExecutor;
 import luj.game.server.internal.data.execute.load.request.node.find.finish.lock.DataPair;
 import luj.game.server.internal.data.execute.service.data.DataServiceImpl;
-import luj.game.server.internal.data.execute.service.network.NetServiceFactory;
 import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
 import luj.game.server.internal.data.load.result.LoadResultProxy;
@@ -57,7 +55,6 @@ public class CommandExecFinisher {
         _dataCache, resultProxy, loadLog, dataSvc::specifySetField));
 
     Object loadResult = resultProxy.getInstance();
-    GameDataCommand.Network netSvc = new NetServiceFactory(_remoteRef).create();
 
 //    LOG.debug("[game]执行数据CMD：{} {}", _cmdType, _cmdParam);
     LOG.debug("[game]执行数据CMD：{}", _commandKit.getCommandType().getName());
@@ -66,7 +63,7 @@ public class CommandExecFinisher {
     try {
       //TODO: 并发到另外的线程去执行
       new DataCmdExecutor(_commandKit, _cmdParam,
-          loadResult, dataSvc, netSvc, _eventRef, _configs, _lujbean).execute();
+          loadResult, dataSvc, _eventRef, _configs, _lujbean).execute();
 
     } catch (Throwable e) {
       LOG.error(e.getMessage(), e);

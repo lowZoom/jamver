@@ -28,18 +28,8 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
   }
 
   @Override
-  public GameDataCommand.EventOld event() {
-    throw new UnsupportedOperationException("event已废弃");
-  }
-
-  @Override
   public <E> GameDataCommand.Event<E> event(Class<E> eventType) {
     return _eventSvc.create(eventType);
-  }
-
-  @Override
-  public GameDataCommand.Network network() {
-    return _networkSvc;
   }
 
   @Override
@@ -53,9 +43,7 @@ final class DataCmdServiceImpl implements GameDataCommand.Service {
   }
 
   GameDataCommand.Data _dataSvc;
-
   GameDataCommand.Proto _protoSvc;
-  GameDataCommand.Network _networkSvc;
 
   ConfigContainer _configs;
   EventServiceFactory _eventSvc;

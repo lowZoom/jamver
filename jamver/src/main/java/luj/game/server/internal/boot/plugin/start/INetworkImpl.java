@@ -15,8 +15,8 @@ final class INetworkImpl implements JamverBootRootInit.Network, BootStartInvoker
    * @see luj.game.server.internal.luj.lujcluster.actor.network.receive.OnReceiveProto#onHandle
    */
   @Override
-  public void receiveProto(String key, Object proto) {
-    _networkRef.tell(new ReceiveProtoMsg(key, proto));
+  public void receiveProto(String key, Object proto, Object param) {
+    _networkRef.tell(new ReceiveProtoMsg(key, proto, param));
   }
 
   Tellable _networkRef;

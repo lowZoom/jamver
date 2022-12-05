@@ -1,6 +1,5 @@
 package luj.game.server.internal.data.execute;
 
-import luj.game.server.api.data.DataCommandException;
 import luj.game.server.api.data.GameDataCommand;
 import org.slf4j.Logger;
 
@@ -23,11 +22,6 @@ final class CmdContextImpl implements GameDataCommand.Context {
   @Override
   public <D> D data(GameDataCommand<?, D> cmd) {
     return (D) _loadResult;
-  }
-
-  @Override
-  public DataCommandException error(String messageTemplate, Object... messageArgs) {
-    return null;
   }
 
   @Override

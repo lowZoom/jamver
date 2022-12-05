@@ -23,6 +23,8 @@ public interface GameProtoHandler<P> {
 
     <P> P proto(GameProtoHandler<P> handler);
 
+    <P> P param();
+
     Service service();
   }
 

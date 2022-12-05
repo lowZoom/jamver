@@ -21,19 +21,7 @@ public interface ServerMessageHandler<M> {
 
   interface Context {
 
-    /**
-     * @see #message
-     */
-    @Deprecated
-    <M> M getMessage(ServerMessageHandler<M> handler);
-
     <M> M message(ServerMessageHandler<M> handler);
-
-    /**
-     * @see #remoteServer
-     */
-    @Deprecated
-    Server getRemoteServer();
 
     Server remoteServer();
 

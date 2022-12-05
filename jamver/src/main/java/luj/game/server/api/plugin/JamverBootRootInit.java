@@ -20,7 +20,7 @@ public interface JamverBootRootInit {
 
   interface Network {
 
-    void receiveProto(String key, Object proto);
+    void receiveProto(String key, Object proto, Object param);
   }
 
   interface Return {

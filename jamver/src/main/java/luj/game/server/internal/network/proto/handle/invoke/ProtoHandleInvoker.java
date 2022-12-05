@@ -6,11 +6,13 @@ import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
 public enum ProtoHandleInvoker {
   GET;
 
-  public void invoke(GameProtoHandler<?> handler, Object proto,
+  public void invoke(GameProtoHandler<?> handler, Object proto, Object param,
       NetRootActor actorState) throws Exception {
     var ctx = new ContextImpl();
     ctx._service = makeService(actorState);
+
     ctx._proto = proto;
+    ctx._param = param;
 
     handler.onHandle(ctx);
   }

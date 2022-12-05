@@ -11,13 +11,12 @@ import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.Gamepla
 public class DataCmdExecutor {
 
   public DataCmdExecutor(GameplayDataActor.CommandKit cmdKit, Object param, Object loadResult,
-      GameDataCommand.Data dataSvc, GameDataCommand.Network netSvc, Tellable eventRef,
-      ConfigContainer configs, BeanContext lujbean) {
+      GameDataCommand.Data dataSvc, Tellable eventRef, ConfigContainer configs,
+      BeanContext lujbean) {
     _cmdKit = cmdKit;
     _param = param;
     _loadResult = loadResult;
     _dataSvc = dataSvc;
-    _netSvc = netSvc;
     _eventRef = eventRef;
     _configs = configs;
     _lujbean = lujbean;
@@ -26,7 +25,6 @@ public class DataCmdExecutor {
   public void execute() throws Exception {
     DataCmdServiceImpl commandSvc = new DataCmdServiceImpl();
     commandSvc._dataSvc = _dataSvc;
-    commandSvc._networkSvc = _netSvc;
     commandSvc._configs = _configs;
 
     commandSvc._eventSvc = new EventServiceFactory(_eventRef, _lujbean);
@@ -41,8 +39,6 @@ public class DataCmdExecutor {
   private final Object _loadResult;
 
   private final GameDataCommand.Data _dataSvc;
-  private final GameDataCommand.Network _netSvc;
-
   private final Tellable _eventRef;
   private final ConfigContainer _configs;
 

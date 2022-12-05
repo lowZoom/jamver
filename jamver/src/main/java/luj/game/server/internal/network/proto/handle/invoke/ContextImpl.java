@@ -10,12 +10,19 @@ final class ContextImpl implements GameProtoHandler.Context {
     return (P) _proto;
   }
 
+  @SuppressWarnings("unchecked")
+  @Override
+  public <P> P param() {
+    return (P) _param;
+  }
+
   @Override
   public GameProtoHandler.Service service() {
     return _service;
   }
 
   Object _proto;
+  Object _param;
 
   HandleServiceImpl _service;
 }

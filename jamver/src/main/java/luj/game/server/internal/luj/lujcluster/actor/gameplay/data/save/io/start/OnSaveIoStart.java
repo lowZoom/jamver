@@ -3,11 +3,11 @@ package luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.io.star
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.concurrent.ExecutorService;
-import luj.ava.spring.Internal;
 import luj.game.server.internal.data.save.io.invoke.DataIoInvoker;
 import luj.game.server.internal.data.save.wait.consume.DataIoWaitConsumer;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.DataSaveActor;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.save.io.finish.SaveIoFinishMsg;
+import luj.spring.anno.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

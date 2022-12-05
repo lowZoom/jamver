@@ -25,7 +25,7 @@ final class OnReceiveProto implements NetRootActor.Handler<ReceiveProtoMsg> {
       return;
     }
 
-    ProtoHandleInvoker.GET.invoke(handler, msg.protoObj(), self);
+    ProtoHandleInvoker.GET.invoke(handler, msg.protoObj(), msg.param(), self);
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnReceiveProto.class);

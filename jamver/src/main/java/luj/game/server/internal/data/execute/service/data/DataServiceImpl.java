@@ -13,7 +13,6 @@ import luj.game.server.api.data.service.CommandService;
 import luj.game.server.internal.data.command.service.CommandServiceFactory;
 import luj.game.server.internal.data.id.state.DataIdGenState;
 import luj.game.server.internal.data.instancev2.DataEntity;
-import luj.game.server.internal.data.load.result.DataResultProxy;
 import luj.game.server.internal.data.load.result.DataResultProxyV2;
 import luj.game.server.internal.data.service.set.FieldImpl2;
 import luj.game.server.internal.luj.lujcluster.actor.gameplay.data.cache.GameplayDataActor;
@@ -40,15 +39,6 @@ public class DataServiceImpl implements GameDataCommand.Data {
   @Override
   public <T> T create(Class<T> dataType) {
     return (T) DataCreateRunner.GET.run(dataType, _idGenState, _createLog, this::specifySetField);
-  }
-
-  /**
-   * @see DataResultProxy#invoke
-   * @see #specifySetField
-   */
-  @Override
-  public <T> void set(Supplier<T> field, T value) {
-    set(field).$(value);
   }
 
   @Override
@@ -79,11 +69,6 @@ public class DataServiceImpl implements GameDataCommand.Data {
   public <P> CommandService<P> command(Class<? extends GameDataCommand<P, ?>> commandType) {
     return new CommandServiceFactory(_lujbean, _dataRef,
         _remoteRef, commandType, _commandMap).create();
-  }
-
-  @Override
-  public <P> void executeCommand(Class<? extends GameDataCommand<P, ?>> commandType) {
-    command(commandType).execute((b, p) -> b);
   }
 
 //  private static final Logger LOG = LoggerFactory.getLogger(DataServiceImpl.class);

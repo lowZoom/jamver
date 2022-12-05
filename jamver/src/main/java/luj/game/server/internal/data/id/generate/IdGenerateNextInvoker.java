@@ -9,7 +9,7 @@ public enum IdGenerateNextInvoker {
   public Comparable<?> invoke(DataIdGenState idGenState) {
     JamverDataIdGenNext<?> generatePlugin = idGenState.getGeneratePlugin();
 
-    ContextImpl ctx = new ContextImpl();
+    var ctx = new ContextImpl();
     ctx._appState = idGenState.getAppState();
 
     return generatePlugin.generate(ctx);
