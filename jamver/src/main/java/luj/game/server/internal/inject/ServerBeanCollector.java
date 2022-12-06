@@ -16,7 +16,7 @@ public class ServerBeanCollector {
   }
 
   public ServerBeanRoot collect() {
-    try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext()) {
+    try (var ctx = new AnnotationConfigApplicationContext()) {
       ctx.setParent(_externalCtx);
 
       ctx.register(DataAllPlugin.class);
@@ -29,7 +29,6 @@ public class ServerBeanCollector {
 
       ctx.register(DataCommandCollect.class);
       ctx.register(ServerBeanRoot.class);
-
       ctx.refresh();
 
       return ctx.getBean(ServerBeanRoot.class);

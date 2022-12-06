@@ -45,7 +45,7 @@ final class CommandServiceImpl<P> implements CommandService<P> {
     //TODO: 校验param里不能包含数据对象
 
     return (_paramType == Void.class) ? null : new CommandParamMaker(
-        _paramType, (BiConsumer<CommandService.Param, Object>) param, _factory._lujbean).make();
+        _paramType, (BiConsumer<Param, Object>) param, _factory._lujbean).make();
   }
 
   Class<?> _commandType;

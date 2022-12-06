@@ -15,7 +15,7 @@ public class CommandParamMaker {
   }
 
   public Object make() {
-    ParamImpl<?> builder = new ParamImpl<>();
+    var builder = new ParamImpl<>();
     Bean<?> paramBean = _lujbean.createBean(_paramType);
 
     builder._paramBean = paramBean;

@@ -22,7 +22,7 @@ public class CommandServiceFactory {
   }
 
   public <P> CommandService<P> create() {
-    CommandServiceImpl<P> svc = new CommandServiceImpl<>();
+    var svc = new CommandServiceImpl<P>();
     svc._commandType = _commandType;
 
     GameplayDataActor.CommandKit cmdKit = _commandMap.get(_commandType.getName());
