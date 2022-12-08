@@ -29,7 +29,7 @@ public class ServerInstanceStarter {
       internalCtx.refresh();
 
       ClusterSession lujcluster = LujCluster.start(internalCtx);
-      startCluster(lujcluster, internalCtx);
+      startCluster(lujcluster);
 
     } catch (Throwable t) {
       LOG.error(t.getMessage(), t);
@@ -39,8 +39,7 @@ public class ServerInstanceStarter {
   /**
    * @see luj.game.server.internal.luj.lujcluster.OnNodeStart#onStart
    */
-  private void startCluster(ClusterSession lujcluster,
-      ApplicationContext internalCtx) throws Exception {
+  private void startCluster(ClusterSession lujcluster) throws Exception {
     ServerBeanRoot beanRoot = new ServerBeanCollector(_appContext).collect();
     JamverBootRootInit startPlugin = beanRoot.getBootInitPlugin();
 

@@ -17,7 +17,6 @@ import luj.game.server.api.cluster.ServerHealthListener;
 import luj.game.server.api.cluster.ServerJoinListener;
 import luj.game.server.api.cluster.ServerMessageHandler;
 import luj.game.server.api.event.GameEventListener;
-import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.api.plugin.JamverDynamicRootInit;
 import luj.game.server.internal.cluster.message.handle.collect.ClusterHandleMapCollector;
 import luj.game.server.internal.config.reload.ConfigReloadInvoker;
@@ -33,7 +32,7 @@ import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.JamStartActor;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.StartRefMsg;
 import luj.game.server.internal.luj.lujcluster.actor.start.child.TopLevelRefs;
-import luj.game.server.internal.network.proto.handle.collect.ProtoHandleMapCollector;
+import luj.game.server.internal.network.proto.handle.collect.ProtoHandleCollector;
 import luj.spring.anno.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,18 +48,19 @@ final class OnNodeStart implements NodeStartListener {
   public void onStart(Context ctx) throws Exception {
     JambeanInLujcluster param = ctx.getStartParam();
 
+    //TODO: 考虑下不要并发使用，同时支持热更（改成不可变再走消息群发同步？）
     Map<String, GameplayDataActor.CommandKit> cmdMap = new ConcurrentHashMap<>(
         new CommandMapCollector(param.getDataCommandList(), param.getDataLoadList()).collect());
 
-    Map<String, GameProtoHandler<?>> handlerMap = new ProtoHandleMapCollector(
-        param.getProtoHandlerList()).collect();
+    ProtoHandleCollector.Result handleCollect =
+        new ProtoHandleCollector(param.getProtoHandlerList()).collect();
 
     // 先创建所有actor
     var allRef = new TopLevelRefs(
         ctx.createApplicationActor(dataActor(param, cmdMap)),
         ctx.createApplicationActor(eventActor(param, cmdMap)),
         ctx.createApplicationActor(clusterActor(param, cmdMap)),
-        ctx.createApplicationActor(networkActor(param, handlerMap, cmdMap))
+        ctx.createApplicationActor(networkActor(param, handleCollect, cmdMap))
     );
 
     // 初始化对外接口
@@ -135,11 +135,11 @@ final class OnNodeStart implements NodeStartListener {
   }
 
   private NetRootActor networkActor(JambeanInLujcluster clusterParam,
-      Map<String, GameProtoHandler<?>> handlerMap,
-      Map<String, GameplayDataActor.CommandKit> cmdMap) {
+      ProtoHandleCollector.Result handler, Map<String, GameplayDataActor.CommandKit> cmdMap) {
     JamPluginCollect plugin = clusterParam.getAllPlugin();
 
-    return new NetRootActor(handlerMap, cmdMap, plugin.getNetAll(), clusterParam.getLujbean());
+    return new NetRootActor(handler.handleMap(), new ArrayList<>(handler.defaultHandler()),
+        cmdMap, plugin.getNetAll(), clusterParam.getLujbean());
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnNodeStart.class);

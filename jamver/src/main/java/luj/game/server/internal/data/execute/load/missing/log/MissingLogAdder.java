@@ -3,8 +3,6 @@ package luj.game.server.internal.data.execute.load.missing.log;
 import java.util.Map;
 import luj.game.server.internal.data.cache.CacheKeyMaker;
 import luj.game.server.internal.data.execute.load.missing.DataReadyChecker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public enum MissingLogAdder {
   GET;
@@ -16,7 +14,7 @@ public enum MissingLogAdder {
       return;
     }
 
-    MissingImpl item = new MissingImpl();
+    var item = new MissingImpl();
     item._dataType = dataType;
     item._dataId = dataId;
 

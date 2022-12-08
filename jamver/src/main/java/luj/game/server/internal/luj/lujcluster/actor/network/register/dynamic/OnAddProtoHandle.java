@@ -1,9 +1,9 @@
 package luj.game.server.internal.luj.lujcluster.actor.network.register.dynamic;
 
-import java.util.Map;
+import java.util.Collection;
 import luj.game.server.api.net.GameProtoHandler;
 import luj.game.server.internal.luj.lujcluster.actor.network.NetRootActor;
-import luj.game.server.internal.network.proto.handle.collect.ProtoHandleMapCollector;
+import luj.game.server.internal.network.proto.handle.collect.ProtoHandleCollector;
 import luj.spring.anno.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +16,12 @@ final class OnAddProtoHandle implements NetRootActor.Handler<AddProtoHandleMsg> 
     NetRootActor self = ctx.getActorState(this);
     AddProtoHandleMsg msg = ctx.getMessage(this);
 
-    Map<String, GameProtoHandler<?>> addMap =
-        new ProtoHandleMapCollector(msg.protoHandler()).collect();
+    Collection<GameProtoHandler<?>> handlerList = msg.protoHandler();
+    LOG.debug("[game]新增GameProtoHandler，数量：{}", handlerList.size());
 
-    LOG.debug("[game]新增GameProtoHandler，数量：{}", addMap.size());
-    self.getProtoHandleMap().putAll(addMap);
+    ProtoHandleCollector.Result addCollect = new ProtoHandleCollector(handlerList).collect();
+    self.getProtoHandleMap().putAll(addCollect.handleMap());
+    self.getDefaultHandler().addAll(addCollect.defaultHandler());
   }
 
   private static final Logger LOG = LoggerFactory.getLogger(OnAddProtoHandle.class);

@@ -19,6 +19,10 @@ public interface GameProtoHandler<P> {
     String value();
   }
 
+  interface Default extends GameProtoHandler<ContextEx> {
+    // NOOP
+  }
+
   interface Context {
 
     <P> P proto(GameProtoHandler<P> handler);
