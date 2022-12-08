@@ -27,11 +27,6 @@ final class LoadContextImpl implements GameDataLoad.Context {
   }
 
   @Override
-  public <R, F> GameDataLoad.AndLoad<R, F> load(Function<R, F> field, Comparable<?> id) {
-    return load(id, field);
-  }
-
-  @Override
   public <R, F> GameDataLoad.AndLoad<R, F> load(Comparable<?> id, Function<R, F> result) {
     LoadNodeOp op = opFactory().createIdOne(id);
     CacheRequest.Node child = ReqRootFieldAppender.GET
@@ -40,8 +35,8 @@ final class LoadContextImpl implements GameDataLoad.Context {
   }
 
   @Override
-  public <R, F> GameDataLoad.AndLoad<R, F> load(GameDataLoad<?, R> load, Class<F> dataType,
-      Comparable<?> id) {
+  public <R, F> GameDataLoad.AndLoad<R, F> load(GameDataLoad<?, R> load, Comparable<?> id,
+      Class<F> dataType) {
     LoadNodeOp op = opFactory().createIdOne(id);
     CacheRequest.Node child = ReqRootTransientAppender.GET.appendV2(_cacheReq, dataType, op);
     return andLoad(child);

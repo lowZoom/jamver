@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.function.Function;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.CacheRequest;
-import luj.cache.api.request.CacheRequest.Node;
 import luj.game.server.api.data.GameDataLoad;
 import luj.game.server.internal.data.execute.load.request.node.LoadNodeOp;
 import luj.game.server.internal.data.execute.load.request.node.LoadNodeOpFactory;
@@ -12,16 +11,10 @@ import luj.game.server.internal.data.execute.load.result.ResultFieldProxy;
 
 final class AndLoadImpl<R, F> implements GameDataLoad.AndLoad<R, F> {
 
-  AndLoadImpl(Node node, CacheContainer dataCache, ResultFieldProxy fieldHolder) {
+  AndLoadImpl(CacheRequest.Node node, CacheContainer dataCache, ResultFieldProxy fieldHolder) {
     _node = node;
     _dataCache = dataCache;
     _fieldHolder = fieldHolder;
-  }
-
-  @Deprecated
-  @Override
-  public GameDataLoad.AndLoad load(Function<F, ?> from, Function<R, ?> to) {
-    return join((Function) from, to);
   }
 
   @Override

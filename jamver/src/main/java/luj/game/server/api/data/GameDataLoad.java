@@ -9,17 +9,11 @@ public interface GameDataLoad<P, R> {
 
     <P> P param(GameDataLoad<P, ?> load);
 
-    /**
-     * @see #load(Comparable, Function)
-     */
-    @Deprecated
-    <R, F> AndLoad<R, F> load(Function<R, F> field, Comparable<?> id);
-
     <R, F> AndLoad<R, F> load(Comparable<?> id, Function<R, F> result);
 
 //    <D, DF, R, RF> AndLoad<R, RF> load(Function<D, DF> field, DF value, Function<R, RF> result);
 
-    <R, F> AndLoad<R, F> load(GameDataLoad<?, R> load, Class<F> dataType, Comparable<?> id);
+    <R, F> AndLoad<R, F> load(GameDataLoad<?, R> load, Comparable<?> id, Class<F> dataType);
 
     <R, F> AndLoad<R, F> loadAll(Collection<? extends Comparable<?>> id, Function<R, Collection<F>> result);
 
@@ -32,12 +26,6 @@ public interface GameDataLoad<P, R> {
   }
 
   interface AndLoad<R, F> {
-
-    /**
-     * @see #join
-     */
-    @Deprecated
-    AndLoad load(Function<F, ?> from, Function<R, ?> to);
 
     <ID extends Comparable<ID>, F2> AndLoad<R, F2> join(Function<F, ID> from, Function<R, F2> to);
 

@@ -66,7 +66,7 @@ public class ServerInstanceStarter {
         beanRoot.getClusterHealthList(),
         ImmutableList.of(), beanRoot.getProtoHandlerList(),
         allPlugin, startResult.internal(),
-        LujCache.start(internalCtx), LujConfig.start(), LujBean.start(),
+        LujCache.start(), LujConfig.start(), LujBean.start(),
         appParam.start(), appParam.shutdown());
 
     lujcluster.startNode(c -> c
