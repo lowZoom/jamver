@@ -22,12 +22,15 @@ public enum NodeGetOneFindReady {
       List<CacheItem> lockedOrLoadingOut) {
     CacheItem parentItem = ctx.getParentReturn();
     if (cannotFollow(parentItem)) {
-      return ImmutableList.of();
+      return ImmutableList.of(); //TODO: null?
     }
 
     DataEntity parentData = parentItem.getDataObjV2();
     DataResultProxyV2 parentResult = getProxy(parentData);
     Comparable<?> dataId = idGetter.apply(parentResult.getInstance());
+    if (dataId == null) {
+      return null;
+    }
 
     NodeIdOneFindReady util = NodeIdOneFindReady.GET;
     Class<?> dataType = ctx.getDataType();

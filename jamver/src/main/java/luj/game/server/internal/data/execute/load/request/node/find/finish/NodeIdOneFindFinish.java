@@ -1,5 +1,7 @@
 package luj.game.server.internal.data.execute.load.request.node.find.finish;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Map;
 import luj.cache.api.container.CacheContainer;
 import luj.cache.api.request.RequestWalkListener;
@@ -14,6 +16,8 @@ public enum NodeIdOneFindFinish {
 
   public LoadNodeOp.Data find(CacheContainer dataCache, Class<?> dataType, Comparable<?> dataId,
       DataResultProxyV2.FieldHook fieldHook, Map<String, DataPair> loadLog) {
+    checkNotNull(dataId);
+
     DataPair data = getDataObjAndLock(dataCache, dataType, dataId, loadLog);
 //    LOG.debug("读取读取读取读取：{}, {}", dataType.getName(), dataId);
 

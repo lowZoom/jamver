@@ -21,6 +21,9 @@ public enum NodeGetOneFindFinish {
     Object parentInstance = parentResult.getInstance();
     Comparable<?> dataId = idGetter.apply(parentInstance);
 
+    if (dataId == null) {
+      return DataImpl.NULL;
+    }
     return util.find(dataCache, dataType, dataId, fieldHook, loadLog);
   }
 }
